@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import Footer from "@/components/common/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -10,6 +12,28 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+// Local fonts from public/fonts
+const outfit = localFont({
+  src: "../../public/fonts/Outfit-VariableFont_wght.ttf",
+  variable: "--font-outfit",
+  weight: "100 900",
+  display: "swap",
+});
+
+const playfair = localFont({
+  src: "../../public/fonts/PlayfairDisplay-VariableFont_wght.ttf",
+  variable: "--font-playfair",
+  weight: "100 900",
+  display: "swap",
+});
+
+const spaceGrotesk = localFont({
+  src: "../../public/fonts/SpaceGrotesk-VariableFont_wght.ttf",
+  variable: "--font-space-grotesk",
+  weight: "300 700",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -24,10 +48,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} ${outfit.variable} ${playfair.variable} ${spaceGrotesk.variable} antialiased`}>
         {children}
+        <Footer />
       </body>
     </html>
   );
