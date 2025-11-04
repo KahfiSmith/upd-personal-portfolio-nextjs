@@ -1,4 +1,4 @@
-import { SkillItemProps } from "@/lib/types";
+import { SkillItemProps } from "../types";
 
 export const dataSkills: SkillItemProps[] = [
   {

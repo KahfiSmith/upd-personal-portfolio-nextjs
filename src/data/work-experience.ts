@@ -1,4 +1,4 @@
-import type { WorkExperienceItemProps } from "@/lib/types";
+import type { WorkExperienceItemProps } from "../types";
 
 export const dataWorkExperience: WorkExperienceItemProps[] = [
   {
