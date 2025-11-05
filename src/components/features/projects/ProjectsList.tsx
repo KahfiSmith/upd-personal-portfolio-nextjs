@@ -1,4 +1,5 @@
 import { dataProjects } from "@/data/projects";
+import AnimatedPillButton from "@/components/common/AnimatedPillButton";
 
 export default function ProjectsList() {
   const projects = dataProjects;
@@ -78,31 +79,14 @@ export default function ProjectsList() {
         </div>
       </div>
 
-      <div
-        className="mt-16 text-center mb-12"
-        data-reveal="up"
-        data-reveal-delay="0.2"
-      >
-        <a
+      <div className="mt-16 text-center mb-12" data-reveal="up" data-reveal-delay="0.2">
+        <AnimatedPillButton
           href="/about"
           data-discover-button
           data-magnetic
-          className="relative inline-flex items-center justify-center px-6 py-3 md:px-8 md:py-4 rounded-full border-2 border-charcoal/50 hover:ring-3 hover:ring-charcoal/80 text-charcoal/60 overflow-hidden cursor-pointer group transition-all duration-300"
-        >
-          <div data-circle-bg className="absolute inset-0 rounded-full"></div>
-          <div className="relative z-10 flex items-center gap-2">
-            <span
-              data-button-text
-              className="text-sm md:text-base font-medium text-charcoal/60 transition-colors duration-300 font-sans whitespace-nowrap"
-            >
-              View Full Projects
-            </span>
-          </div>
-          <div
-            data-ripple
-            className="absolute inset-0 rounded-full border-2 border-charcoal/50 scale-100 opacity-0"
-          ></div>
-        </a>
+          label="View Full Projects"
+          className="inline-flex"
+        />
       </div>
     </section>
   );

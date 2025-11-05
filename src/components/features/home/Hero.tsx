@@ -1,6 +1,10 @@
+"use client";
+
+import AnimatedPillButton from "@/components/common/AnimatedPillButton";
+
 export default function Hero() {
   return (
-    <section id="hero" className="relative min-h-screen">
+    <section id="hero" className="relative min-h-screen mt-8">
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div
           className="absolute top-10 -left-32 w-[300px] h-[300px] rounded-full opacity-25 blur-[120px]"
@@ -49,21 +53,7 @@ export default function Hero() {
             © Code by Kahfi Smith
           </div>
 
-          <div
-            data-get-in-touch
-            className="relative px-6 py-3 md:px-8 md:py-4 rounded-full flex items-center justify-center cursor-pointer group overflow-hidden bg-white border-2 border-charcoal/50 hover:ring-3 hover:ring-charcoal/80"
-          >
-            <div data-circle-bg className="absolute inset-0 rounded-full"></div>
-            <div className="relative z-10 flex items-center gap-2">
-              <span className="text-sm md:text-base font-medium text-charcoal/60 transition-colors duration-300 font-sans whitespace-nowrap">
-                Get in Touch
-              </span>
-            </div>
-            <div
-              data-ripple
-              className="absolute inset-0 rounded-full border-2 border-charcoal/50 scale-100 opacity-0"
-            ></div>
-          </div>
+          <AnimatedPillButton data-get-in-touch label="Get in Touch" />
         </div>
 
         <div className="flex-1 flex items-center justify-center">

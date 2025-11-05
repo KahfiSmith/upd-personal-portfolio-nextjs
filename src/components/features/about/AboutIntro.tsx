@@ -1,4 +1,57 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+
 export default function AboutIntro() {
+  const discoverRef = useRef<HTMLAnchorElement | null>(null);
+
+  useEffect(() => {
+    const el = discoverRef.current;
+    if (!el) return;
+
+    const bg = el.querySelector<HTMLElement>("[data-circle-bg]");
+    const ripple = el.querySelector<HTMLElement>("[data-ripple]");
+    const label = el.querySelector<HTMLElement>("[data-label]");
+    if (!bg || !label) return;
+
+    const CLIP_START = "inset(0% 100% 0% 0% round 999px)";
+    const CLIP_END = "inset(0% 0% 0% 0% round 999px)";
+
+    gsap.set(bg, {
+      backgroundColor: "#0a0a0a",
+      willChange: "clip-path",
+      clipPath: CLIP_START,
+      webkitClipPath: CLIP_START as any,
+    });
+    gsap.set(ripple, { opacity: 0, scale: 1 });
+
+    const tl = gsap.timeline({ paused: true });
+    tl.to(bg, { clipPath: CLIP_END, webkitClipPath: CLIP_END as any, duration: 0.8, ease: "power3.out" }, 0)
+      .to(label, { color: "#F5F3EE", duration: 0.45, ease: "power2.out" }, 0.12);
+
+    const onEnter = () => {
+      tl.timeScale(0.85).play(0);
+    };
+    const onLeave = () => {
+      tl.timeScale(0.75).reverse();
+    };
+    const onMouseDown = () => {
+      if (!ripple) return;
+      gsap.fromTo(ripple, { opacity: 0.2, scale: 0.95 }, { opacity: 0, scale: 1.1, duration: 0.4, ease: "power2.out" });
+    };
+
+    el.addEventListener("mouseenter", onEnter as any);
+    el.addEventListener("mouseleave", onLeave);
+    el.addEventListener("mousedown", onMouseDown);
+
+    return () => {
+      el.removeEventListener("mouseenter", onEnter as any);
+      el.removeEventListener("mouseleave", onLeave);
+      el.removeEventListener("mousedown", onMouseDown);
+      tl.kill();
+    };
+  }, []);
   return (
     <section className="relative my-12 md:my-20 lg:my-32 overflow-hidden">
       <div aria-hidden="true" className="absolute inset-0 -z-10">
@@ -78,19 +131,20 @@ export default function AboutIntro() {
 
             <div data-animate="fade-up" data-delay="0.4" className="mb-12">
               <a
+                ref={discoverRef}
                 href="/about"
                 data-discover-button
-                className="relative inline-flex items-center justify-center px-6 py-3 md:px-8 md:py-4 rounded-full border-2 border-charcoal/50 hover:ring-3 hover:ring-charcoal/80 text-charcoal/60 overflow-hidden cursor-pointer group transition-all duration-300"
+                className="relative inline-flex items-center justify-center px-6 py-3 md:px-8 md:py-4 rounded-full border-2 border-charcoal/50 hover:ring-3 hover:ring-charcoal/80 text-charcoal/60 overflow-hidden cursor-pointer group transition-shadow duration-300"
                 data-magnetic
               >
                 <div
                   data-circle-bg
-                  className="absolute inset-0 rounded-full"
+                  className="absolute -inset-px rounded-[999px]"
                 ></div>
                 <div className="relative z-10 flex items-center gap-2">
                   <span
-                    data-button-text
-                    className="text-sm md:text-base font-medium text-charcoal/60 transition-colors duration-300 font-sans whitespace-nowrap"
+                    data-label
+                    className="text-sm md:text-base font-medium text-charcoal/60 font-sans whitespace-nowrap"
                   >
                     Discover My Story
                   </span>
