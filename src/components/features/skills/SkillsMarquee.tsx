@@ -82,8 +82,8 @@ export default function SkillsMarquee() {
     let phase1 = 0; // [0, w1)
     let phase2 = 0; // [0, w2)
     let lastTime = performance.now();
-    let speed1 = 180; // px/s (top faster)
-    let speed2 = 120; // px/s (bottom slower)
+    let speed1 = 200; // px/s (top faster)
+    let speed2 = 200; // px/s (bottom slower)
     let initialPhaseApplied = false;
 
     const tick = () => {
@@ -109,10 +109,12 @@ export default function SkillsMarquee() {
         initialPhaseApplied = true;
       }
 
-      // Signed steps, modulo wrapped (rows always opposite due to mapping)
-      // Note: x1 = -phase1 (so positive step => left), x2 = phase2 - w2 (positive step => right)
-      const step1 = (followScroll ?  dirSmooth1 :  1) * speed1 * dt; // top: left on positive
-      const step2 = (followScroll ?  dirSmooth2 :  1) * speed2 * dt; // bottom: right on positive
+      // Signed steps, modulo wrapped
+      // Make BOTH rows move left (right->left) by default, and both reverse together with scroll
+      // Top: x1 = -phase1, so positive step => left
+      // Bottom: x2 = phase2 - w2, so NEGATIVE step => left
+      const step1 = (followScroll ?  dirSmooth1 :  1) * speed1 * dt;  // left on positive
+      const step2 = (followScroll ? -dirSmooth2 : -1) * speed2 * dt;  // left on positive overall
       phase1 = ((phase1 + step1) % w1 + w1) % w1;
       phase2 = ((phase2 + step2) % w2 + w2) % w2;
 
@@ -155,21 +157,52 @@ export default function SkillsMarquee() {
       window.addEventListener("touchmove", onTouchMove as any, { passive: true });
     }
 
-    // Resize handling
+    // Resize handling + content-width observer to keep loop seamless
     let resizeRaf = 0 as unknown as number;
     const onResize = () => {
       if (resizeRaf) return;
       resizeRaf = requestAnimationFrame(async () => {
         const imgs = [...row1.querySelectorAll('img'), ...row2.querySelectorAll('img')] as HTMLImageElement[];
         await Promise.all(imgs.map((img) => (img.decode ? img.decode().catch(() => {}) : Promise.resolve())));
+        const prevW1 = w1 || 1;
+        const prevW2 = w2 || 1;
         w1 = prepareRow(row1, window.innerWidth);
         w2 = prepareRow(row2, window.innerWidth);
-        if (w1) phase1 = ((phase1 % w1) + w1) % w1;
-        if (w2) phase2 = ((phase2 % w2) + w2) % w2;
+        if (w1) {
+          const frac = (phase1 / prevW1) || 0;
+          phase1 = (frac * w1) % w1;
+        }
+        if (w2) {
+          const frac = (phase2 / prevW2) || 0;
+          phase2 = (frac * w2) % w2;
+        }
         resizeRaf = 0 as unknown as number;
       }) as unknown as number;
     };
     window.addEventListener("resize", onResize, { passive: true });
+
+    // Observe intrinsic width changes (e.g., late image/font load) and retune phase to avoid jumps
+    const ro1 = new ResizeObserver(() => {
+      const half = (row1.scrollWidth || 0) / 2;
+      if (!half) return;
+      if (!w1) { w1 = half; return; }
+      if (Math.abs(half - w1) > 0.5) {
+        const frac = (phase1 / w1) || 0;
+        w1 = half;
+        phase1 = (frac * w1) % w1;
+      }
+    });
+    const ro2 = new ResizeObserver(() => {
+      const half = (row2.scrollWidth || 0) / 2;
+      if (!half) return;
+      if (!w2) { w2 = half; return; }
+      if (Math.abs(half - w2) > 0.5) {
+        const frac = (phase2 / w2) || 0;
+        w2 = half;
+        phase2 = (frac * w2) % w2;
+      }
+    });
+    try { ro1.observe(row1); ro2.observe(row2); } catch {}
 
     return () => {
       try { gsap.ticker.remove(tick); } catch {}
@@ -180,6 +213,7 @@ export default function SkillsMarquee() {
         window.removeEventListener("touchmove", onTouchMove as any);
       }
       window.removeEventListener("resize", onResize as any);
+      try { ro1.disconnect(); ro2.disconnect(); } catch {}
     };
   }, []);
 

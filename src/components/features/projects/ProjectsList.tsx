@@ -5,7 +5,7 @@ export default function ProjectsList() {
   return (
     <section
       id="projects-section"
-      className="relative my-12 md:my-20 lg:my-32 overflow-hidden bg-cream"
+      className="relative my-12 md:my-20 lg:my-32 overflow-hidden"
     >
       <div aria-hidden="true" className="absolute inset-0 -z-10 opacity-[0.03]">
         <div
@@ -87,7 +87,7 @@ export default function ProjectsList() {
           href="/about"
           data-discover-button
           data-magnetic
-          className="relative inline-flex items-center justify-center px-6 py-3 md:px-8 md:py-4 rounded-full bg-cream border-2 border-charcoal/50 hover:ring-3 hover:ring-charcoal/80 text-charcoal/60 overflow-hidden cursor-pointer group transition-all duration-300"
+          className="relative inline-flex items-center justify-center px-6 py-3 md:px-8 md:py-4 rounded-full border-2 border-charcoal/50 hover:ring-3 hover:ring-charcoal/80 text-charcoal/60 overflow-hidden cursor-pointer group transition-all duration-300"
         >
           <div data-circle-bg className="absolute inset-0 rounded-full"></div>
           <div className="relative z-10 flex items-center gap-2">

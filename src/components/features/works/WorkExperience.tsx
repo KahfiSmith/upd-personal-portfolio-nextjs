@@ -6,7 +6,7 @@ export default function WorkExperience() {
   return (
     <section
       id="experience-section"
-      className="relative my-12 md:my-20 lg:my-32 overflow-hidden bg-cream"
+      className="relative my-12 md:my-20 lg:my-32 overflow-hidden"
     >
       <div aria-hidden="true" className="absolute inset-0 -z-10 opacity-[0.03]">
         <div

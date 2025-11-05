@@ -1,6 +1,6 @@
 export default function Hero() {
   return (
-    <section id="hero" className="relative min-h-screen mb-16 md:mb-24">
+    <section id="hero" className="relative min-h-screen">
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div
           className="absolute top-10 -left-32 w-[300px] h-[300px] rounded-full opacity-25 blur-[120px]"
