@@ -21,7 +21,7 @@ export const dataWorkExperience: WorkExperienceItemProps[] = [
     period: "Feb 2024 - Jun 2024",
     company: "Infinite Learning",
     description: [
-      "Responsible as the programmer in developing a online psychology consultation website that integrates React.js and Express.js.",
+      "Responsible as the main programmer in developing an online psychology consultation platform that integrates React.js for the frontend and Express.js for the backend",
       "Conduct market research to ensure that the website meets user needs in the health sector.",
       "Analyze business needs to create effective digital solutions in providing health information.",
     ],

@@ -82,8 +82,33 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+  
+  /* Custom scrollbar styles - Opsi 1: Track charcoal dengan scrollbar lebih tipis */
+  body::-webkit-scrollbar {
+    width: 0.05em; /* Lebih tipis dari sebelumnya */
+  }
+  
+  body::-webkit-scrollbar-track {
+    background-color: var(--color-charcoal);
+    opacity: 0.1;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background-color: var(--color-charcoal);
+    opacity: 0.4;
+    border-radius: 20px;
+  }
+  
+  body::-webkit-scrollbar-thumb:hover {
+    opacity: 0.7;
   }
 }
 
