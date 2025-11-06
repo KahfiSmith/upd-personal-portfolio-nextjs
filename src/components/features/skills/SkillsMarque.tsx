@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { dataSkills } from "@/data/skills";
 
-export default function SkillsMarquee() {
+export default function SkillsMarque() {
   const row1Ref = useRef<HTMLDivElement | null>(null);
   const row2Ref = useRef<HTMLDivElement | null>(null);
 
