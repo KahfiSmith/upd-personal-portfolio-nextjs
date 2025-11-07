@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   return (
-    <main className="min-h-screen p-8 sm:p-20">
+    <main className="max-w-[96rem] mx-auto px-6 md:px-8 min-h-screen my-12 md:my-20 lg:my-24">
       <h1 className="text-3xl font-semibold mb-4">Blog</h1>
       <p className="text-base text-foreground/80 mb-6">
         Your latest posts will appear here.

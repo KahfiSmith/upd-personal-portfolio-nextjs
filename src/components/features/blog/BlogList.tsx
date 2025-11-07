@@ -1,6 +1,6 @@
 export default function BlogList() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-12">
+    <section className="max-w-[96rem] mx-auto px-6 md:px-8">
       <h2 className="text-2xl font-semibold mb-3">Latest Posts</h2>
       <ul className="space-y-3">
         <li>
