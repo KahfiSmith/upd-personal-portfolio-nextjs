@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import TechOrbit from "@/components/features/about/TechOrbit";
+import AboutPageEnhancer from "@/components/features/about/AboutPageEnhancer";
 
 export const metadata: Metadata = {
   title: "About | Behind the Code",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen relative">
+    <main id="about-page" className="min-h-screen relative">
+      <AboutPageEnhancer />
       <div aria-hidden="true" className="fixed inset-0 -z-10">
         <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-gradient-to-br from-orange-100/30 to-pink-100/30 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 left-1/3 w-48 h-48 bg-gradient-to-br from-blue-100/20 to-purple-100/20 rounded-full blur-3xl" />
@@ -120,7 +122,7 @@ export default function AboutPage() {
                         <div className="w-px h-16 bg-charcoal/20 drives-divider" />
                         <div className="space-y-2">
                           <h4 className="font-display text-2xl md:text-3xl lg:text-4xl text-charcoal drives-title">Problem Solving</h4>
-                          <div className="w-0 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full drives-underline" />
+                          <div className="w-24 md:w-28 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full drives-underline" />
                         </div>
                       </div>
                     </div>
@@ -147,7 +149,7 @@ export default function AboutPage() {
                         {/* Title */}
                         <div className="space-y-2 text-right lg:text-left">
                           <h4 className="font-display text-2xl md:text-3xl lg:text-4xl text-charcoal drives-title">Continuous Learning</h4>
-                          <div className="w-0 h-1 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full drives-underline ml-auto lg:ml-0" />
+                          <div className="w-24 md:w-28 h-1 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full drives-underline ml-auto lg:ml-0" />
                         </div>
                         <div className="w-px h-16 bg-charcoal/20 drives-divider" />
                         <div className="relative drives-number">
@@ -173,7 +175,7 @@ export default function AboutPage() {
                         <div className="w-px h-16 bg-charcoal/20 drives-divider" />
                         <div className="space-y-2">
                           <h4 className="font-display text-2xl md:text-3xl lg:text-4xl text-charcoal drives-title">User Impact</h4>
-                          <div className="w-0 h-1 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full drives-underline" />
+                          <div className="w-24 md:w-28 h-1 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full drives-underline" />
                         </div>
                       </div>
                     </div>

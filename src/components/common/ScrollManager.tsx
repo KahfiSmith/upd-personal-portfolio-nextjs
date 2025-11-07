@@ -33,10 +33,14 @@ export default function ScrollManager() {
           return;
         }
       }
-      if (lenis?.scrollTo) {
-        lenis.scrollTo(0);
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+      // Avoid redundant scroll-to-top that can cause flicker
+      const atTop = Math.abs(window.scrollY || window.pageYOffset || 0) < 1;
+      if (!atTop) {
+        if (lenis?.scrollTo) {
+          lenis.scrollTo(0);
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
       }
     };
 
@@ -46,4 +50,3 @@ export default function ScrollManager() {
 
   return null;
 }
-
