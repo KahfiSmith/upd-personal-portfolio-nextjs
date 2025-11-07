@@ -4,6 +4,7 @@ import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import FloatingDockNav from "@/components/common/FloatingDockNav";
 
 // Local fonts from public/fonts
 const outfit = localFont({
@@ -43,6 +44,7 @@ export default function RootLayout({
         <SmoothScrollProvider>
           <ScrollManager />
           {children}
+          <FloatingDockNav />
           <Footer />
         </SmoothScrollProvider>
       </body>
