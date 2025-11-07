@@ -225,11 +225,11 @@ export default function SkillsMarque() {
   }, []);
 
   return (
-    <section className="my-12 md:my-20 relative overflow-x-hidden overflow-y-visible pt-12 pb-12">
-      <div className="relative py-12">
+    <section className="my-12 md:my-20 relative overflow-x-hidden overflow-y-visible pt-16 md:pt-24 pb-16">
+      <div className="relative py-16 md:py-20 overflow-visible">
         {/* TOP ROW */}
         <div
-          className="w-full max-w-none bg-charcoal text-cream px-6 py-8 md:px-10 md:py-12 overflow-x-hidden overflow-y-visible shadow-lg ring-1 ring-white/10 -rotate-6 origin-center relative z-20 mb-8"
+          className="w-full max-w-none bg-charcoal text-cream px-6 py-8 md:px-10 md:py-12 overflow-x-hidden overflow-y-visible shadow-lg ring-1 ring-white/10 -rotate-6 origin-center relative z-20 mb-8 translate-y-2 md:translate-y-3"
           style={{ width: "calc(100% + 16rem)", marginLeft: "-8rem" }}
         >
           <div className="relative select-none overflow-x-hidden overflow-y-visible">
@@ -243,7 +243,7 @@ export default function SkillsMarque() {
                   key={`row1-${s.label}-${i}`}
                   src={s.imgSrc}
                   alt={s.label}
-                  className="shrink-0 w-12 h-12 md:w-14 md:h-14 opacity-90 hover:opacity-100 transition-opacity"
+                  className="block shrink-0 w-12 h-12 md:w-14 md:h-14 opacity-90 hover:opacity-100 transition-opacity"
                   loading="lazy"
                 />
               ))}
@@ -264,7 +264,7 @@ export default function SkillsMarque() {
                   key={`row2-${s.label}-${i}`}
                   src={s.imgSrc}
                   alt={s.label}
-                  className="shrink-0 w-12 h-12 md:w-14 md:h-14 opacity-90 hover:opacity-100 transition-opacity"
+                  className="block shrink-0 w-12 h-12 md:w-14 md:h-14 opacity-90 hover:opacity-100 transition-opacity"
                   loading="lazy"
                 />
               ))}

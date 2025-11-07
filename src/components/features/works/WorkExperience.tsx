@@ -1,10 +1,58 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { dataWorkExperience } from "@/data/work-experience";
 import { Calendar } from "lucide-react";
 
 export default function WorkExperience() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const sectionEl = sectionRef.current;
+    if (!sectionEl) return;
+
+    const ctx = gsap.context(() => {
+      const nodes = sectionEl.querySelectorAll<HTMLElement>("[data-reveal]");
+      nodes.forEach((node) => {
+        const type = node.getAttribute("data-reveal");
+        const delay = parseFloat(node.getAttribute("data-reveal-delay") || "0") || 0;
+
+        const fromVars: gsap.TweenVars = { opacity: 0 };
+        if (type === "up") fromVars.y = 32;
+        if (type === "down") fromVars.y = -32;
+        if (type === "left") fromVars.x = 32;
+        if (type === "right") fromVars.x = -32;
+
+        gsap.fromTo(
+          node,
+          { ...fromVars, willChange: "transform, opacity" },
+          {
+            x: 0,
+            y: 0,
+            opacity: 1,
+            ease: "power3.out",
+            duration: 0.8,
+            delay,
+            clearProps: "willChange",
+            scrollTrigger: {
+              trigger: node,
+              start: "top 85%",
+              once: true,
+            },
+          }
+        );
+      });
+    }, sectionEl);
+
+    return () => ctx.revert();
+  }, []);
   const works = dataWorkExperience;
   return (
     <section
+      ref={sectionRef}
       id="work-experience"
       className="relative my-12 md:my-20 lg:my-32 overflow-hidden"
     >

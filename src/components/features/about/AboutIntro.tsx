@@ -2,9 +2,57 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function AboutIntro() {
   const discoverRef = useRef<HTMLAnchorElement | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    // Register ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+
+    const sectionEl = sectionRef.current;
+    if (!sectionEl) return;
+
+    // Scoped GSAP context for safe cleanup
+    const ctx = gsap.context(() => {
+      const nodes = sectionEl.querySelectorAll<HTMLElement>("[data-animate]");
+      nodes.forEach((node) => {
+        const type = node.getAttribute("data-animate");
+        const delay = parseFloat(node.getAttribute("data-delay") || "0") || 0;
+
+        const fromVars: gsap.TweenVars = { opacity: 0 };
+        if (type === "fade-up") fromVars.y = 32;
+        if (type === "fade-down") fromVars.y = -32;
+        if (type === "fade-left") fromVars.x = 32;
+        if (type === "fade-right") fromVars.x = -32;
+
+        gsap.fromTo(
+          node,
+          { ...fromVars, willChange: "transform, opacity" },
+          {
+            x: 0,
+            y: 0,
+            opacity: 1,
+            ease: "power3.out",
+            duration: 0.8,
+            delay,
+            clearProps: "willChange",
+            scrollTrigger: {
+              trigger: node,
+              start: "top 85%",
+              once: true,
+            },
+          }
+        );
+      });
+    }, sectionEl);
+
+    return () => {
+      ctx.revert();
+    };
+  }, []);
 
   useEffect(() => {
     const el = discoverRef.current;
@@ -53,7 +101,7 @@ export default function AboutIntro() {
     };
   }, []);
   return (
-    <section className="relative my-12 md:my-20 lg:my-32 overflow-hidden">
+    <section id="about" ref={sectionRef} className="relative my-12 md:my-20 lg:my-32 overflow-hidden">
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute top-1/4 left-1/4 w-32 h-32 opacity-5">
           <div className="w-full h-full bg-gradient-to-br from-orange-400 to-pink-500 rounded-full blur-xl animate-pulse"></div>
