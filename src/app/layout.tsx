@@ -1,6 +1,7 @@
 import Footer from "@/components/common/Footer";
 import ScrollManager from "@/components/common/ScrollManager";
 import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
+import PageTransition from "@/components/common/PageTransition";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -43,7 +44,9 @@ export default function RootLayout({
       <body className={`${outfit.variable} ${playfair.variable} ${spaceGrotesk.variable} antialiased`}>
         <SmoothScrollProvider>
           <ScrollManager />
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
           <FloatingDockNav />
           <Footer />
         </SmoothScrollProvider>

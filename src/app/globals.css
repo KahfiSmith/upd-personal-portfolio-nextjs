@@ -91,9 +91,8 @@
     @apply bg-background text-foreground font-sans;
   }
   
-  /* Custom scrollbar styles - Opsi 1: Track charcoal dengan scrollbar lebih tipis */
   body::-webkit-scrollbar {
-    width: 0.05em; /* Lebih tipis dari sebelumnya */
+    width: 0.05em; 
   }
   
   body::-webkit-scrollbar-track {
@@ -121,7 +120,6 @@
   --font-space-grotesk: var(--font-space-grotesk);
 }
 
-/* SimpleCurtainLoader specific styles migrated from inline <style> */
 .brand-name {
   font-family: var(--font-display, 'Playfair Display', serif);
   text-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
@@ -154,7 +152,6 @@
   }
 }
 
-/* Display toggles for loader based on html flags */
 #simple-curtain-loader { display: none; }
 html.is-reload #simple-curtain-loader { display: block; }
 html.needs-reveal #simple-curtain-loader { display: none !important; }
