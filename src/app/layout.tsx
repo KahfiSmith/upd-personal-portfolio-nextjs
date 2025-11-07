@@ -1,11 +1,9 @@
 import Footer from "@/components/common/Footer";
 import ScrollManager from "@/components/common/ScrollManager";
 import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
-import PageTransition from "@/components/common/PageTransition";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import FloatingDockNav from "@/components/common/FloatingDockNav";
 
 // Local fonts from public/fonts
 const outfit = localFont({
@@ -41,13 +39,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} ${playfair.variable} ${spaceGrotesk.variable} antialiased`}>
+      <body
+        className={`${outfit.variable} ${playfair.variable} ${spaceGrotesk.variable} antialiased`}
+      >
         <SmoothScrollProvider>
           <ScrollManager />
-          <PageTransition>
-            {children}
-          </PageTransition>
-          <FloatingDockNav />
+          {children}
           <Footer />
         </SmoothScrollProvider>
       </body>

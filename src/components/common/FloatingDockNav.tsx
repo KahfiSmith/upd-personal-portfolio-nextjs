@@ -9,13 +9,29 @@ export default function FloatingDockNav() {
     if (!hash?.startsWith("#")) return;
     e.preventDefault();
     const id = hash.replace(/^#/, "");
+    // On home: smooth scroll to section
     const el = document.getElementById(id);
     if (!el) return;
     const lenis: any = (window as any).__lenis;
     if (lenis?.scrollTo) {
-      lenis.scrollTo(el);
+      const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+      lenis.scrollTo(el, { duration: 1.8, easing: easeInOutCubic });
     } else {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Fallback manual tween for smoother-than-default behavior
+      const startY = window.scrollY || window.pageYOffset || 0;
+      const targetRect = el.getBoundingClientRect();
+      const targetY = startY + targetRect.top;
+      const duration = 700; // ms
+      const start = performance.now();
+      const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = easeInOutCubic(t);
+        const y = startY + (targetY - startY) * eased;
+        window.scrollTo(0, y);
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
     }
     history.pushState(null, "", `#${id}`);
   }, []);

@@ -101,7 +101,7 @@ export default function AboutIntro() {
     };
   }, []);
   return (
-    <section id="about" ref={sectionRef} className="relative my-12 md:my-20 lg:my-32 overflow-hidden">
+    <section id="about" ref={sectionRef} className="relative my-12 md:my-20 lg:my-32 overflow-hidden min-h-screen flex items-center">
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute top-1/4 left-1/4 w-32 h-32 opacity-5">
           <div className="w-full h-full bg-gradient-to-br from-orange-400 to-pink-500 rounded-full blur-xl animate-pulse"></div>
@@ -114,8 +114,8 @@ export default function AboutIntro() {
         </div>
       </div>
 
-      <div className="max-w-[96rem] mx-auto px-6 md:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+      <div className="max-w-[96rem] mx-auto px-6 md:px-8 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
           <div className="lg:col-span-5" data-animate="fade-right">
             <div className="space-y-4 lg:space-y-6">
               <h2 className="font-display text-charcoal leading-[0.9] font-medium text-left">
