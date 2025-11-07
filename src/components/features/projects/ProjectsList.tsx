@@ -5,7 +5,7 @@ export default function ProjectsList() {
   const projects = dataProjects;
   return (
     <section
-      id="projects-section"
+      id="projects"
       className="relative my-12 md:my-20 lg:my-32 overflow-hidden"
     >
       <div aria-hidden="true" className="absolute inset-0 -z-10 opacity-[0.03]">

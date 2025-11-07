@@ -5,7 +5,7 @@ export default function WorkExperience() {
   const works = dataWorkExperience;
   return (
     <section
-      id="experience-section"
+      id="work-experience"
       className="relative my-12 md:my-20 lg:my-32 overflow-hidden"
     >
       <div aria-hidden="true" className="absolute inset-0 -z-10 opacity-[0.03]">
@@ -20,15 +20,13 @@ export default function WorkExperience() {
       </div>
 
       <div className="max-w-[96rem] mx-auto px-6 md:px-8 lg:px-12">
-        {/* Removed stray style tag */}
-        <div className="mb-4 lg:mb-8" data-reveal="right">
+        <div className="mb-4" data-reveal="right">
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-charcoal font-medium leading-tight">
             <span className="bg-gradient-to-r from-cyan-600 to-black bg-clip-text text-transparent">
               Work Experience
             </span>
           </h2>
         </div>
-
         <div className="divide-y-2 divide-charcoal" id="work-grid">
           {works.map((w, index) => (
             <article key={w.id}

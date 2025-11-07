@@ -1,4 +1,5 @@
 import Footer from "@/components/common/Footer";
+import ScrollManager from "@/components/common/ScrollManager";
 import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -40,6 +41,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${outfit.variable} ${playfair.variable} ${spaceGrotesk.variable} antialiased`}>
         <SmoothScrollProvider>
+          <ScrollManager />
           {children}
           <Footer />
         </SmoothScrollProvider>

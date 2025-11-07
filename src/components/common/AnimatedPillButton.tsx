@@ -77,7 +77,7 @@ export default function AnimatedPillButton({
       ref={containerRef as any}
       href={href as any}
       whileTap={{ scale: 0.98 }}
-      className={`relative px-6 py-3 md:px-8 md:py-4 rounded-full flex items-center justify-center cursor-pointer group overflow-hidden bg-white border-2 border-charcoal/50 hover:ring-3 hover:ring-charcoal/80 transition-shadow duration-300 ${className}`}
+      className={`relative px-6 py-3 md:px-8 md:py-4 rounded-full flex items-center justify-center cursor-pointer group overflow-hidden bg-white border-2 border-charcoal/50 hover:ring-3 hover:ring-charcoal/80 transition-shadow duration-500 ${className}`}
       {...rest}
     >
       <div data-circle-bg className="absolute -inset-px rounded-[999px] will-change-transform z-0" />

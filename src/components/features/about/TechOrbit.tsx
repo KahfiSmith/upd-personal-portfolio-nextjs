@@ -16,7 +16,9 @@ type Props = {
 export default function TechOrbit({ icons, duration = 24, reverse = false, keepUpright = false, orbitRatio = 0.7 }: Props) {
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const [radius, setRadius] = useState(120);
+  // Start with no radius and render hidden until measured to avoid flicker
+  const [radius, setRadius] = useState<number | null>(null);
+  const [ready, setReady] = useState(false);
 
   // Compute positions evenly spaced
   const angles = useMemo(() => {
@@ -27,16 +29,23 @@ export default function TechOrbit({ icons, duration = 24, reverse = false, keepU
   useLayoutEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => {
+
+    // Measure immediately (before paint) and on resize to keep in sync
+    const measure = () => {
       const rect = el.getBoundingClientRect();
       const r = Math.max(32, (Math.min(rect.width, rect.height) / 2) * orbitRatio);
       setRadius(r);
-    });
+      setReady(true);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [orbitRatio]);
 
   useEffect(() => {
+    if (!ready) return;
     const track = trackRef.current;
     if (!track) return;
     gsap.set(track, { xPercent: -50, yPercent: -50, left: "50%", top: "50%" });
@@ -62,11 +71,16 @@ export default function TechOrbit({ icons, duration = 24, reverse = false, keepU
     return () => {
       tween.kill();
     };
-  }, [duration, reverse, keepUpright]);
+  }, [duration, reverse, keepUpright, ready]);
 
   return (
     <div ref={wrapRef} className="relative mx-auto w-80 h-80 md:w-96 md:h-96 overflow-visible">
-      <div ref={trackRef} className="absolute" data-orbit-track>
+      <div
+        ref={trackRef}
+        className="absolute"
+        data-orbit-track
+        style={{ opacity: ready ? 1 : 0, willChange: ready ? "transform" : undefined }}
+      >
         {icons.map((icon, idx) => {
           const angle = angles[idx] ?? 0;
           return (
@@ -74,10 +88,9 @@ export default function TechOrbit({ icons, duration = 24, reverse = false, keepU
               key={`${icon.alt}-${idx}`}
               data-orbit-arm
               className="absolute left-1/2 top-1/2"
-              style={{ transform: `translate(-50%, -50%) rotate(${angle}deg) translateX(${radius}px)` }}
+              style={{ transform: `translate(-50%, -50%) rotate(${angle}deg) translateX(${radius ?? 0}px)` }}
             >
-              <div data-icon-inner data-angle={angle}
-                   style={{ transform: keepUpright ? undefined : undefined }}>
+              <div data-icon-inner data-angle={angle}>
                 <div className="w-16 h-16 rounded-full bg-charcoal border border-charcoal/10 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
                   <img src={icon.src} alt={icon.alt} className="w-10 h-10" loading="eager" />
                 </div>
