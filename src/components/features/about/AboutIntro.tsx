@@ -142,14 +142,18 @@ export default function AboutIntro() {
                 great software is born from the intersection of technical
                 excellence and human-centered design. My approach combines
                 meticulous attention to detail with a passion for creating
-                delightful user experiences.
+                delightful user experiences. From user research sessions to
+                late-night prototyping, I obsess over understanding the nuance
+                behind every interaction so that interfaces feel expressive,
+                inclusive, and effortless. I treat every challenge as a chance to learn and
+                leave the experience better than I found it.
               </p>
             </div>
 
             <div
               data-animate="fade-up"
               data-delay="0.2"
-              className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 lg:gap-12 mb-12 lg:mb-16"
+              className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 lg:gap-12 mb-10 lg:mb-12"
             >
               <div className="space-y-3">
                 <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal font-display">

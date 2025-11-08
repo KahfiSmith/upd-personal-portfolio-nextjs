@@ -225,7 +225,7 @@ export default function SkillsMarque() {
   }, []);
 
   return (
-    <section className="my-12 md:my-20 relative overflow-x-hidden overflow-y-visible pt-16 md:pt-24 pb-16">
+    <section className="my-12 md:my-20 relative overflow-x-hidden overflow-y-visible pt-16 md:pt-24">
       <div className="relative py-16 md:py-20 overflow-visible">
         {/* TOP ROW */}
         <div

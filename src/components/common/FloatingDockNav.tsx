@@ -1,7 +1,7 @@
 "use client";
 
 import { FloatingDock } from "@/components/ui/floating-dock";
-import { Briefcase, FolderGit2, User2, BookText } from "lucide-react";
+import { Briefcase, FolderGit2, User2, BookText, Home } from "lucide-react";
 import { MouseEvent, useCallback, useMemo } from "react";
 
 export default function FloatingDockNav() {
@@ -38,6 +38,12 @@ export default function FloatingDockNav() {
 
   const items = useMemo(
     () => [
+      {
+        title: "Home",
+        icon: <Home className="h-5 w-5 text-white" />,
+        href: "#hero",
+        onClick: onAnchorClick,
+      },
       {
         title: "About",
         icon: <User2 className="h-5 w-5 text-white" />,
