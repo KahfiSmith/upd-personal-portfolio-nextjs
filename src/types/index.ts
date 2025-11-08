@@ -31,6 +31,18 @@ export interface ProjectItem {
   role: string;
 };
 
+export interface BlogPost {
+  id: number;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string[];
+  publishedAt: string;
+  minuteRead: number;
+  tags: string[];
+  heroImage?: string;
+}
+
 export type SocialName = 'github' | 'linkedin' | 'facebook' | 'instagram';
 
 export interface SocialLink { name: SocialName; href: string }
