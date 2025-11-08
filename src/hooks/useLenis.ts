@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import Lenis from 'lenis';
+import { useEffect } from "react";
+import Lenis from "lenis";
 
 export const useLenis = () => {
   useEffect(() => {
@@ -11,14 +11,16 @@ export const useLenis = () => {
     // Expose globally for programmatic control (e.g., ScrollManager)
     (window as any).__lenis = lenis;
 
-    function raf(time: number) {
+    let rafId = 0;
+    const raf = (time: number) => {
       lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
+      rafId = window.requestAnimationFrame(raf);
+    };
 
-    requestAnimationFrame(raf);
+    rafId = window.requestAnimationFrame(raf);
 
     return () => {
+      window.cancelAnimationFrame(rafId);
       try {
         if ((window as any).__lenis === lenis) {
           delete (window as any).__lenis;

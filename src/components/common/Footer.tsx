@@ -4,7 +4,7 @@ export default function Footer({
   headlinePrefix = "Let's Build Something",
   headlineHighlight = "Amazing",
   description = "I'm always excited to collaborate on interesting projects and bring creative ideas to life. Let's create something extraordinary together.",
-  primaryButton = { label: "View My Work", href: "/works" },
+  primaryButton = { label: "View My Work", href: "/projects" },
   secondaryButton = { label: "Get in Touch", href: "mailto:alkahfii2018@gmail.com" },
   socials = [
     { name: 'github', href: 'https://github.com/kahfismith' },

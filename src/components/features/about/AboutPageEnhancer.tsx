@@ -9,6 +9,7 @@ export default function AboutPageEnhancer() {
     gsap.registerPlugin(ScrollTrigger);
 
     const root = document.getElementById("about-page") || document;
+    const hoverCleanups: Array<() => void> = [];
     const ctx = gsap.context(() => {
       // Reveal animations for elements with data-animate
       const nodes = root.querySelectorAll<HTMLElement>("[data-animate]");
@@ -71,22 +72,16 @@ export default function AboutPageEnhancer() {
         const onLeave = () => tl.reverse();
         item.addEventListener("mouseenter", onEnter);
         item.addEventListener("mouseleave", onLeave);
-
-        // store for cleanup
-        (item as any)._tl = tl;
+        hoverCleanups.push(() => {
+          item.removeEventListener("mouseenter", onEnter);
+          item.removeEventListener("mouseleave", onLeave);
+          tl.kill();
+        });
       });
     }, root);
 
     return () => {
-      // Cleanup hover listeners
-      const items = (root as HTMLElement).querySelectorAll<HTMLElement>(".drives-item");
-      items.forEach((item) => {
-        // @ts-ignore
-        const tl = (item as any)._tl as gsap.core.Timeline | undefined;
-        if (tl) tl.kill();
-        item.replaceWith(item.cloneNode(true)); // quick remove listeners
-      });
-      // No title underline listeners to cleanup
+      hoverCleanups.forEach((cleanup) => cleanup());
       ctx.revert();
     };
   }, []);

@@ -72,7 +72,6 @@ export default function AboutPage() {
                     </div>
                   </div>
 
-                  {/* Orbiting tech icons */}
                   <TechOrbit
                     icons={[
                       { src: "/icons/react.svg", alt: "React" },
@@ -96,7 +95,7 @@ export default function AboutPage() {
 
           <div data-animate="fade-up" data-delay="0.3" className="space-y-20 lg:space-y-24">
             <div className="text-center space-y-8">
-              <h3 className="font-display text-charcoal text-4xl md:text-5xl lg:text-6xl font-light" data-drives-title>
+              <h3 className="font-display text-charcoal text-4xl md:text-5xl lg:text-6xl font-light mb-12" data-drives-title>
                 What Drives Me
               </h3>
               <div className="flex items-center justify-center">

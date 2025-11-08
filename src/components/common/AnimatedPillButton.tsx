@@ -4,19 +4,21 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { motion } from "framer-motion";
 
+type DivVariantProps = React.HTMLAttributes<HTMLDivElement> & { href?: undefined };
+type AnchorVariantProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
+
 type AnimatedPillButtonProps = {
   label: string;
-  href?: string;
   className?: string;
-} & React.HTMLAttributes<HTMLDivElement> & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+} & (DivVariantProps | AnchorVariantProps);
 
 export default function AnimatedPillButton({
   label,
-  href,
   className = "",
+  href,
   ...rest
 }: AnimatedPillButtonProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | HTMLAnchorElement | null>(null);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -39,46 +41,64 @@ export default function AnimatedPillButton({
     });
     gsap.set(ripple, { opacity: 0, scale: 1 });
 
-    const tl = gsap.timeline({ paused: true });
+    const tl = gsap.timeline({ paused: true, smoothChildTiming: true });
     tl.to(bg, { clipPath: CLIP_END, webkitClipPath: CLIP_END as any, duration: 0.8, ease: "power3.out" }, 0)
       .to(labelEl, { color: "#F5F3EE", duration: 0.45, ease: "power2.out" }, 0.12);
 
+    // Control tween to animate timeline progress for smooth, interruptible transitions
+    let ctrl: gsap.core.Tween | null = null;
+    const tweenProgress = (to: number, duration: number, ease: string) => {
+      if (ctrl) ctrl.kill();
+      ctrl = gsap.to(tl, { progress: to, duration, ease, overwrite: true });
+    };
     const onEnter = () => {
-      tl.timeScale(0.8).play(0);
+      const p = tl.progress();
+      // Durasi dinamis berdasar sisa progress supaya terasa menerus, bukan restart
+      const base = 0.8; // semula total fill 0.8s
+      const dur = Math.max(0.06, (1 - p) * base);
+      tweenProgress(1, dur, "none");
     };
     const onLeave = () => {
-      tl.timeScale(0.8).reverse();
+      const p = tl.progress();
+      // Percepat keluar, tapi tetap proporsional dengan progress sekarang
+      const base = 0.24; // lebih cepat dari masuk
+      const dur = Math.max(0.04, p * base);
+      tweenProgress(0, dur, "none");
     };
-    const onMouseDown = () => {
+    const onPointerDown = () => {
       if (!ripple) return;
       gsap.fromTo(
         ripple,
         { opacity: 0.2, scale: 0.95 },
-        { opacity: 0, scale: 1.1, duration: 0.4, ease: "power2.out" }
+        { opacity: 0, scale: 1.1, duration: 0.4, ease: "power2.out", overwrite: "auto" }
       );
     };
 
-    el.addEventListener("mouseenter", onEnter);
-    el.addEventListener("mouseleave", onLeave);
-    el.addEventListener("mousedown", onMouseDown);
+    el.addEventListener("pointerenter", onEnter as any);
+    el.addEventListener("pointerleave", onLeave as any);
+    el.addEventListener("pointerdown", onPointerDown as any);
 
     return () => {
-      el.removeEventListener("mouseenter", onEnter);
-      el.removeEventListener("mouseleave", onLeave);
-      el.removeEventListener("mousedown", onMouseDown);
+      if (ctrl) ctrl.kill();
+      el.removeEventListener("pointerenter", onEnter as any);
+      el.removeEventListener("pointerleave", onLeave as any);
+      el.removeEventListener("pointerdown", onPointerDown as any);
       tl.kill();
     };
   }, []);
 
   const MotionRoot: any = href ? motion.a : motion.div;
+  const isLink = typeof href === "string";
+  const elementProps = isLink
+    ? { ...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>), href }
+    : (rest as React.HTMLAttributes<HTMLDivElement>);
 
   return (
     <MotionRoot
       ref={containerRef as any}
-      href={href as any}
       whileTap={{ scale: 0.98 }}
       className={`relative px-6 py-3 md:px-8 md:py-4 rounded-full flex items-center justify-center cursor-pointer group overflow-hidden bg-white border-2 border-charcoal/50 hover:ring-3 hover:ring-charcoal/80 transition-shadow duration-500 ${className}`}
-      {...rest}
+      {...elementProps}
     >
       <div data-circle-bg className="absolute -inset-px rounded-[999px] will-change-transform z-0" />
       <div className="relative z-10 flex items-center gap-2">
