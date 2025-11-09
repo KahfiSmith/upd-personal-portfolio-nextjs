@@ -18,11 +18,14 @@ const cardVariants: Variants = {
     y: 0,
     borderColor: "rgba(10,10,10,0.18)",
     boxShadow: "0 0 0 rgba(15,15,15,0)",
+    borderRadius: 0,
+    backgroundColor: "rgba(255,255,255,0)",
   },
   hover: {
     y: -10,
     borderColor: "rgba(10,10,10,0.35)",
-    boxShadow: "0 30px 60px rgba(5,5,5,0.12)",
+    borderRadius: 40,
+    backgroundColor: "rgba(255,255,255,0.06)",
     transition: { type: "spring", stiffness: 280, damping: 24 },
   },
 };
@@ -76,6 +79,16 @@ const contentVariants: Variants = {
 const contentHighlightVariants: Variants = {
   rest: { opacity: 0, scale: 0.96 },
   hover: { opacity: 1, scale: 1, transition: { duration: 0.35 } },
+};
+
+const contentOutlineVariants: Variants = {
+  rest: { scale: 0.98, opacity: 0, borderRadius: 0 },
+  hover: {
+    scale: 1,
+    opacity: 1,
+    borderRadius: 20,
+    transition: { type: "spring", stiffness: 240, damping: 20 },
+  },
 };
 
 interface AnimatedBlogListProps {
@@ -140,17 +153,22 @@ function BlogCard({ post }: { post: BlogPost }) {
         aria-hidden="true"
         variants={cardGlowVariants}
         style={{ background: glowBackground }}
-        className="pointer-events-none absolute inset-x-2 md:inset-x-6 inset-y-4 rounded-[2.5rem] -z-10 blur-3xl"
+        className="pointer-events-none absolute inset-x-2 md:inset-x-6 inset-y-4 -z-10 blur-3xl"
       />
 
       <Link href={`/blog/${post.slug}`} className="group block relative">
         <motion.div
-          className="relative flex flex-col gap-6 py-10 md:py-12 overflow-hidden"
+          className="relative flex flex-col gap-6 py-10 md:py-12"
           variants={contentVariants}
         >
           <motion.span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-3 md:inset-x-6 top-3 bottom-3 rounded-[2rem] bg-gradient-to-r from-cyan-500/12 via-transparent to-purple-500/18"
+            className="pointer-events-none absolute inset-x-3 md:inset-x-6 top-3 bottom-3 border border-transparent"
+            variants={contentOutlineVariants}
+          />
+          <motion.span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-2 bottom-2 -z-10 bg-gradient-to-r from-cyan-500/10 via-transparent to-purple-500/16"
             variants={contentHighlightVariants}
           />
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
@@ -170,7 +188,7 @@ function BlogCard({ post }: { post: BlogPost }) {
 
             {post.heroImage && (
               <motion.div
-                className="relative w-full lg:w-72 overflow-hidden rounded-2xl border border-charcoal/10"
+                className="relative w-full lg:w-72 overflow-hidden rounded-xl"
                 variants={imageWrapperVariants}
               >
                 <motion.img
@@ -189,7 +207,7 @@ function BlogCard({ post }: { post: BlogPost }) {
             )}
           </div>
 
-          <div className="inline-flex items-center gap-2 text-charcoal font-semibold">
+          <div className="inline-flex items-center gap-2 text-charcoal/70 font-semibold">
             Continue reading
             <motion.span
               aria-hidden="true"
