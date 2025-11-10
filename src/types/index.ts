@@ -36,11 +36,23 @@ export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
-  content: string[];
+  content: (BlogContentText | BlogContentImage)[];
   publishedAt: string;
   minuteRead: number;
   tags: string[];
   heroImage?: string;
+}
+
+export interface BlogContentText {
+  type: 'text';
+  content: string;
+}
+
+export interface BlogContentImage {
+  type: 'image';
+  src: string;
+  alt: string;
+  caption?: string;
 }
 
 export type SocialName = 'github' | 'linkedin' | 'facebook' | 'instagram';
