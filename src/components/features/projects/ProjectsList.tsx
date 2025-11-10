@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { dataProjects } from "@/data/projects";
 import AnimatedPillButton from "@/components/common/AnimatedPillButton";
 
@@ -47,8 +48,8 @@ export default function ProjectsList() {
                 data-project-divider-bottom
               ></div>
 
-              <a
-                href={p.link || "#"}
+              <Link
+                href={`/projects/${p.slug}`}
                 className="block w-full relative z-10 py-6 md:py-8"
                 data-project-card
                 data-preview-src={p.previewSrc || ""}
@@ -73,7 +74,7 @@ export default function ProjectsList() {
                     </div>
                   </div>
                 </div>
-              </a>
+              </Link>
             </article>
           ))}
         </div>
