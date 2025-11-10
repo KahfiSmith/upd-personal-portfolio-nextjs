@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: "Discover my story, what drives me, and the technologies I love.",
 };
 
+const driveItemClasses =
+  "drives-item group cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:shadow-xl";
+
 export default function AboutPage() {
   return (
     <main id="about-page" className="min-h-screen relative">
@@ -109,7 +112,7 @@ export default function AboutPage() {
 
             <div className="max-w-6xl mx-auto space-y-16 lg:space-y-20" data-drives-container>
               {/* Item 01 */}
-              <div className="drives-item group cursor-pointer" data-drives-item="1" data-magnetic>
+              <div className={driveItemClasses} data-drives-item="1" data-magnetic>
                 <div className="py-8 md:py-12">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                     <div className="lg:col-span-5 space-y-6">
@@ -135,7 +138,7 @@ export default function AboutPage() {
               </div>
 
               {/* Item 02 */}
-              <div className="drives-item group cursor-pointer" data-drives-item="2" data-magnetic>
+              <div className={driveItemClasses} data-drives-item="2" data-magnetic>
                 <div className="py-8 md:py-12">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                     <div className="lg:col-span-7 order-2 lg:order-1">
@@ -162,7 +165,7 @@ export default function AboutPage() {
               </div>
 
               {/* Item 03 */}
-              <div className="drives-item group cursor-pointer" data-drives-item="3" data-magnetic>
+              <div className={driveItemClasses} data-drives-item="3" data-magnetic>
                 <div className="py-8 md:py-12">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                     <div className="lg:col-span-5 space-y-6">

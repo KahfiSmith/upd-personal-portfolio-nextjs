@@ -68,13 +68,23 @@ export default function AboutPageEnhancer() {
         if (title) tl.to(title, { color: "#0a0a0a", duration: 0.35, ease: "power2.out" }, 0);
         if (desc) tl.to(desc, { color: "rgba(10,10,10,0.9)", y: -2, duration: 0.4, ease: "power2.out" }, 0);
 
-        const onEnter = () => tl.play();
-        const onLeave = () => tl.reverse();
+        let hoverTween: gsap.core.Tween | null = null;
+        const playTo = (time: number, duration: number, ease = "power2.out") => {
+          hoverTween?.kill();
+          hoverTween = tl.tweenTo(time, {
+            duration,
+            ease,
+          });
+        };
+
+        const onEnter = () => playTo(tl.duration(), 0.45, "power2.out");
+        const onLeave = () => playTo(0, 0.55, "power2.inOut");
         item.addEventListener("mouseenter", onEnter);
         item.addEventListener("mouseleave", onLeave);
         hoverCleanups.push(() => {
           item.removeEventListener("mouseenter", onEnter);
           item.removeEventListener("mouseleave", onLeave);
+          hoverTween?.kill();
           tl.kill();
         });
       });
