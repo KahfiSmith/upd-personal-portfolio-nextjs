@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { blogPosts } from "@/data/blog-posts";
+import { BlogContentRenderer } from "@/components/features/blog/BlogContentRenderer";
 
 type BlogPageProps = {
   params: { slug: string };
@@ -63,7 +64,7 @@ export default function BlogDetailPage({ params }: BlogPageProps) {
         </header>
 
         {post.heroImage && (
-          <div className="mb-12 overflow-hidden rounded-3xl border border-charcoal/10 shadow-xl">
+          <div className="mb-12 overflow-hidden rounded-xl border border-charcoal/10 shadow-md">
             <img
               src={post.heroImage}
               alt={post.title}
@@ -73,11 +74,7 @@ export default function BlogDetailPage({ params }: BlogPageProps) {
           </div>
         )}
 
-        <div className="prose prose-lg max-w-none prose-headings:font-display prose-p:text-charcoal/80">
-          {post.content.map((paragraph, idx) => (
-            <p key={`${post.slug}-paragraph-${idx}`}>{paragraph}</p>
-          ))}
-        </div>
+        <BlogContentRenderer content={post.content} postSlug={post.slug} />
       </article>
     </main>
   );
