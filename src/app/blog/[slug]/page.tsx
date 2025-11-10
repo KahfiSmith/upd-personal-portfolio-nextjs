@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { blogPosts } from "@/data/blog-posts";
 import { BlogContentRenderer } from "@/components/features/blog/BlogContentRenderer";
+import BackButton from "@/components/common/BackButton";
 
 type BlogPageProps = {
   params: { slug: string };
@@ -33,15 +33,7 @@ export default function BlogDetailPage({ params }: BlogPageProps) {
   return (
     <main className="relative min-h-screen py-16 md:py-24">
       <article className="max-w-4xl mx-auto px-6 md:px-0 space-y-10">
-        <div>
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-charcoal/70 hover:text-charcoal"
-          >
-            <span aria-hidden="true">←</span>
-            Back to all posts
-          </Link>
-        </div>
+        <BackButton href="/blog" label="Back to all posts" />
         <header className="space-y-6 mb-12">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-display leading-[1.05] text-charcoal">
             {post.title}
