@@ -1,4 +1,4 @@
-import { SkillItemProps } from "../types";
+import { SkillItemProps } from "@/types";
 
 export const dataSkills: SkillItemProps[] = [
   {
@@ -7,7 +7,7 @@ export const dataSkills: SkillItemProps[] = [
     desc: "Interaction",
   },
   {
-    imgSrc: "/icons/typescript-icon.svg",
+    imgSrc: "/icons/typescript.svg",
     label: "Typescript",
     desc: "Superset of JavaScript",
   },
@@ -17,7 +17,7 @@ export const dataSkills: SkillItemProps[] = [
     desc: "User Interface",
   },
   {
-    imgSrc: "/icons/tailwindcss-icon.svg",
+    imgSrc: "/icons/tailwind.svg",
     label: "TailwindCSS",
     desc: "User Interface",
   },
@@ -32,7 +32,7 @@ export const dataSkills: SkillItemProps[] = [
     desc: "Node Framework",
   },
   {
-    imgSrc: "/icons/nextjs.svg",
+    imgSrc: "/icons/next.svg",
     label: "NextJS",
     desc: "React Framework",
   },
@@ -42,7 +42,7 @@ export const dataSkills: SkillItemProps[] = [
     desc: "PHP Framework",
   },
   {
-    imgSrc: "/icons/mysql-icon.svg",
+    imgSrc: "/icons/mysql.svg",
     label: "MySQL",
     desc: "Database",
   },
@@ -52,7 +52,7 @@ export const dataSkills: SkillItemProps[] = [
     desc: "Database",
   },
   {
-    imgSrc: "/icons/git-icon.svg",
+    imgSrc: "/icons/git.svg",
     label: "Git",
     desc: "Version Control",
   },

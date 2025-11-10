@@ -1,4 +1,4 @@
-import type { ProjectsItemProps } from "../types";
+import type { ProjectsItemProps } from "@/types";
 
 export const dataHobby: ProjectsItemProps[] = [
   {

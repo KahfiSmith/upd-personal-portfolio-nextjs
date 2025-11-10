@@ -21,15 +21,38 @@ export interface WorkExperienceItemProps {
   tags: string | string[];
 }
 
+export interface ProjectMetric {
+  label: string;
+  value: string;
+}
+
+export interface ProjectSection {
+  title: string;
+  paragraphs: string[];
+  highlights?: string[];
+}
+
+export interface ProjectLink {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
 export interface ProjectItem {
   id: number;
+  slug: string;
   title: string;
-  description: string | string[];
-  tags: string[];
-  link?: string;
-  previewSrc?: string;
   role: string;
-};
+  description: string | string[];
+  summary?: string;
+  previewSrc?: string;
+  heroImage?: string;
+  timeline?: string;
+  techStack?: string[];
+  metrics?: ProjectMetric[];
+  sections?: ProjectSection[];
+  links?: ProjectLink[];
+}
 
 export interface BlogPost {
   id: number;

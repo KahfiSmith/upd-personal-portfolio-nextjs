@@ -22,7 +22,7 @@ export default function AboutPage() {
 
       <section className="relative py-16 md:py-24">
         <div className="max-w-[96rem] mx-auto px-6 md:px-8">
-          <div className="mb-10 md:mb-12">
+          <div className="mb-10">
             <BackButton label="Back" />
           </div>
           <div className="max-w-full mb-20">
@@ -82,13 +82,13 @@ export default function AboutPage() {
                   <TechOrbit
                     icons={[
                       { src: "/icons/react.svg", alt: "React" },
-                      { src: "/icons/nextjs.svg", alt: "Next.js" },
+                      { src: "/icons/next.svg", alt: "Next.js" },
                       { src: "/icons/express.svg", alt: "Express" },
-                      { src: "/icons/mysql-icon.svg", alt: "MySQL" },
+                      { src: "/icons/supabase.svg", alt: "Supabase" },
                       { src: "/icons/postgresql.svg", alt: "PostgreSQL" },
-                      { src: "/icons/nodejs-icon-alt.svg", alt: "Node.js" },
-                      { src: "/icons/tailwindcss-icon.svg", alt: "Tailwind" },
-                      { src: "/icons/git-icon.svg", alt: "Git" },
+                      { src: "/icons/node.svg", alt: "Node.js" },
+                      { src: "/icons/tailwind.svg", alt: "Tailwind" },
+                      { src: "/icons/docker.svg", alt: "Docker" },
                     ]}
                     duration={26}
                     reverse={false}
