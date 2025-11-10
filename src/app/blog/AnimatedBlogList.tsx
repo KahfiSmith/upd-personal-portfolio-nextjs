@@ -3,93 +3,8 @@
 import Link from "next/link";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback } from "react";
-import {
-  motion,
-  useMotionTemplate,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
-import type { Variants } from "framer-motion";
+import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
 import type { BlogPost } from "@/types";
-
-const cardVariants: Variants = {
-  rest: {
-    y: 0,
-    borderColor: "rgba(10,10,10,0.18)",
-    boxShadow: "0 0 0 rgba(15,15,15,0)",
-    borderRadius: 0,
-    backgroundColor: "rgba(255,255,255,0)",
-  },
-  hover: {
-    y: -10,
-    borderColor: "rgba(10,10,10,0.35)",
-    borderRadius: 40,
-    backgroundColor: "rgba(255,255,255,0.06)",
-    transition: { type: "spring", stiffness: 280, damping: 24 },
-  },
-};
-
-const cardGlowVariants: Variants = {
-  rest: { opacity: 0, scale: 0.92 },
-  hover: { opacity: 1, scale: 1, transition: { duration: 0.4 } },
-};
-
-const imageWrapperVariants: Variants = {
-  rest: { y: 0 },
-  hover: {
-    y: -4,
-    transition: { type: "spring", stiffness: 240, damping: 20 },
-  },
-};
-
-const imageVariants: Variants = {
-  rest: { scale: 1, rotate: 0 },
-  hover: {
-    scale: 1.08,
-    rotate: 0.6,
-    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
-
-const imageHighlightVariants: Variants = {
-  rest: { opacity: 0 },
-  hover: { opacity: 1, transition: { duration: 0.35 } },
-};
-
-const arrowVariants: Variants = {
-  rest: { x: 0 },
-  hover: { x: 10, transition: { type: "spring", stiffness: 350, damping: 15 } },
-};
-
-const contentVariants: Variants = {
-  rest: {
-    paddingLeft: 0,
-    paddingRight: 0,
-    borderRadius: 0,
-  },
-  hover: {
-    paddingLeft: 24,
-    paddingRight: 24,
-    borderRadius: 32,
-    transition: { type: "spring", stiffness: 260, damping: 24 },
-  },
-};
-
-const contentHighlightVariants: Variants = {
-  rest: { opacity: 0, scale: 0.96 },
-  hover: { opacity: 1, scale: 1, transition: { duration: 0.35 } },
-};
-
-const contentOutlineVariants: Variants = {
-  rest: { scale: 0.98, opacity: 0, borderRadius: 0 },
-  hover: {
-    scale: 1,
-    opacity: 1,
-    borderRadius: 20,
-    transition: { type: "spring", stiffness: 240, damping: 20 },
-  },
-};
 
 interface AnimatedBlogListProps {
   posts: BlogPost[];
@@ -140,36 +55,26 @@ function BlogCard({ post }: { post: BlogPost }) {
 
   return (
     <motion.article
-      variants={cardVariants}
-      initial="rest"
-      animate="rest"
-      whileHover="hover"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      className="relative pb-4 md:pb-6 after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-charcoal/20 after:to-transparent last:after:hidden"
+      className="group relative pb-4 md:pb-6 transition-all duration-500 ease-out rounded-none hover:-translate-y-2 hover:bg-white/5 hover:rounded-[40px] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-charcoal/20 after:to-transparent last:after:hidden"
     >
       <motion.span
         aria-hidden="true"
-        variants={cardGlowVariants}
         style={{ background: glowBackground }}
-        className="pointer-events-none absolute inset-x-2 md:inset-x-6 inset-y-4 -z-10 blur-3xl"
+        className="pointer-events-none absolute inset-x-2 md:inset-x-6 inset-y-4 -z-10 blur-3xl opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100"
       />
 
-      <Link href={`/blog/${post.slug}`} className="group block relative">
-        <motion.div
-          className="relative flex flex-col gap-6 py-10 md:py-12"
-          variants={contentVariants}
-        >
-          <motion.span
+      <Link href={`/blog/${post.slug}`} className="block relative">
+        <div className="relative flex flex-col gap-6 py-10 md:py-12 px-0 rounded-none transition-all duration-500 group-hover:px-6 group-hover:rounded-[32px]">
+          <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-3 md:inset-x-6 top-3 bottom-3 border border-transparent"
-            variants={contentOutlineVariants}
+            className="pointer-events-none absolute inset-x-3 md:inset-x-6 top-3 bottom-3 opacity-0 scale-[0.97] transition-all duration-500 group-hover:bg-white/10 group-hover:opacity-100 group-hover:scale-100 group-hover:rounded-2xl"
           />
-          <motion.span
+          <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-2 bottom-2 -z-10 bg-gradient-to-r from-cyan-500/10 via-transparent to-purple-500/16"
-            variants={contentHighlightVariants}
+            className="pointer-events-none absolute inset-x-0 top-2 bottom-2 -z-10 bg-gradient-to-r from-cyan-500/10 via-transparent to-purple-500/20 opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100 group-hover:rounded-[32px]"
           />
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="space-y-3 max-w-3xl">
@@ -187,37 +92,31 @@ function BlogCard({ post }: { post: BlogPost }) {
             </div>
 
             {post.heroImage && (
-              <motion.div
-                className="relative w-full lg:w-72 overflow-hidden rounded-xl"
-                variants={imageWrapperVariants}
-              >
-                <motion.img
+              <div className="relative w-full lg:w-72 overflow-hidden rounded-xl transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-lg">
+                <img
                   src={post.heroImage}
                   alt={post.title}
-                  className="h-44 w-full object-cover"
+                  className="h-44 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 group-hover:rotate-[0.8deg]"
                   loading="lazy"
-                  variants={imageVariants}
                 />
-                <motion.span
-                  className="absolute inset-0 bg-gradient-to-br from-cyan-400/25 via-transparent to-purple-500/20"
+                <span
+                  className="absolute inset-0 bg-gradient-to-br from-cyan-400/25 via-transparent to-purple-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                   aria-hidden="true"
-                  variants={imageHighlightVariants}
                 />
-              </motion.div>
+              </div>
             )}
           </div>
 
           <div className="inline-flex items-center gap-2 text-charcoal/70 font-semibold">
             Continue reading
-            <motion.span
+            <span
               aria-hidden="true"
-              className="inline-block"
-              variants={arrowVariants}
+              className="inline-block transition-transform duration-500 group-hover:translate-x-2"
             >
               →
-            </motion.span>
+            </span>
           </div>
-        </motion.div>
+        </div>
       </Link>
     </motion.article>
   );
