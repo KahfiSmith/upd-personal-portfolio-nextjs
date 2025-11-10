@@ -101,7 +101,12 @@ export default function AboutIntro() {
     };
   }, []);
   return (
-    <section id="about" ref={sectionRef} className="relative my-12 md:my-20 lg:my-32 overflow-hidden min-h-screen flex items-center">
+    <section
+      id="about"
+      ref={sectionRef}
+      data-anchor-offset="30"
+      className="relative my-12 md:my-20 overflow-hidden min-h-screen flex items-center"
+    >
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute top-1/4 left-1/4 w-32 h-32 opacity-5">
           <div className="w-full h-full bg-gradient-to-br from-orange-400 to-pink-500 rounded-full blur-xl animate-pulse"></div>

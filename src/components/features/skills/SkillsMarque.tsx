@@ -14,11 +14,11 @@ export default function SkillsMarque() {
     if (!row1 || !row2) return;
 
     // ====== CONFIG ======
-    const SPEED_TOP = 200;      // px/s
-    const SPEED_BOTTOM = 200;   // px/s (sedikit beda -> rasa paralaks)
+    const SPEED_TOP = 200; // px/s
+    const SPEED_BOTTOM = 200; // px/s (sedikit beda -> rasa paralaks)
     const FOLLOW_SCROLL = true; // auto reverse by scroll
-    const LERP1 = 0.18;         // smoothing top
-    const LERP2 = 0.12;         // smoothing bottom
+    const LERP1 = 0.18; // smoothing top
+    const LERP2 = 0.12; // smoothing bottom
     const DATA_KEY = "marqueeOriginal";
     // ====================
 
@@ -89,7 +89,9 @@ export default function SkillsMarque() {
     row2.style.willChange = "transform";
     row1.style.backfaceVisibility = "hidden";
     row2.style.backfaceVisibility = "hidden";
-    try { gsap.ticker.fps(60); } catch {}
+    try {
+      gsap.ticker.fps(60);
+    } catch {}
 
     // Phase (0..w). x = -phase → gerak kanan→kiri saat dir>0
     let phase1 = 0;
@@ -122,8 +124,8 @@ export default function SkillsMarque() {
       }
 
       // Update phase: dir>0 → kanan→kiri (phase tambah), dir<0 → balik
-      phase1 = ((phase1 + (SPEED_TOP * dirSmooth1) * dt) % w1 + w1) % w1;
-      phase2 = ((phase2 + (SPEED_BOTTOM * dirSmooth2) * dt) % w2 + w2) % w2;
+      phase1 = (((phase1 + SPEED_TOP * dirSmooth1 * dt) % w1) + w1) % w1;
+      phase2 = (((phase2 + SPEED_BOTTOM * dirSmooth2 * dt) % w2) + w2) % w2;
 
       // Terapkan transform (x = -phase) dan rounding DPM supaya seam tidak “patah”
       gsap.set(row1, { x: roundPx(-phase1), y: 0, z: 0, force3D: true });
@@ -162,8 +164,12 @@ export default function SkillsMarque() {
 
       window.addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("wheel", onWheel as any, { passive: true });
-      window.addEventListener("touchstart", onTouchStart as any, { passive: true });
-      window.addEventListener("touchmove", onTouchMove as any, { passive: true });
+      window.addEventListener("touchstart", onTouchStart as any, {
+        passive: true,
+      });
+      window.addEventListener("touchmove", onTouchMove as any, {
+        passive: true,
+      });
 
       // Bersih-bersih
       const cleanupScroll = () => {
@@ -198,7 +204,10 @@ export default function SkillsMarque() {
     const ro1 = new ResizeObserver(() => {
       const half = (row1.scrollWidth || 0) / 2;
       if (!half) return;
-      if (!w1) { w1 = half; return; }
+      if (!w1) {
+        w1 = half;
+        return;
+      }
       if (Math.abs(half - w1) > 0.5) {
         phase1 = ((phase1 / w1) * half) % half;
         w1 = half;
@@ -207,18 +216,29 @@ export default function SkillsMarque() {
     const ro2 = new ResizeObserver(() => {
       const half = (row2.scrollWidth || 0) / 2;
       if (!half) return;
-      if (!w2) { w2 = half; return; }
+      if (!w2) {
+        w2 = half;
+        return;
+      }
       if (Math.abs(half - w2) > 0.5) {
         phase2 = ((phase2 / w2) * half) % half;
         w2 = half;
       }
     });
-    try { ro1.observe(row1); ro2.observe(row2); } catch {}
+    try {
+      ro1.observe(row1);
+      ro2.observe(row2);
+    } catch {}
 
     return () => {
-      try { gsap.ticker.remove(tick); } catch {}
+      try {
+        gsap.ticker.remove(tick);
+      } catch {}
       window.removeEventListener("resize", onResize as any);
-      try { ro1.disconnect(); ro2.disconnect(); } catch {}
+      try {
+        ro1.disconnect();
+        ro2.disconnect();
+      } catch {}
       const c = (SkillsMarque as any)._cleanupScroll;
       if (c && c._) c();
     };
@@ -227,7 +247,6 @@ export default function SkillsMarque() {
   return (
     <section className="my-12 md:my-20 relative overflow-x-hidden overflow-y-visible pt-16 md:pt-24">
       <div className="relative py-16 md:py-20 overflow-visible">
-        {/* TOP ROW */}
         <div
           className="w-full max-w-none bg-charcoal text-cream px-6 py-8 md:px-10 md:py-12 overflow-x-hidden overflow-y-visible shadow-lg ring-1 ring-white/10 -rotate-6 origin-center relative z-20 mb-8 translate-y-2 md:translate-y-3"
           style={{ width: "calc(100% + 16rem)", marginLeft: "-8rem" }}

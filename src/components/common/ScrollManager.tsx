@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { getAnchorScrollOffset } from "@/lib/utils/utils";
 
 export default function ScrollManager() {
   const pathname = usePathname();
@@ -28,14 +29,19 @@ export default function ScrollManager() {
           const targetId = hash.replace(/^#/, "");
           // If navigation was triggered from FloatingDock from another page, use longer, smoother scroll
           const fromDock = (window as any).__dockNavigateTo === targetId;
+          const offset = getAnchorScrollOffset(targetId, el);
           if (lenis?.scrollTo) {
             const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
             lenis.scrollTo(el, {
               duration: fromDock ? 1.8 : 0.9,
               easing: easeInOutCubic,
+              offset,
             });
           } else {
-            el.scrollIntoView({ behavior: "smooth", block: "start" });
+            const startY = window.scrollY || window.pageYOffset || 0;
+            const targetRect = el.getBoundingClientRect();
+            const targetY = startY + targetRect.top + offset;
+            window.scrollTo({ top: targetY, behavior: "smooth" });
           }
           try { (window as any).__dockNavigateTo = null; } catch {}
           return;

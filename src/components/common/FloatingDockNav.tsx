@@ -1,6 +1,7 @@
 "use client";
 
 import { FloatingDock } from "@/components/ui/floating-dock";
+import { getAnchorScrollOffset } from "@/lib/utils/utils";
 import { Briefcase, FolderGit2, User2, BookText, Home } from "lucide-react";
 import { MouseEvent, useCallback, useMemo } from "react";
 
@@ -13,14 +14,15 @@ export default function FloatingDockNav() {
     const el = document.getElementById(id);
     if (!el) return;
     const lenis: any = (window as any).__lenis;
+    const offset = getAnchorScrollOffset(id, el);
     if (lenis?.scrollTo) {
       const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-      lenis.scrollTo(el, { duration: 1.8, easing: easeInOutCubic });
+      lenis.scrollTo(el, { duration: 1.8, easing: easeInOutCubic, offset });
     } else {
       // Fallback manual tween for smoother-than-default behavior
       const startY = window.scrollY || window.pageYOffset || 0;
       const targetRect = el.getBoundingClientRect();
-      const targetY = startY + targetRect.top;
+      const targetY = startY + targetRect.top + offset;
       const duration = 700; // ms
       const start = performance.now();
       const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
