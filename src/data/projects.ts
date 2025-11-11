@@ -1,13 +1,13 @@
 import { ProjectItem } from "@/types";
 
-
 export const dataProjects: ProjectItem[] = [
   {
     id: 1,
     slug: "quowrld",
     title: "Quowrld",
     role: "Fullstack Development",
-    summary: "A performance-obsessed personal site that blends Astro, MDX, and cinematic micro-interactions to showcase work with zero wasted bytes.",
+    summary:
+      "A performance-obsessed personal site that blends Astro, MDX, and cinematic micro-interactions to showcase work with zero wasted bytes.",
     description: [
       "Redesigned my portfolio with a performance-first approach using Astro.",
       "Implemented smooth page transitions, reveal animations, and accessible UI components.",
@@ -18,7 +18,11 @@ export const dataProjects: ProjectItem[] = [
       "Scroll-linked reveals",
       "Sub-second loads",
     ],
-    marqueeImages: ["/images/japan.jpg", "/images/hill.jpg"],
+    marqueeImages: [
+      "/images/halloween.jpg",
+      "/images/duck.jpg",
+      "/images/gojocat.jpg",
+    ],
     previewSrc: "/images/pre_quowrld.png",
     heroImage: "/images/pre_quowrld.png",
     timeline: "Jan 15, 2024 – Mar 10, 2024",
@@ -69,17 +73,22 @@ export const dataProjects: ProjectItem[] = [
     slug: "kpop-pulls",
     title: "Kpop Pulls",
     role: "Fullstack Development",
-    summary: "A playful commerce experience for collectors with real-time drops, curated bundles, and a loyalty engine.",
+    summary:
+      "A playful commerce experience for collectors with real-time drops, curated bundles, and a loyalty engine.",
     description: [
       "Built a modern storefront with responsive layouts and reusable components.",
       "Integrated global state for cart and wishlist with clean UX flows.",
     ],
     marqueeTexts: ["Real-time drops", "Loyalty Engine", "Dynamic theming"],
-    marqueeImages: ["/images/godzilla.jpg", "/images/forest.jpg"],
+    marqueeImages: [
+      "/images/leafcat.jpg",
+      "/images/blackcat.jpg",
+      "/images/orange.jpg",
+    ],
     previewSrc: "/images/pre_kpopulls.png",
     heroImage: "/images/pre_kpopulls.png",
     timeline: "Jul 10, 2023 – Sep 22, 2023",
-    techStack: ["React,js", "Redux","Framer Motion"],
+    techStack: ["React.js", "Redux", "Framer Motion"],
     metrics: [
       { label: "Timeline", value: "Jul 10, 2023 – Sep 22, 2023" },
       { label: "Role", value: "Fullstack dev" },
@@ -117,13 +126,18 @@ export const dataProjects: ProjectItem[] = [
     slug: "code-roaster",
     title: "Code Roaster",
     role: "Fullstack Development",
-    summary: "A coffee-themed developer chat with latency-sensitive messaging, reactions, and presence indicators.",
+    summary:
+      "A coffee-themed developer chat with latency-sensitive messaging, reactions, and presence indicators.",
     description: [
       "Developed a real-time chat interface with optimistic UI updates.",
       "Handled authentication and presence with scalable architecture.",
     ],
     marqueeTexts: ["Realtime chat", "Optimistic UI", "Presence indicators"],
-    marqueeImages: ["/images/godzilla.jpg", "/images/forest.jpg"],
+    marqueeImages: [
+      "/images/yor.jpg",
+      "/images/blueberry.jpg",
+      "/images/flowercat.jpg",
+    ],
     previewSrc: "/images/pre_coderoaster.png",
     heroImage: "/images/pre_coderoaster.png",
     timeline: "Oct 3, 2022 – Dec 14, 2022",
@@ -163,13 +177,22 @@ export const dataProjects: ProjectItem[] = [
     slug: "eduverse",
     title: "Eduverse",
     role: "Frontend Development",
-    summary: "Interactive learning modules that translate dense curriculum into snackable, trackable lessons.",
+    summary:
+      "Interactive learning modules that translate dense curriculum into snackable, trackable lessons.",
     description: [
       "Educational platform with interactive learning modules.",
       "Built responsive components with modern React patterns.",
     ],
-    marqueeTexts: ["Interactive lessons", "White-label LMS", "Real-time analytics"],
-    marqueeImages: ["/images/godzilla.jpg", "/images/forest.jpg"],
+    marqueeTexts: [
+      "Interactive lessons",
+      "White-label LMS",
+      "Real-time analytics",
+    ],
+    marqueeImages: [
+      "/images/watermelon.jpg",
+      "/images/otter.jpg",
+      "/images/anime.jpg",
+    ],
     previewSrc: "/images/pre_eduverse.png",
     heroImage: "/images/pre_eduverse.png",
     timeline: "Apr 5, 2022 – Jun 18, 2022",
@@ -209,13 +232,18 @@ export const dataProjects: ProjectItem[] = [
     slug: "ternakq",
     title: "TernakQ",
     role: "Web Development",
-    summary: "A livestock management dashboard with forecasting, health tracking, and automated paperwork for small farms.",
+    summary:
+      "A livestock management dashboard with forecasting, health tracking, and automated paperwork for small farms.",
     description: [
       "Livestock management system with inventory tracking.",
       "Implemented data visualization and reporting features.",
     ],
     marqueeTexts: ["Ops intelligence", "Forecasting engine", "Health tracking"],
-    marqueeImages: ["/images/godzilla.jpg", "/images/forest.jpg"],
+    marqueeImages: [
+      "/images/capybara.jpg",
+      "/images/ponyo.jpg",
+      "/images/sailormoon.jpg",
+    ],
     previewSrc: "/images/pre_ternakq.png",
     heroImage: "/images/pre_ternakq.png",
     timeline: "Jan 12, 2022 – Mar 30, 2022",
