@@ -49,7 +49,7 @@ const buildTokens = (project: ProjectItem): MarqueeToken[] => {
 export default function ProjectsList() {
   const projects = dataProjects;
   const [activeId, setActiveId] = useState<number | null>(null);
-  const [overlayProject, setOverlayProject] = useState<ProjectItem | null>(null);
+  const [overlayState, setOverlayState] = useState<{ project: ProjectItem; key: number } | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
@@ -154,9 +154,10 @@ export default function ProjectsList() {
     overlayMoveTweenRef.current = gsap.to(overlayRef.current, {
       y: top,
       height,
-      duration: 0.6,
-      ease: "power4.out",
+      duration: 0.45,
+      ease: "power3.out",
       overwrite: "auto",
+      force3D: true,
     });
   };
 
@@ -164,7 +165,7 @@ export default function ProjectsList() {
     setActiveId(id);
     const project = id ? projects.find((p) => p.id === id) ?? null : null;
     if (project) {
-      setOverlayProject({ ...project });
+      setOverlayState({ project: { ...project }, key: Date.now() });
     }
     if (!overlayRef.current) return;
     if (id && row) {
@@ -192,11 +193,11 @@ export default function ProjectsList() {
           if (content) {
             gsap.set(content, { scaleY: 1, opacity: 1, transformOrigin: "50% 0%" });
           }
-          setOverlayProject(null);
+          setOverlayState(null);
           hideTimelineRef.current = null;
         },
       });
-      if (content && overlayProject) {
+      if (content && overlayState) {
         hideTween.to(content, {
           scaleY: 0,
           opacity: 1,
@@ -214,14 +215,14 @@ export default function ProjectsList() {
 
   useEffect(() => {
     const el = overlayContentRef.current;
-    if (!overlayProject || !el) {
+    if (!overlayState || !el) {
       entryTweenRef.current?.kill();
       entryTweenRef.current = null;
       return;
     }
     const fromOrigin = wipeDirectionRef.current === "down" ? "50% 0%" : "50% 100%";
-    const fromScale = firstRevealRef.current ? 0 : 0.65;
-    const duration = firstRevealRef.current ? 0.45 : 0.3;
+    const fromScale = firstRevealRef.current ? 0 : 0.85;
+    const duration = firstRevealRef.current ? 0.45 : 0.25;
     entryTweenRef.current?.kill();
     entryTweenRef.current = gsap.fromTo(
       el,
@@ -233,7 +234,7 @@ export default function ProjectsList() {
       entryTweenRef.current?.kill();
       entryTweenRef.current = null;
     };
-  }, [overlayProject]);
+  }, [overlayState]);
 
   return (
     <section
@@ -339,13 +340,13 @@ export default function ProjectsList() {
             className="pointer-events-none absolute left-0 top-0 w-full opacity-0"
             style={{ zIndex: 5 }}
           >
-            {overlayProject && (
+            {overlayState && (
               <div
                 ref={overlayContentRef}
                 className="h-full w-full bg-charcoal text-white overflow-hidden"
               >
                 <div className="flex h-full items-center">
-                  {renderMarquee(overlayProject, Boolean(activeId))}
+                  {renderMarquee(overlayState.project, Boolean(activeId))}
                 </div>
               </div>
             )}
