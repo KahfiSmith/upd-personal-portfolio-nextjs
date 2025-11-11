@@ -60,9 +60,9 @@ export default function AnimatedPillButton({
     };
     const onLeave = () => {
       const p = tl.progress();
-      // Percepat keluar, tapi tetap proporsional dengan progress sekarang
-      const base = 0.24; // lebih cepat dari masuk
-      const dur = Math.max(0.04, p * base);
+      // Perlambat keluar supaya transisi tidak terasa terlalu cepat
+      const base = 0.5;
+      const dur = Math.max(0.08, p * base);
       tweenProgress(0, dur, "none");
     };
     const onPointerDown = () => {
