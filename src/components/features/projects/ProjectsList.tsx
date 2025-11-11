@@ -57,6 +57,13 @@ export default function ProjectsList() {
   const roleRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const rowRefs = useRef<Record<number, HTMLElement | null>>({});
   const overlayContentRef = useRef<HTMLDivElement | null>(null);
+  const lastRowTopRef = useRef<number | null>(null);
+  const wipeDirectionRef = useRef<"down" | "up">("down");
+  const firstRevealRef = useRef(true);
+  const hideTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  const overlayMoveTweenRef = useRef<gsap.core.Tween | null>(null);
+  const overlayOpacityTweenRef = useRef<gsap.core.Tween | null>(null);
+  const entryTweenRef = useRef<gsap.core.Tween | null>(null);
 
   const marqueeTokens = useMemo(() => {
     const map = new Map<number, MarqueeToken[]>();
@@ -136,44 +143,96 @@ export default function ProjectsList() {
     const rowRect = row.getBoundingClientRect();
     const top = rowRect.top - listRect.top;
     const height = rowRect.height;
-    gsap.to(overlayRef.current, {
+    const prevTop = lastRowTopRef.current;
+    if (prevTop !== null) {
+      wipeDirectionRef.current = top >= prevTop ? "down" : "up";
+    } else {
+      wipeDirectionRef.current = "down";
+    }
+    lastRowTopRef.current = top;
+    overlayMoveTweenRef.current?.kill();
+    overlayMoveTweenRef.current = gsap.to(overlayRef.current, {
       y: top,
       height,
       duration: 0.6,
       ease: "power4.out",
+      overwrite: "auto",
     });
   };
 
   const handleActivate = (id: number | null, row?: HTMLElement | null) => {
     setActiveId(id);
     const project = id ? projects.find((p) => p.id === id) ?? null : null;
-    setOverlayProject(project);
+    if (project) {
+      setOverlayProject({ ...project });
+    }
     if (!overlayRef.current) return;
     if (id && row) {
+      hideTimelineRef.current?.kill();
+      hideTimelineRef.current = null;
       moveOverlay(row);
-      gsap.to(overlayRef.current, {
+      overlayOpacityTweenRef.current?.kill();
+      overlayOpacityTweenRef.current = gsap.to(overlayRef.current, {
         opacity: 1,
         duration: 0.35,
         ease: "power2.out",
+        overwrite: "auto",
       });
     } else {
-      gsap.to(overlayRef.current, {
-        opacity: 0,
-        duration: 0.3,
-        ease: "power2.inOut",
+      lastRowTopRef.current = null;
+      const content = overlayContentRef.current;
+      const origin = wipeDirectionRef.current === "down" ? "50% 100%" : "50% 0%";
+      hideTimelineRef.current?.kill();
+      overlayMoveTweenRef.current?.kill();
+      overlayOpacityTweenRef.current?.kill();
+      const hideTween = gsap.timeline({
+        defaults: { ease: "power3.inOut" },
+        onComplete: () => {
+          gsap.set(overlayRef.current, { opacity: 0 });
+          if (content) {
+            gsap.set(content, { scaleY: 1, opacity: 1, transformOrigin: "50% 0%" });
+          }
+          setOverlayProject(null);
+          hideTimelineRef.current = null;
+        },
       });
+      if (content && overlayProject) {
+        hideTween.to(content, {
+          scaleY: 0,
+          opacity: 1,
+          duration: 0.45,
+          transformOrigin: origin,
+        });
+        hideTween.to(overlayRef.current, { opacity: 0, duration: 0.2 }, ">-0.1");
+      } else {
+        hideTween.to(overlayRef.current, { opacity: 0, duration: 0.25 });
+      }
+      hideTimelineRef.current = hideTween;
+      firstRevealRef.current = true;
     }
   };
 
   useEffect(() => {
-    if (!overlayProject) return;
     const el = overlayContentRef.current;
-    if (!el) return;
-    gsap.fromTo(
+    if (!overlayProject || !el) {
+      entryTweenRef.current?.kill();
+      entryTweenRef.current = null;
+      return;
+    }
+    const fromOrigin = wipeDirectionRef.current === "down" ? "50% 0%" : "50% 100%";
+    const fromScale = firstRevealRef.current ? 0 : 0.65;
+    const duration = firstRevealRef.current ? 0.45 : 0.3;
+    entryTweenRef.current?.kill();
+    entryTweenRef.current = gsap.fromTo(
       el,
-      { scaleY: 0, opacity: 0.8, transformOrigin: "50% 0%" },
-      { scaleY: 1, opacity: 1, duration: 0.45, ease: "power3.out" }
+      { scaleY: fromScale, opacity: firstRevealRef.current ? 0.85 : 1, transformOrigin: fromOrigin },
+      { scaleY: 1, opacity: 1, duration, ease: "power3.out" }
     );
+    firstRevealRef.current = false;
+    return () => {
+      entryTweenRef.current?.kill();
+      entryTweenRef.current = null;
+    };
   }, [overlayProject]);
 
   return (
