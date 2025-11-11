@@ -1,93 +1,307 @@
+"use client";
+
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { gsap } from "gsap";
+import type { ProjectItem } from "@/types";
 import { dataProjects } from "@/data/projects";
 import AnimatedPillButton from "@/components/common/AnimatedPillButton";
 
+type MarqueeToken =
+  | { type: "text"; value: string }
+  | { type: "image"; value: string };
+
+const buildTokens = (project: ProjectItem): MarqueeToken[] => {
+  const textBits = [project.summary, project.role, ...(project.techStack ?? [])]
+    .filter(
+      (entry): entry is string =>
+        typeof entry === "string" && entry.trim().length > 0
+    )
+    .map((entry) => entry.replace(/\.$/, "").toUpperCase());
+
+  const uniqueText = Array.from(new Set(textBits)).slice(0, 5);
+  const visualBits = [project.previewSrc, project.heroImage].filter(
+    (src): src is string => typeof src === "string" && src.length > 0
+  );
+
+  const tokens: MarqueeToken[] = [];
+  uniqueText.forEach((text, index) => {
+    tokens.push({ type: "text", value: text });
+    if (visualBits.length) {
+      tokens.push({
+        type: "image",
+        value: visualBits[index % visualBits.length]!,
+      });
+    }
+  });
+
+  if (!tokens.length && visualBits.length) {
+    tokens.push({ type: "image", value: visualBits[0]! });
+  }
+
+  if (!tokens.length) {
+    tokens.push({ type: "text", value: project.title.toUpperCase() });
+  }
+
+  return tokens;
+};
+
 export default function ProjectsList() {
   const projects = dataProjects;
+  const [activeId, setActiveId] = useState<number | null>(null);
+  const [overlayProject, setOverlayProject] = useState<ProjectItem | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const listRef = useRef<HTMLDivElement | null>(null);
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const titleRefs = useRef<Record<number, HTMLElement | null>>({});
+  const roleRefs = useRef<Record<number, HTMLDivElement | null>>({});
+  const rowRefs = useRef<Record<number, HTMLElement | null>>({});
+  const overlayContentRef = useRef<HTMLDivElement | null>(null);
+
+  const marqueeTokens = useMemo(() => {
+    const map = new Map<number, MarqueeToken[]>();
+    projects.forEach((project) => {
+      const built = buildTokens(project);
+      const duplicated = built.length ? [...built, ...built, ...built] : built;
+      map.set(project.id, duplicated);
+    });
+    return map;
+  }, [projects]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      Object.values(titleRefs.current).forEach((node) => {
+        if (!node) return;
+        gsap.set(node, {
+          color: "#171717",
+          opacity: 1,
+        });
+      });
+      Object.entries(roleRefs.current).forEach(([id, node]) => {
+        if (!node) return;
+        const isActive = Number(id) === activeId;
+        gsap.to(node, {
+          opacity: isActive ? 1 : 0.65,
+          y: isActive ? 0 : 4,
+          duration: 0.45,
+          ease: "power2.out",
+        });
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [activeId]);
+
+  const renderMarquee = (project: ProjectItem, isActive: boolean) => {
+    const tokens = marqueeTokens.get(project.id) ?? [];
+    const duration = Math.max(18, tokens.length * 1.8);
+
+    return (
+      <div
+        className="recent-work-marquee flex flex-nowrap items-center gap-10 pr-14"
+        style={{
+          animationDuration: `${duration}s`,
+          animationPlayState: isActive ? "running" : "paused",
+        }}
+      >
+        {tokens.map((token, index) =>
+          token.type === "text" ? (
+            <span
+              key={`${project.id}-text-${index}`}
+              className="whitespace-nowrap text-4xl xl:text-5xl font-light tracking-[0.2em]"
+            >
+              {token.value}
+            </span>
+          ) : (
+            <span
+              key={`${project.id}-img-${index}`}
+              className="block h-[160px] w-[160px] flex-shrink-0 overflow-hidden border border-white/15"
+            >
+              <img
+                src={token.value}
+                alt={`${project.title} preview asset`}
+                className="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </span>
+          )
+        )}
+      </div>
+    );
+  };
+
+  const moveOverlay = (row: HTMLElement | null) => {
+    if (!overlayRef.current || !listRef.current || !row) return;
+    const listRect = listRef.current.getBoundingClientRect();
+    const rowRect = row.getBoundingClientRect();
+    const top = rowRect.top - listRect.top;
+    const height = rowRect.height;
+    gsap.to(overlayRef.current, {
+      y: top,
+      height,
+      duration: 0.6,
+      ease: "power4.out",
+    });
+  };
+
+  const handleActivate = (id: number | null, row?: HTMLElement | null) => {
+    setActiveId(id);
+    const project = id ? projects.find((p) => p.id === id) ?? null : null;
+    setOverlayProject(project);
+    if (!overlayRef.current) return;
+    if (id && row) {
+      moveOverlay(row);
+      gsap.to(overlayRef.current, {
+        opacity: 1,
+        duration: 0.35,
+        ease: "power2.out",
+      });
+    } else {
+      gsap.to(overlayRef.current, {
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.inOut",
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (!overlayProject) return;
+    const el = overlayContentRef.current;
+    if (!el) return;
+    gsap.fromTo(
+      el,
+      { scaleY: 0, opacity: 0.8, transformOrigin: "50% 0%" },
+      { scaleY: 1, opacity: 1, duration: 0.45, ease: "power3.out" }
+    );
+  }, [overlayProject]);
+
   return (
     <section
+      ref={sectionRef}
       id="projects"
-      className="relative my-12 md:my-20 lg:my-32 overflow-hidden"
+      className="relative py-16 md:py-20 overflow-hidden"
     >
-      <div aria-hidden="true" className="absolute inset-0 -z-10 opacity-[0.03]">
+      <div className="absolute inset-0 -z-10 opacity-[0.03]">
         <div
           className="absolute inset-0"
           style={{
             backgroundImage:
-              'radial-gradient(circle at 1px 1px, rgb(0 0 0 / 0.15) 1px, transparent 0)',
-            backgroundSize: '24px 24px',
+              "radial-gradient(circle at 1px 1px, rgb(0 0 0 / 0.15) 1px, transparent 0)",
+            backgroundSize: "24px 24px",
           }}
-        ></div>
+        />
       </div>
 
       <div className="max-w-[96rem] mx-auto px-6 md:px-8 lg:px-12">
-        <div className="mb-8 lg:mb-12" data-reveal="right">
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-charcoal font-medium leading-tight">
-            <span className="bg-gradient-to-r from-black via-cyan-600 to-black bg-clip-text text-transparent">
-              Projects
-            </span>
-          </h2>
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
+          <div className="mb-4" data-reveal="right">
+            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-charcoal font-medium leading-tight">
+              <span className="bg-gradient-to-r from-cyan-600 to-black bg-clip-text text-transparent">
+                Projects
+              </span>
+            </h2>
+          </div>
         </div>
 
-        <div id="projects-list">
-          {projects.map((p, index) => (
-            <article key={p.id}
-              className="group relative"
-              data-reveal="up"
-              data-reveal-delay={String(Math.min(index * 0.08, 0.4))}
-              data-magnetic-card
-            >
-              {index === 0 && (
-                <div
-                  className="pointer-events-none absolute top-0 left-0 w-full h-[2px] bg-charcoal/70 origin-left"
-                  data-project-divider-top
-                ></div>
-              )}
-              <div
-                className="pointer-events-none absolute bottom-0 left-0 w-full h-[2px] bg-charcoal/70 origin-left"
-                data-project-divider-bottom
-              ></div>
-
-              <Link
-                href={`/projects/${p.slug}`}
-                className="block w-full relative z-10 py-6 md:py-8"
-                data-project-card
-                data-preview-src={p.previewSrc || ""}
-                aria-label={`Open ${p.title}`}
+        <div
+          id="projects-list"
+          ref={listRef}
+          className="relative"
+          onPointerLeave={() => handleActivate(null)}
+        >
+          {projects.map((project, index) => {
+            return (
+              <article
+                key={project.id}
+                ref={(node) => {
+                  rowRefs.current[project.id] = node;
+                }}
+                className="group relative"
+                onPointerEnter={() =>
+                  handleActivate(project.id, rowRefs.current[project.id] ?? null)
+                }
+                onFocusCapture={() =>
+                  handleActivate(project.id, rowRefs.current[project.id] ?? null)
+                }
+                onBlurCapture={(event) => {
+                  const next = event.relatedTarget as Node | null;
+                  if (!next || !event.currentTarget.contains(next)) {
+                    handleActivate(null);
+                  }
+                }}
               >
-                <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-center">
-                  <div className="md:col-span-6 lg:col-span-6">
-                    <h3
-                      className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-charcoal transition-all duration-300"
-                      data-project-title
-                    >
-                      {p.title}
-                    </h3>
-                  </div>
+                {index === 0 && (
+                  <div
+                    className="pointer-events-none absolute top-0 left-0 w-full h-[2px] bg-charcoal/70 origin-left"
+                    aria-hidden="true"
+                  />
+                )}
+                <div
+                  className="pointer-events-none absolute bottom-0 left-0 w-full h-[2px] bg-charcoal/50 origin-left"
+                  aria-hidden="true"
+                />
 
-                  <div className="md:col-span-6 lg:col-span-6 flex md:justify-end">
-                    <div
-                      className="text-charcoal/80 text-sm md:text-base font-medium transition-all duration-300"
-                      data-project-role
-                    >
-                      {p.role}
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="block w-full relative z-0 py-8 md:py-10 focus:outline-none"
+                  aria-label={`Open ${project.title}`}
+                >
+                  <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-center">
+                    <div className="md:col-span-6 lg:col-span-6">
+                      <h3
+                        ref={(node) => {
+                          titleRefs.current[project.id] = node;
+                        }}
+                        className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-charcoal transition-colors duration-300"
+                      >
+                        {project.title}
+                      </h3>
+                    </div>
+
+                    <div className="md:col-span-6 lg:col-span-6 flex md:justify-end">
+                      <div
+                        ref={(node) => {
+                          roleRefs.current[project.id] = node;
+                        }}
+                        className="text-charcoal/80 text-sm md:text-base font-medium transition-all duration-300"
+                      >
+                        {project.role}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </article>
-          ))}
-        </div>
-      </div>
+                </Link>
+              </article>
+            );
+          })}
 
-      <div className="mt-16 text-center mb-12" data-reveal="up" data-reveal-delay="0.2">
-        <AnimatedPillButton
-          href="/about"
-          data-discover-button
-          data-magnetic
-          label="View Full Projects"
-          className="inline-flex"
-        />
+          <div
+            ref={overlayRef}
+            className="pointer-events-none absolute left-0 top-0 w-full opacity-0"
+            style={{ zIndex: 5 }}
+          >
+            {overlayProject && (
+              <div
+                ref={overlayContentRef}
+                className="h-full w-full bg-charcoal text-white overflow-hidden"
+              >
+                <div className="flex h-full items-center">
+                  {renderMarquee(overlayProject, Boolean(activeId))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-16 text-center">
+          <AnimatedPillButton
+            href="/about"
+            data-discover-button
+            data-magnetic
+            label="View Full Projects"
+            className="inline-flex"
+          />
+        </div>
       </div>
     </section>
   );

@@ -156,3 +156,17 @@
 html.is-reload #simple-curtain-loader { display: block; }
 html.needs-reveal #simple-curtain-loader { display: none !important; }
 html[data-astro-transition] #simple-curtain-loader { display: none !important; }
+
+.recent-work-marquee {
+  animation: recentWorkMarquee 20s linear infinite;
+  will-change: transform;
+}
+
+@keyframes recentWorkMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
