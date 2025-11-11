@@ -11,36 +11,40 @@ type MarqueeToken =
   | { type: "text"; value: string }
   | { type: "image"; value: string };
 
+const MARQUEE_IMAGES = ["/images/asbcat.jpg", "/images/absowl.jpg", "/images/geometric.jpg"];
+const OVERLAY_VERTICAL_PADDING = 12; // px spacing between overlay content and divider lines
+
 const buildTokens = (project: ProjectItem): MarqueeToken[] => {
-  const textBits = [project.summary, project.role, ...(project.techStack ?? [])]
+  const fallbackTexts = [project.summary, project.role, ...(project.techStack ?? [])];
+  const rawTexts = project.marqueeTexts && project.marqueeTexts.length > 0 ? project.marqueeTexts : fallbackTexts;
+
+  const textBits = rawTexts
     .filter(
       (entry): entry is string =>
         typeof entry === "string" && entry.trim().length > 0
     )
     .map((entry) => entry.replace(/\.$/, "").toUpperCase());
 
-  const uniqueText = Array.from(new Set(textBits)).slice(0, 5);
-  const visualBits = [project.previewSrc, project.heroImage].filter(
-    (src): src is string => typeof src === "string" && src.length > 0
-  );
+  const uniqueText = Array.from(new Set(textBits));
+  if (!uniqueText.length) uniqueText.push(project.title.toUpperCase());
+
+  const fallbackImages = [project.previewSrc, project.heroImage, ...MARQUEE_IMAGES];
+  const imagePool = project.marqueeImages && project.marqueeImages.length > 0 ? project.marqueeImages : fallbackImages;
+  const filteredImages = imagePool.filter((src): src is string => typeof src === "string" && src.trim().length > 0);
 
   const tokens: MarqueeToken[] = [];
   uniqueText.forEach((text, index) => {
     tokens.push({ type: "text", value: text });
-    if (visualBits.length) {
-      tokens.push({
-        type: "image",
-        value: visualBits[index % visualBits.length]!,
-      });
+
+    const shouldInsertImage = ((index + 1) % 2 === 0) && filteredImages.length;
+    if (shouldInsertImage) {
+      const imageIndex = Math.floor(index / 2) % filteredImages.length;
+      tokens.push({ type: "image", value: filteredImages[imageIndex]! });
     }
   });
 
-  if (!tokens.length && visualBits.length) {
-    tokens.push({ type: "image", value: visualBits[0]! });
-  }
-
-  if (!tokens.length) {
-    tokens.push({ type: "text", value: project.title.toUpperCase() });
+  if (!tokens.some((token) => token.type === "image") && filteredImages.length) {
+    tokens.splice(2, 0, { type: "image", value: filteredImages[0]! });
   }
 
   return tokens;
@@ -152,12 +156,12 @@ export default function ProjectsList() {
           ) : (
             <span
               key={`${project.id}-img-${index}`}
-              className="block h-[160px] w-[160px] flex-shrink-0 overflow-hidden border border-white/15"
+              className="block h-[220px] w-[340px] flex-shrink-0 overflow-hidden rounded-[32px] bg-charcoal/60 px-6 py-6"
             >
               <img
                 src={token.value}
                 alt={`${project.title} preview asset`}
-                className="h-full w-full object-cover"
+                className="h-full w-full rounded-[24px] object-cover"
                 loading="lazy"
               />
             </span>

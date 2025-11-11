@@ -52,6 +52,8 @@ export interface ProjectItem {
   metrics?: ProjectMetric[];
   sections?: ProjectSection[];
   links?: ProjectLink[];
+  marqueeTexts?: string[];
+  marqueeImages?: string[];
 }
 
 export interface BlogPost {
