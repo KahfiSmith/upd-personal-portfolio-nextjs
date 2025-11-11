@@ -12,7 +12,6 @@ type MarqueeToken =
   | { type: "image"; value: string };
 
 const MARQUEE_IMAGES = ["/images/asbcat.jpg", "/images/absowl.jpg", "/images/geometric.jpg"];
-const OVERLAY_VERTICAL_PADDING = 12; // px spacing between overlay content and divider lines
 
 const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   const fallbackTexts = [project.summary, project.role, ...(project.techStack ?? [])];
@@ -35,16 +34,14 @@ const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   const tokens: MarqueeToken[] = [];
   uniqueText.forEach((text, index) => {
     tokens.push({ type: "text", value: text });
-
-    const shouldInsertImage = ((index + 1) % 2 === 0) && filteredImages.length;
-    if (shouldInsertImage) {
-      const imageIndex = Math.floor(index / 2) % filteredImages.length;
+    if (filteredImages.length) {
+      const imageIndex = index % filteredImages.length;
       tokens.push({ type: "image", value: filteredImages[imageIndex]! });
     }
   });
 
-  if (!tokens.some((token) => token.type === "image") && filteredImages.length) {
-    tokens.splice(2, 0, { type: "image", value: filteredImages[0]! });
+  if (!uniqueText.length && filteredImages.length) {
+    tokens.push({ type: "image", value: filteredImages[0]! });
   }
 
   return tokens;
@@ -135,7 +132,7 @@ export default function ProjectsList() {
 
   const renderMarquee = (project: ProjectItem, isActive: boolean) => {
     const tokens = marqueeTokens.get(project.id) ?? [];
-    const duration = Math.max(18, tokens.length * 1.8);
+    const duration = Math.max(10, tokens.length * 1.2);
 
     return (
       <div
@@ -149,19 +146,19 @@ export default function ProjectsList() {
           token.type === "text" ? (
             <span
               key={`${project.id}-text-${index}`}
-              className="whitespace-nowrap text-4xl xl:text-5xl font-light tracking-[0.2em]"
+              className="whitespace-nowrap text-4xl xl:text-5xl font-medium tracking-[0.2em]"
             >
               {token.value}
             </span>
           ) : (
             <span
               key={`${project.id}-img-${index}`}
-              className="block h-[220px] w-[340px] flex-shrink-0 overflow-hidden rounded-[32px] bg-charcoal/60 px-6 py-6"
+              className="flex h-[260px] w-[340px] flex-shrink-0 overflow-hidden rounded-[32px] bg-charcoal/60 px-6 py-6 items-center"
             >
               <img
                 src={token.value}
                 alt={`${project.title} preview asset`}
-                className="h-full w-full rounded-[24px] object-cover"
+                className="h-[150px] w-full rounded-[24px] object-cover my-8"
                 loading="lazy"
               />
             </span>
@@ -370,7 +367,7 @@ export default function ProjectsList() {
                         ref={(node) => {
                           titleRefs.current[project.id] = node;
                         }}
-                        className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-charcoal transition-colors duration-300"
+                        className="text-3xl md:text-4xl lg:text-6xl font-display font-bold text-charcoal transition-colors duration-300"
                       >
                         {project.title}
                       </h3>
@@ -381,7 +378,7 @@ export default function ProjectsList() {
                         ref={(node) => {
                           roleRefs.current[project.id] = node;
                         }}
-                        className="text-charcoal/80 text-sm md:text-base font-medium transition-all duration-300"
+                        className="text-charcoal/80 text-lg md:text-xl font-medium transition-all duration-300"
                       >
                         {project.role}
                       </div>
