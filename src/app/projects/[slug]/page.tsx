@@ -40,15 +40,16 @@ const getTechIcon = (name: string) => {
 };
 
 interface ProjectPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export function generateStaticParams() {
   return dataProjects.map((project) => ({ slug: project.slug }));
 }
 
-export function generateMetadata({ params }: ProjectPageProps): Metadata {
-  const project = dataProjects.find((item) => item.slug === params.slug);
+export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const project = dataProjects.find((item) => item.slug === slug);
   if (!project) return { title: "Project Not Found" };
   return {
     title: `${project.title} | Case Study`,
@@ -56,8 +57,9 @@ export function generateMetadata({ params }: ProjectPageProps): Metadata {
   };
 }
 
-export default function ProjectDetailPage({ params }: ProjectPageProps) {
-  const project = dataProjects.find((item) => item.slug === params.slug);
+export default async function ProjectDetailPage({ params }: ProjectPageProps) {
+  const { slug } = await params;
+  const project = dataProjects.find((item) => item.slug === slug);
   if (!project) notFound();
 
   const description = Array.isArray(project.description) ? project.description : [project.description];
@@ -131,7 +133,7 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
             </div>
           )}
 
-          <div className="relative overflow-hidden rounded-lg bg-charcoal text-white shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+          <div className="relative overflow-hidden rounded-2xl bg-charcoal text-white shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
             {project.heroImage && (
               <img
                 src={project.heroImage}
@@ -158,7 +160,7 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
               {overviewDetails.length > 0 && (
                 <div className="grid gap-4 md:grid-cols-2">
                   {overviewDetails.map((paragraph, idx) => (
-                    <div key={idx} className="rounded-3xl border border-white/10 bg-white/5 px-6 py-4 text-base md:text-lg text-white/85 backdrop-blur-sm">
+                    <div key={idx} className="rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-base md:text-lg text-white/85 backdrop-blur-sm">
                       {paragraph}
                     </div>
                   ))}
@@ -220,7 +222,7 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
                 <article
                   key={section.title}
                   className={cn(
-                    "relative overflow-hidden rounded-lg",
+                    "relative overflow-hidden rounded-2xl",
                     isDark ? "bg-charcoal text-white" : "bg-white text-charcoal"
                   )}
                 >
