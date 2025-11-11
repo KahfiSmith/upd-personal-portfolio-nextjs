@@ -64,6 +64,36 @@ export default function ProjectsList() {
   const overlayMoveTweenRef = useRef<gsap.core.Tween | null>(null);
   const overlayOpacityTweenRef = useRef<gsap.core.Tween | null>(null);
   const entryTweenRef = useRef<gsap.core.Tween | null>(null);
+  const suppressExitRef = useRef(false);
+  const deactivateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearDeactivateTimeout = () => {
+    if (deactivateTimeoutRef.current) {
+      clearTimeout(deactivateTimeoutRef.current);
+      deactivateTimeoutRef.current = null;
+    }
+  };
+
+  const finishTween = (tween: gsap.core.Tween | gsap.core.Timeline | null) => {
+    if (!tween) return;
+    try {
+      tween.progress(1, false);
+    } catch {}
+    tween.kill();
+  };
+
+  const startSuppressExit = () => {
+    suppressExitRef.current = true;
+    clearDeactivateTimeout();
+    finishTween(overlayMoveTweenRef.current);
+    finishTween(overlayOpacityTweenRef.current);
+    finishTween(hideTimelineRef.current);
+    finishTween(entryTweenRef.current);
+    overlayMoveTweenRef.current = null;
+    overlayOpacityTweenRef.current = null;
+    hideTimelineRef.current = null;
+    entryTweenRef.current = null;
+  };
 
   const marqueeTokens = useMemo(() => {
     const map = new Map<number, MarqueeToken[]>();
@@ -162,6 +192,8 @@ export default function ProjectsList() {
   };
 
   const handleActivate = (id: number | null, row?: HTMLElement | null) => {
+    if (id === null && suppressExitRef.current) return;
+    if (id) clearDeactivateTimeout();
     setActiveId(id);
     const project = id ? projects.find((p) => p.id === id) ?? null : null;
     if (project) {
@@ -169,6 +201,7 @@ export default function ProjectsList() {
     }
     if (!overlayRef.current) return;
     if (id && row) {
+      suppressExitRef.current = false;
       hideTimelineRef.current?.kill();
       hideTimelineRef.current = null;
       moveOverlay(row);
@@ -213,6 +246,15 @@ export default function ProjectsList() {
     }
   };
 
+  const requestDeactivate = () => {
+    if (suppressExitRef.current) return;
+    clearDeactivateTimeout();
+    deactivateTimeoutRef.current = setTimeout(() => {
+      deactivateTimeoutRef.current = null;
+      handleActivate(null);
+    }, 60);
+  };
+
   useEffect(() => {
     const el = overlayContentRef.current;
     if (!overlayState || !el) {
@@ -235,6 +277,13 @@ export default function ProjectsList() {
       entryTweenRef.current = null;
     };
   }, [overlayState]);
+
+  useEffect(() => {
+    return () => {
+      suppressExitRef.current = false;
+      clearDeactivateTimeout();
+    };
+  }, []);
 
   return (
     <section
@@ -268,7 +317,7 @@ export default function ProjectsList() {
           id="projects-list"
           ref={listRef}
           className="relative"
-          onPointerLeave={() => handleActivate(null)}
+          onPointerLeave={requestDeactivate}
         >
           {projects.map((project, index) => {
             return (
@@ -287,7 +336,7 @@ export default function ProjectsList() {
                 onBlurCapture={(event) => {
                   const next = event.relatedTarget as Node | null;
                   if (!next || !event.currentTarget.contains(next)) {
-                    handleActivate(null);
+                    requestDeactivate();
                   }
                 }}
               >
@@ -304,8 +353,12 @@ export default function ProjectsList() {
 
                 <Link
                   href={`/projects/${project.slug}`}
-                  className="block w-full relative z-0 py-8 md:py-10 focus:outline-none"
+                  className="block w-full relative z-0 py-8 md:py-10 lg:py-16 focus:outline-none"
                   aria-label={`Open ${project.title}`}
+                  onPointerDown={startSuppressExit}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") startSuppressExit();
+                  }}
                 >
                   <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-center">
                     <div className="md:col-span-6 lg:col-span-6">
