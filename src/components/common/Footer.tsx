@@ -51,6 +51,8 @@ export default function Footer({
               {primaryButton && (
                 <a
                   href={primaryButton.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="primary-cta-btn magnetic-button group relative inline-flex items-center gap-2 px-8 py-4 bg-cream text-charcoal rounded-full transition-all duration-500 hover:scale-110 overflow-hidden text-lg font-medium cursor-pointer"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>

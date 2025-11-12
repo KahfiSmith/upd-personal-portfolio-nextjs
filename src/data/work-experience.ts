@@ -17,7 +17,7 @@ export const dataWorkExperience: WorkExperienceItemProps[] = [
   {
     id: 2,
     title: "Online Psychology Consultation",
-    role: "Fullstack Web Developer (Independent Study)",
+    role: "Web Development & UI/UX Design (Independent Study)",
     period: "Feb 2024 - Jun 2024",
     company: "Infinite Learning",
     description: [

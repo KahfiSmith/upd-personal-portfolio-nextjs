@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 const driveItemClasses =
-  "drives-item group cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:shadow-xl";
+  "drives-item group cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1";
 
 export default function AboutPage() {
   return (
