@@ -12,7 +12,7 @@ export default function Home() {
       <SkillsMarque />
       <AboutIntro/>
       <WorkExperience/>      
-      <ProjectsList/>
+      <ProjectsList limit={5} />
       <FloatingDockNav />
     </>
   );
