@@ -21,18 +21,40 @@ export default function ScrollManager() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const hash = window.location.hash;
+    const ensureTop = () => {
+      const atTop = Math.abs(window.scrollY || window.pageYOffset || 0) < 1;
+      if (atTop) return;
+      const doScrollTop = () => {
+        const lenisInstance: any = (window as any).__lenis;
+        if (lenisInstance?.scrollTo) {
+          lenisInstance.scrollTo(0, { duration: 0, immediate: true });
+        } else {
+          window.scrollTo({ top: 0, behavior: "auto" });
+        }
+      };
+      setTimeout(doScrollTop, 40);
+    };
+
     const run = () => {
-      const lenis: any = (window as any).__lenis;
       if (hash) {
-        const el = document.getElementById(hash.replace(/^#/, ""));
-        if (el) {
-          const targetId = hash.replace(/^#/, "");
-          // If navigation was triggered from FloatingDock from another page, use longer, smoother scroll
+        const targetId = hash.replace(/^#/, "");
+        const scrollToHash = (attempt = 0) => {
+          const el = document.getElementById(targetId);
+          if (!el) {
+            if (attempt < 6) {
+              setTimeout(() => scrollToHash(attempt + 1), 60);
+              return;
+            }
+            ensureTop();
+            try { (window as any).__dockNavigateTo = null; } catch {}
+            return;
+          }
+          const lenisInstance: any = (window as any).__lenis;
           const fromDock = (window as any).__dockNavigateTo === targetId;
           const offset = getAnchorScrollOffset(targetId, el);
-          if (lenis?.scrollTo) {
+          if (lenisInstance?.scrollTo) {
             const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-            lenis.scrollTo(el, {
+            lenisInstance.scrollTo(el, {
               duration: fromDock ? 1.8 : 0.9,
               easing: easeInOutCubic,
               offset,
@@ -44,21 +66,23 @@ export default function ScrollManager() {
             window.scrollTo({ top: targetY, behavior: "smooth" });
           }
           try { (window as any).__dockNavigateTo = null; } catch {}
-          return;
-        }
+        };
+
+        scrollToHash();
+        return;
       }
-      // Avoid redundant scroll-to-top that can cause flicker.
-      // Delay slightly to let PageTransition fade start, reducing perceived flicker.
+
       const atTop = Math.abs(window.scrollY || window.pageYOffset || 0) < 1;
       if (!atTop) {
-        const doScrollTop = () => {
-          if (lenis?.scrollTo) {
-            lenis.scrollTo(0, { duration: 0.6 });
+        const lenisInstance: any = (window as any).__lenis;
+        const scrollTop = () => {
+          if (lenisInstance?.scrollTo) {
+            lenisInstance.scrollTo(0, { duration: 0, immediate: true });
           } else {
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            window.scrollTo({ top: 0, behavior: "auto" });
           }
         };
-        setTimeout(doScrollTop, 120);
+        requestAnimationFrame(scrollTop);
       }
     };
 

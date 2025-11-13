@@ -216,6 +216,11 @@ export default function ProjectsList({
   const handleActivate = (id: number | null, row?: HTMLElement | null) => {
     if (id === null && suppressExitRef.current) return;
     if (id) clearDeactivateTimeout();
+    const sameActive = typeof id === "number" && id === activeId;
+    if (sameActive) {
+      if (row) moveOverlay(row);
+      return;
+    }
     setActiveId(id);
     const project = id ? projects.find((p) => p.id === id) ?? null : null;
     if (project) {
