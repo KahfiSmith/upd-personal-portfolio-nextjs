@@ -9,13 +9,11 @@ export default function AboutIntro() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    // Register ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
 
     const sectionEl = sectionRef.current;
     if (!sectionEl) return;
 
-    // Scoped GSAP context for safe cleanup
     const ctx = gsap.context(() => {
       const nodes = sectionEl.querySelectorAll<HTMLElement>("[data-animate]");
       nodes.forEach((node) => {
@@ -145,7 +143,7 @@ export default function AboutIntro() {
                 href="/about"
                 data-discover-button
                 data-magnetic
-                label="View Full Projects"
+                label="Discover my story"
                 className="inline-flex"
               />
             </div>

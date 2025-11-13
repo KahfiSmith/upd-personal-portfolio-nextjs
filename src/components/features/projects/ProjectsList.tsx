@@ -7,11 +7,19 @@ import type { ProjectItem } from "@/types";
 import { dataProjects } from "@/data/projects";
 import AnimatedPillButton from "@/components/common/AnimatedPillButton";
 
+type ProjectsListProps = {
+  limit?: number;
+  showHeader?: boolean;
+  sectionId?: string;
+  showCTA?: boolean;
+  ctaHref?: string;
+  ctaLabel?: string;
+  wrapperClassName?: string;
+};
+
 type MarqueeToken =
   | { type: "text"; value: string }
   | { type: "image"; value: string };
-
-const MARQUEE_IMAGES = ["/images/asbcat.jpg", "/images/absowl.jpg", "/images/geometric.jpg"];
 
 const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   const fallbackTexts = [project.summary, project.role, ...(project.techStack ?? [])];
@@ -27,7 +35,7 @@ const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   const uniqueText = Array.from(new Set(textBits));
   if (!uniqueText.length) uniqueText.push(project.title.toUpperCase());
 
-  const fallbackImages = [project.previewSrc, project.heroImage, ...MARQUEE_IMAGES];
+  const fallbackImages = [project.previewSrc, project.heroImage];
   const imagePool = project.marqueeImages && project.marqueeImages.length > 0 ? project.marqueeImages : fallbackImages;
   const filteredImages = imagePool.filter((src): src is string => typeof src === "string" && src.trim().length > 0);
 
@@ -47,8 +55,21 @@ const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   return tokens;
 };
 
-export default function ProjectsList() {
-  const projects = dataProjects;
+export default function ProjectsList({
+  limit,
+  showHeader = true,
+  sectionId = "projects",
+  showCTA = true,
+  ctaHref = "/projects",
+  ctaLabel = "View Full Projects",
+  wrapperClassName = "max-w-[96rem] mx-auto px-6 md:px-8 lg:px-12",
+}: ProjectsListProps = {}) {
+  const projects = useMemo(() => {
+    if (typeof limit === "number") {
+      return dataProjects.slice(0, Math.max(0, limit));
+    }
+    return dataProjects;
+  }, [limit]);
   const [activeId, setActiveId] = useState<number | null>(null);
   const [overlayState, setOverlayState] = useState<{ project: ProjectItem; key: number } | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -289,7 +310,7 @@ export default function ProjectsList() {
   return (
     <section
       ref={sectionRef}
-      id="projects"
+      id={sectionId}
       className="relative py-16 md:py-20 overflow-hidden"
     >
       <div className="absolute inset-0 -z-10 opacity-[0.03]">
@@ -303,16 +324,18 @@ export default function ProjectsList() {
         />
       </div>
 
-      <div className="max-w-[96rem] mx-auto px-6 md:px-8 lg:px-12">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
-          <div className="mb-4" data-reveal="right">
-            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-charcoal font-medium leading-tight">
-              <span className="bg-gradient-to-r from-cyan-600 to-black bg-clip-text text-transparent">
-                Projects
-              </span>
-            </h2>
+      <div className={wrapperClassName?.trim() ? wrapperClassName : undefined}>
+        {showHeader && (
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
+            <div className="mb-4" data-reveal="right">
+              <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-charcoal font-medium leading-tight">
+                <span className="bg-gradient-to-r from-cyan-600 to-black bg-clip-text text-transparent">
+                  Projects
+                </span>
+              </h2>
+            </div>
           </div>
-        </div>
+        )}
 
         <div
           id="projects-list"
@@ -407,15 +430,17 @@ export default function ProjectsList() {
           </div>
         </div>
 
-        <div className="mt-16 text-center">
-          <AnimatedPillButton
-            href="/about"
-            data-discover-button
-            data-magnetic
-            label="View Full Projects"
-            className="inline-flex"
-          />
-        </div>
+        {showCTA && (
+          <div className="mt-16 text-center">
+            <AnimatedPillButton
+              href={ctaHref}
+              data-discover-button
+              data-magnetic
+              label={ctaLabel}
+              className="inline-flex"
+            />
+          </div>
+        )}
       </div>
     </section>
   );
