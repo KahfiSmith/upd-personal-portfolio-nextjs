@@ -47,6 +47,7 @@ export interface ProjectItem {
   summary?: string;
   previewSrc?: string;
   heroImage?: string;
+  detailImages?: string[];
   timeline?: string;
   techStack?: string[];
   metrics?: ProjectMetric[];

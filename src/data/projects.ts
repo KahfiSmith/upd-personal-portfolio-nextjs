@@ -12,6 +12,11 @@ export const dataProjects: ProjectItem[] = [
       "Designed and built a fullstack quote platform that lets users publish, tag, and browse quotes with a clean, reading-first layout.",
       "Implemented auth, profile pages, trending feeds, and search so the community can explore quotes by tags, authors, and popularity.",
     ],
+    detailImages: [
+      "/images/quowrld-page.png",
+      "/images/quowrld.png",
+      "/images/quowrld-profile.png",
+    ],
     marqueeTexts: [
       "Quote-First Experience",
       "Community for Writers",
@@ -92,6 +97,11 @@ export const dataProjects: ProjectItem[] = [
       "Pull History & Rarity Feel",
       "Import / Export Collections",
     ],
+    detailImages: [
+      "/images/kpopulls.png",
+      "/images/kpopulls-1.png",
+      "/images/kpopulls-2.png",
+    ],
     marqueeImages: [
       "/images/leafcat.jpg",
       "/images/blackcat.jpg",
@@ -156,6 +166,11 @@ export const dataProjects: ProjectItem[] = [
       "Roasting & Brutal Honesty",
       "Supportive Mentor Mode",
       "Best Practices & Security Focus",
+    ],
+    detailImages: [
+      "/images/coderoaster.png",
+      "/images/coderoaster-1.png",
+      "/images/coderoaster-2.png",
     ],
     marqueeImages: [
       "/images/yor.jpg",
@@ -222,6 +237,11 @@ export const dataProjects: ProjectItem[] = [
       "Student-friendly layout",
       "Reusable course components",
     ],
+    detailImages: [
+      "/images/eduverse.png",
+      "/images/eduverse-1.png",
+      "/images/eduverse-2.png",
+    ],
     marqueeImages: [
       "/images/watermelon.jpg",
       "/images/otter.jpg",
@@ -280,6 +300,11 @@ export const dataProjects: ProjectItem[] = [
       "Population tracking",
       "Feed & finance management",
       "Articles for farmers",
+    ],
+    detailImages: [
+      "/images/ternakq.png",
+      "/images/ternakq-1.png",
+      "/images/ternakq-2.png",
     ],
     marqueeImages: [
       "/images/capybara.jpg",
