@@ -110,7 +110,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           </div>
         )}
 
-        <section className="space-y-20">
+        <section className="space-y-16">
           {project.techStack && project.techStack.length > 0 && (
             <div className="space-y-4">
               <p className="text-sm uppercase tracking-[0.3em] text-charcoal/50">Primary Stack</p>
@@ -138,7 +138,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             </div>
           )}
 
-          <div className="relative overflow-hidden rounded-2xl bg-charcoal text-white shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+          <div className="relative overflow-hidden rounded-2xl bg-charcoal text-white shadow-md">
             {project.heroImage && (
               <img
                 src={project.heroImage}
@@ -177,7 +177,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           <div className="space-y-16">
             {project.sections?.map((section, index) => {
               const isDark = index % 2 === 1;
-              const showVisual = Boolean(project.heroImage);
+              const sectionImage = project.detailImages?.[index] ?? project.heroImage;
+              const showVisual = Boolean(sectionImage);
               const visualFirst = index % 2 === 0;
               const content = (
                 <div className="space-y-8 p-10 lg:p-12">
@@ -257,12 +258,14 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                           className="absolute inset-0 bg-gradient-to-br from-cyan-500/25 via-transparent to-purple-500/25"
                           aria-hidden="true"
                         />
-                        <img
-                          src={project.heroImage}
-                          alt={`${project.title} detail`}
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                        />
+                        {sectionImage && (
+                          <img
+                            src={sectionImage}
+                            alt={`${project.title} detail ${index + 1}`}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        )}
                       </div>
                     </div>
                   ) : (
