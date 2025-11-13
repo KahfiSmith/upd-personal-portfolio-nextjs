@@ -23,6 +23,7 @@ const techIconMap: Record<string, string> = {
   supabase: "/Icons/supabase.svg",
   vitest: "/Icons/vitest.svg",
   zustand: "/Icons/zustand.svg",
+  cypress: "/Icons/cypress.svg",
   expressjs: "/Icons/express.svg",
   git: "/Icons/git.svg",
   html: "/Icons/html.svg",
@@ -30,6 +31,10 @@ const techIconMap: Record<string, string> = {
   php: "/Icons/php.svg",
   bootstrap: "/Icons/bootstrap.svg",
   framermotion: "/Icons/framermotion.svg",
+  zod: "/Icons/zod.svg",
+  openaiapi: "/Icons/openaiapi.svg",
+  alpinejs: "/Icons/alpine.svg",
+  shadcnui: "/Icons/shadcn.svg",
 };
 
 const normalize = (name: string) => name.trim().toLowerCase().replace(/[\s.-]/g, "");
