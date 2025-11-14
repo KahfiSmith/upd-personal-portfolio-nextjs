@@ -1,4 +1,5 @@
 import Footer from "@/components/common/Footer";
+import PageTransitionProvider from "@/components/common/PageTransitionProvider";
 import ScrollManager from "@/components/common/ScrollManager";
 import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
 import type { Metadata } from "next";
@@ -39,14 +40,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${outfit.variable} ${playfair.variable} ${spaceGrotesk.variable} antialiased`}
-      >
-        <SmoothScrollProvider>
-          <ScrollManager />
-          {children}
-          <Footer />
-        </SmoothScrollProvider>
+      <body className={`${outfit.variable} ${playfair.variable} ${spaceGrotesk.variable} antialiased`}>
+        <PageTransitionProvider>
+          <SmoothScrollProvider>
+            <ScrollManager />
+            {children}
+            <Footer />
+          </SmoothScrollProvider>
+        </PageTransitionProvider>
       </body>
     </html>
   );
