@@ -91,6 +91,38 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
     gsap.set(overlayRef.current, { pointerEvents: "none" });
   }, [isClient]);
 
+  const normalizePath = useCallback((value: string) => {
+    const pathOnly = value.replace(/[?#].*$/, "");
+    return pathOnly || "/";
+  }, []);
+
+  const rememberScrollPosition = useCallback(() => {
+    if (typeof window === "undefined") return;
+    const lenis: any = (window as any).__lenis;
+    const currentScroll =
+      typeof lenis?.scroll === "number"
+        ? lenis.scroll
+        : window.scrollY ?? window.pageYOffset ?? 0;
+    try {
+      sessionStorage.setItem(
+        `__scrollRestore:${pathname}`,
+        JSON.stringify({ y: currentScroll })
+      );
+    } catch {}
+  }, [pathname]);
+
+  const pushWithHashAwareScroll = useCallback(
+    (target: string) => {
+      const options = target.includes("#") ? { scroll: false } : undefined;
+      if (options) {
+        router.push(target, options);
+      } else {
+        router.push(target);
+      }
+    },
+    [router]
+  );
+
   const openWipe = useCallback(() => {
     const wipe = wipeRef.current;
     if (!wipe) {
@@ -125,15 +157,17 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
   const closeWipe = useCallback(
     (targetPath: string) => {
       const wipe = wipeRef.current;
+      const normalizedTarget = normalizePath(targetPath);
       if (!wipe) {
-        router.push(targetPath);
+        setPendingPath(normalizedTarget);
+        pushWithHashAwareScroll(targetPath);
         return;
       }
       const tl = gsap.timeline({
         defaults: { ease: "power4.inOut" },
         onComplete: () => {
-          setPendingPath(targetPath);
-          router.push(targetPath);
+          setPendingPath(normalizedTarget);
+          pushWithHashAwareScroll(targetPath);
         },
       });
       if (overlayRef.current) {
@@ -150,16 +184,18 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
       tl.to(wipe, { opacity: 1, duration: 0.12, overwrite: "auto" }, 0);
       tl.to({}, { duration: 0.12 });
     },
-    [router]
+    [normalizePath, pushWithHashAwareScroll]
   );
 
   const navigate = useCallback(
     (href: string, options?: NavigateOptions) => {
       if (!href || animatingRef.current) return;
       const target = href.toString();
-      if (target === pathname) return;
+      const normalizedTarget = normalizePath(target);
+      if (normalizedTarget === pathname) return;
+      rememberScrollPosition();
       if (options?.disableCurtain) {
-        router.push(target);
+        pushWithHashAwareScroll(target);
         return;
       }
       animatingRef.current = true;
@@ -169,7 +205,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
       setShowTitle(false);
       closeWipe(target);
     },
-    [closeWipe, pathname, router]
+    [closeWipe, normalizePath, pathname, pushWithHashAwareScroll, rememberScrollPosition]
   );
 
   useEffect(() => {

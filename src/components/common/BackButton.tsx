@@ -1,70 +1,67 @@
 "use client";
 
-import Link from "next/link";
+import { MoveLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
-import type { ReactNode, MouseEvent } from "react";
+import { useCallback, type MouseEvent, type KeyboardEvent } from "react";
 import { cn } from "@/lib/utils/utils";
 import { usePageTransition } from "@/hooks";
-
-interface BackButtonProps {
-  href?: string;
-  label?: string;
-  icon?: ReactNode;
-  className?: string;
-  disableTransition?: boolean;
-}
+import type { BackButtonProps } from "@/types";
 
 export default function BackButton({
+  title,
+  subtitle,
+  titleColor = "text-gray-900",
+  className,
   href,
   label = "Back",
-  icon,
-  className,
   disableTransition = false,
 }: BackButtonProps) {
   const router = useRouter();
   const { navigate } = usePageTransition();
-  const baseClass = cn(
-    "group inline-flex items-center gap-3 text-sm font-semibold text-charcoal/70 hover:text-charcoal transition-colors",
-    className
+
+  const handleNavigate = useCallback(
+    (event?: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>) => {
+      if (href) {
+        if (event?.metaKey || event?.altKey || event?.ctrlKey || event?.shiftKey) {
+          return;
+        }
+        event?.preventDefault();
+        if (href.includes("#")) {
+          try {
+            (window as any).__instantHashScroll = true;
+          } catch {}
+        }
+        navigate(href, { label, disableCurtain: disableTransition });
+        return;
+      }
+      router.back();
+    },
+    [disableTransition, href, label, navigate, router]
   );
-  const content = (
+
+  const buttonClasses =
+    "flex space-x-2 cursor-pointer group text-charcoal/80 hover:text-charcoal transition-colors duration-300";
+
+  const buttonContent = (
     <>
-      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/50 text-charcoal/70 transition-transform duration-300 group-hover:-translate-x-1 group-active:-translate-x-1.5">
-        {icon ?? <ArrowLeft className="h-4 w-4" />}
-      </span>
-      <span className="transition-transform duration-300 group-hover:-translate-x-0.5">
-        {label}
-      </span>
+      <MoveLeft className="transition-transform duration-300 ease-in-out group-hover:text-charcoal group-hover:-translate-x-2" />
+      <span className="font-semibold">{label}</span>
     </>
   );
 
-  if (href) {
-    const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
-      if (
-        event.metaKey ||
-        event.altKey ||
-        event.ctrlKey ||
-        event.shiftKey ||
-        event.button !== 0 ||
-        event.defaultPrevented
-      ) {
-        return;
-      }
-      event.preventDefault();
-      navigate(href, { label, disableCurtain: disableTransition });
-    };
-
-    return (
-      <Link href={href} className={baseClass} onClick={handleClick}>
-        {content}
-      </Link>
-    );
-  }
-
   return (
-    <button type="button" onClick={() => router.back()} className={baseClass}>
-      {content}
-    </button>
+    <div className={cn("space-y-4", className)}>
+      <button type="button" onClick={(event) => handleNavigate(event)} className={buttonClasses}>
+        {buttonContent}
+      </button>
+      <div>
+        <h2
+          className={`mb-1 font-semibold text-xl md:text-2xl lg:text-3xl ${titleColor}`}
+        >
+          {title}
+        </h2>
+        <span className="font-normal text-base leading-7 text-charcoal/75">{subtitle}</span>
+      </div>
+    </div>
   );
 }
