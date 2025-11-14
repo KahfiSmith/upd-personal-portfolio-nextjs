@@ -3,18 +3,27 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import type { ReactNode } from "react";
+import type { ReactNode, MouseEvent } from "react";
 import { cn } from "@/lib/utils/utils";
+import { usePageTransition } from "@/hooks";
 
 interface BackButtonProps {
   href?: string;
   label?: string;
   icon?: ReactNode;
   className?: string;
+  disableTransition?: boolean;
 }
 
-export default function BackButton({ href, label = "Back", icon, className }: BackButtonProps) {
+export default function BackButton({
+  href,
+  label = "Back",
+  icon,
+  className,
+  disableTransition = false,
+}: BackButtonProps) {
   const router = useRouter();
+  const { navigate } = usePageTransition();
   const baseClass = cn(
     "group inline-flex items-center gap-3 text-sm font-semibold text-charcoal/70 hover:text-charcoal transition-colors",
     className
@@ -31,8 +40,23 @@ export default function BackButton({ href, label = "Back", icon, className }: Ba
   );
 
   if (href) {
+    const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+      if (
+        event.metaKey ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.button !== 0 ||
+        event.defaultPrevented
+      ) {
+        return;
+      }
+      event.preventDefault();
+      navigate(href, { label, disableCurtain: disableTransition });
+    };
+
     return (
-      <Link href={href} className={baseClass}>
+      <Link href={href} className={baseClass} onClick={handleClick}>
         {content}
       </Link>
     );
