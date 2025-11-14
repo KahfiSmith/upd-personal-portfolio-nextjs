@@ -75,11 +75,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   return (
     <main className="relative min-h-screen py-16 md:py-24">
       <div className="max-w-[96rem] mx-auto px-6 md:px-10 space-y-10">
-        <BackButton
-          title={project.title}
-          subtitle={project.summary ?? project.role}
-          href="/#projects"
-        />
+        <BackButton href="/#projects" label="Back to projects" />
 
         <header className="space-y-8">
           <div className="space-y-4">

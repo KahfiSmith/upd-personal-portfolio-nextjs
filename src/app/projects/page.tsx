@@ -42,11 +42,7 @@ export default function ProjectsPage() {
       <div className="max-w-[96rem] mx-auto px-6 md:px-10 space-y-12">
         <header className="space-y-12">
           <div className="space-y-10 text-center md:text-left">
-            <BackButton
-              title="Projects Archive"
-              subtitle="Every shipped project, research sprint, and passion build."
-              href="/"
-            />
+            <BackButton href="/" label="Back to home" className="justify-center md:justify-start" />
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display leading-[1.05] text-charcoal">
               Every shipped project, research sprint, and passion build
             </h1>
