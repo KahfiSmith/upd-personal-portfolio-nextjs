@@ -7,7 +7,6 @@ import { getAnchorScrollOffset } from "@/lib/utils/utils";
 export default function ScrollManager() {
   const pathname = usePathname();
 
-  // Disable browser's automatic restoration to control it ourselves
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
@@ -17,7 +16,6 @@ export default function ScrollManager() {
     } catch {}
   }, []);
 
-  // On route change, scroll to target (hash) or to top smoothly
   useEffect(() => {
     if (typeof window === "undefined") return;
     let cancelled = false;
@@ -34,6 +32,28 @@ export default function ScrollManager() {
       }
     };
 
+    const attemptRestoreScroll = () => {
+      try {
+        const key = `__scrollRestore:${pathname}`;
+        const stored = sessionStorage.getItem(key);
+        if (!stored) return false;
+        sessionStorage.removeItem(key);
+        const parsed = JSON.parse(stored);
+        const targetY = typeof parsed?.y === "number" ? parsed.y : null;
+        if (targetY === null) return false;
+        const lenisInstance: any = (window as any).__lenis;
+        if (lenisInstance?.scrollTo) {
+          const smoothEase = (t: number) => 1 - Math.pow(1 - t, 3);
+          lenisInstance.scrollTo(targetY, { duration: 0.5, easing: smoothEase });
+        } else {
+          window.scrollTo({ top: targetY, behavior: "smooth" });
+        }
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
     const attemptHashScroll = () => {
       if (!hash) return false;
       const targetId = hash.replace(/^#/, "");
@@ -45,24 +65,27 @@ export default function ScrollManager() {
         const el = document.getElementById(targetId);
         if (el) {
           const lenisInstance: any = (window as any).__lenis;
+          const instantHash = Boolean((window as any).__instantHashScroll);
           const fromDock = (window as any).__dockNavigateTo === targetId;
           const offset = getAnchorScrollOffset(targetId, el);
           if (lenisInstance?.scrollTo) {
             const easeInOutCubic = (t: number) =>
               t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
             lenisInstance.scrollTo(el, {
-              duration: fromDock ? 1.8 : 0.9,
-              easing: easeInOutCubic,
+              duration: instantHash ? 0 : fromDock ? 1.8 : 0.9,
+              easing: instantHash ? undefined : easeInOutCubic,
+              immediate: instantHash,
               offset,
             });
           } else {
             const startY = window.scrollY || window.pageYOffset || 0;
             const targetRect = el.getBoundingClientRect();
             const targetY = startY + targetRect.top + offset;
-            window.scrollTo({ top: targetY, behavior: "smooth" });
+            window.scrollTo({ top: targetY, behavior: instantHash ? "auto" : "smooth" });
           }
           try {
             (window as any).__dockNavigateTo = null;
+            (window as any).__instantHashScroll = false;
           } catch {}
           return;
         }
@@ -72,6 +95,7 @@ export default function ScrollManager() {
         } else {
           try {
             (window as any).__dockNavigateTo = null;
+            (window as any).__instantHashScroll = false;
           } catch {}
         }
       };
@@ -81,6 +105,12 @@ export default function ScrollManager() {
       });
       return true;
     };
+
+    if (attemptRestoreScroll()) {
+      return () => {
+        cancelled = true;
+      };
+    }
 
     const handledHash = attemptHashScroll();
     if (!handledHash) {

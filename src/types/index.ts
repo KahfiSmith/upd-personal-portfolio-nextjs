@@ -11,6 +11,16 @@ export interface SkillItemProps {
   desc: string;
 }
 
+export interface BackButtonProps {
+  title: string;
+  subtitle: string;
+  titleColor?: string;
+  className?: string;
+  href?: string;
+  label?: string;
+  disableTransition?: boolean;
+}
+
 export interface WorkExperienceItemProps {
   id: number;
   title: string;

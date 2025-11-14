@@ -8,7 +8,6 @@ export const useLenis = () => {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     });
 
-    // Expose globally for programmatic control (e.g., ScrollManager)
     (window as any).__lenis = lenis;
 
     let rafId = 0;
