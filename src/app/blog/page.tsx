@@ -13,7 +13,11 @@ export default function BlogPage() {
     <main className="relative min-h-screen py-16 md:py-24">
       <div className="max-w-[96rem] mx-auto px-6 md:px-10 space-y-16">
         <header className="space-y-4">
-          <BackButton label="Back" href="/" className="mb-10" />
+          <BackButton
+            title="Journal"
+            subtitle="Stories & lessons gathered along the way."
+            href="/"
+          />
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-display leading-[1.05] bg-gradient-to-r from-cyan-600 via-black to-cyan-600 bg-clip-text text-transparent pb-2">
             Stories & lessons gathered along the way.
           </h1>

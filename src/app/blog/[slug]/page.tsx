@@ -33,7 +33,11 @@ export default function BlogDetailPage({ params }: BlogPageProps) {
   return (
     <main className="relative min-h-screen py-16 md:py-24">
       <article className="max-w-4xl mx-auto px-6 md:px-0 space-y-10">
-        <BackButton href="/blog" label="Back to all posts" />
+        <BackButton
+          title={post.title}
+          subtitle={`${post.minuteRead} min read • ${formatDate(post.publishedAt)}`}
+          href="/blog"
+        />
         <header className="space-y-6 mb-12">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-display leading-[1.05] text-charcoal">
             {post.title}

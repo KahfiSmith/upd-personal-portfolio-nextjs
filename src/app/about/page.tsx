@@ -22,9 +22,7 @@ export default function AboutPage() {
 
       <section className="relative py-16 md:py-24">
         <div className="max-w-[96rem] mx-auto px-6 md:px-8">
-          <div className="mb-10">
-            <BackButton label="Back" />
-          </div>
+          <BackButton title="About" subtitle="Behind the Code" href="/" />
           <div className="max-w-full mb-20">
             <div className="space-y-6">
               <div data-animate="fade-up" className="space-y-8">
