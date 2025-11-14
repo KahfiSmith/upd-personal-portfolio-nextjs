@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import type { ProjectItem } from "@/types";
 import { dataProjects } from "@/data/projects";
 import AnimatedPillButton from "@/components/common/AnimatedPillButton";
+import { usePageTransition } from "@/hooks";
 
 type ProjectsListProps = {
   limit?: number;
@@ -64,6 +65,7 @@ export default function ProjectsList({
   ctaLabel = "View Full Projects",
   wrapperClassName = "max-w-[96rem] mx-auto px-6 md:px-8 lg:px-12",
 }: ProjectsListProps = {}) {
+  const { navigate } = usePageTransition();
   const projects = useMemo(() => {
     if (typeof limit === "number") {
       return dataProjects.slice(0, Math.max(0, limit));
@@ -319,6 +321,16 @@ export default function ProjectsList({
     handleActivate(null, undefined, { forceExit: true });
   };
 
+  const shouldBypassNavigation = (event: ReactMouseEvent<HTMLAnchorElement>) => {
+    return (
+      event.metaKey ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.button !== 0
+    );
+  };
+
   useEffect(() => {
     const el = overlayContentRef.current;
     if (!overlayState || !el) {
@@ -426,9 +438,17 @@ export default function ProjectsList({
                     if (event.key === "Enter" || event.key === " ") startSuppressExit();
                   }}
                   onKeyUp={(event) => {
-                    if (event.key === "Enter" || event.key === " ") forceHideOverlay();
+                    if (event.key !== "Enter" && event.key !== " ") return;
+                    event.preventDefault();
+                    forceHideOverlay();
+                    navigate(`/projects/${project.slug}`, { label: project.title });
                   }}
-                  onClick={forceHideOverlay}
+                  onClick={(event) => {
+                    if (shouldBypassNavigation(event)) return;
+                    event.preventDefault();
+                    forceHideOverlay();
+                    navigate(`/projects/${project.slug}`, { label: project.title });
+                  }}
                 >
                   <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-center">
                     <div className="md:col-span-6 lg:col-span-6">

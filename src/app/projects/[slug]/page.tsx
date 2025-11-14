@@ -75,7 +75,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   return (
     <main className="relative min-h-screen py-16 md:py-24">
       <div className="max-w-[96rem] mx-auto px-6 md:px-10 space-y-10">
-        <BackButton href="/#projects" label="Back to projects" />
+        <BackButton href="/#projects" label="Back to projects" disableTransition />
 
         <header className="space-y-8">
           <div className="space-y-4">
@@ -100,7 +100,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         )}
 
         {project.heroImage && (
-          <div className="relative overflow-hidden rounded-2xl border border-charcoal/10 bg-white shadow-2xl">
+          <div className="relative overflow-hidden rounded-2xl border border-charcoal/10 bg-white">
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-transparent to-purple-500/10" aria-hidden="true" />
             <div className="relative h-[360px] w-full md:h-[420px]">
               <Image
