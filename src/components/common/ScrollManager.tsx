@@ -20,40 +20,36 @@ export default function ScrollManager() {
   // On route change, scroll to target (hash) or to top smoothly
   useEffect(() => {
     if (typeof window === "undefined") return;
+    let cancelled = false;
     const hash = window.location.hash;
-    const ensureTop = () => {
-      const atTop = Math.abs(window.scrollY || window.pageYOffset || 0) < 1;
-      if (atTop) return;
-      const doScrollTop = () => {
-        const lenisInstance: any = (window as any).__lenis;
-        if (lenisInstance?.scrollTo) {
-          lenisInstance.scrollTo(0, { duration: 0, immediate: true });
-        } else {
-          window.scrollTo({ top: 0, behavior: "auto" });
-        }
-      };
-      setTimeout(doScrollTop, 40);
+
+    const scrollToTopInstant = () => {
+      const current = window.scrollY || window.pageYOffset || 0;
+      if (Math.abs(current) < 1) return;
+      const lenisInstance: any = (window as any).__lenis;
+      if (lenisInstance?.scrollTo) {
+        lenisInstance.scrollTo(0, { duration: 0, immediate: true });
+      } else {
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }
     };
 
-    const run = () => {
-      if (hash) {
-        const targetId = hash.replace(/^#/, "");
-        const scrollToHash = (attempt = 0) => {
-          const el = document.getElementById(targetId);
-          if (!el) {
-            if (attempt < 6) {
-              setTimeout(() => scrollToHash(attempt + 1), 60);
-              return;
-            }
-            ensureTop();
-            try { (window as any).__dockNavigateTo = null; } catch {}
-            return;
-          }
+    const attemptHashScroll = () => {
+      if (!hash) return false;
+      const targetId = hash.replace(/^#/, "");
+      let attempts = 0;
+      const maxAttempts = 30;
+
+      const tryScroll = () => {
+        if (cancelled) return;
+        const el = document.getElementById(targetId);
+        if (el) {
           const lenisInstance: any = (window as any).__lenis;
           const fromDock = (window as any).__dockNavigateTo === targetId;
           const offset = getAnchorScrollOffset(targetId, el);
           if (lenisInstance?.scrollTo) {
-            const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+            const easeInOutCubic = (t: number) =>
+              t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
             lenisInstance.scrollTo(el, {
               duration: fromDock ? 1.8 : 0.9,
               easing: easeInOutCubic,
@@ -65,29 +61,37 @@ export default function ScrollManager() {
             const targetY = startY + targetRect.top + offset;
             window.scrollTo({ top: targetY, behavior: "smooth" });
           }
-          try { (window as any).__dockNavigateTo = null; } catch {}
-        };
+          try {
+            (window as any).__dockNavigateTo = null;
+          } catch {}
+          return;
+        }
+        attempts += 1;
+        if (attempts < maxAttempts) {
+          requestAnimationFrame(tryScroll);
+        } else {
+          try {
+            (window as any).__dockNavigateTo = null;
+          } catch {}
+        }
+      };
 
-        scrollToHash();
-        return;
-      }
-
-      const atTop = Math.abs(window.scrollY || window.pageYOffset || 0) < 1;
-      if (!atTop) {
-        const lenisInstance: any = (window as any).__lenis;
-        const scrollTop = () => {
-          if (lenisInstance?.scrollTo) {
-            lenisInstance.scrollTo(0, { duration: 0, immediate: true });
-          } else {
-            window.scrollTo({ top: 0, behavior: "auto" });
-          }
-        };
-        requestAnimationFrame(scrollTop);
-      }
+      requestAnimationFrame(() => {
+        if (!cancelled) tryScroll();
+      });
+      return true;
     };
 
-    // Defer a tick to let layout paint and Lenis initialize
-    requestAnimationFrame(() => setTimeout(run, 40));
+    const handledHash = attemptHashScroll();
+    if (!handledHash) {
+      requestAnimationFrame(() => {
+        if (!cancelled) scrollToTopInstant();
+      });
+    }
+
+    return () => {
+      cancelled = true;
+    };
   }, [pathname]);
 
   return null;

@@ -104,6 +104,23 @@ export default function ProjectsList({
     tween.kill();
   };
 
+  const resetOverlayImmediate = () => {
+    finishTween(overlayMoveTweenRef.current);
+    finishTween(overlayOpacityTweenRef.current);
+    finishTween(hideTimelineRef.current);
+    finishTween(entryTweenRef.current);
+    overlayMoveTweenRef.current = null;
+    overlayOpacityTweenRef.current = null;
+    hideTimelineRef.current = null;
+    entryTweenRef.current = null;
+    lastRowTopRef.current = null;
+    firstRevealRef.current = true;
+    if (overlayRef.current) {
+      gsap.set(overlayRef.current, { opacity: 0 });
+    }
+    setOverlayState(null);
+  };
+
   const startSuppressExit = () => {
     suppressExitRef.current = true;
     clearDeactivateTimeout();
@@ -213,9 +230,24 @@ export default function ProjectsList({
     });
   };
 
-  const handleActivate = (id: number | null, row?: HTMLElement | null) => {
-    if (id === null && suppressExitRef.current) return;
-    if (id) clearDeactivateTimeout();
+  const handleActivate = (
+    id: number | null,
+    row?: HTMLElement | null,
+    options?: { forceExit?: boolean }
+  ) => {
+    const forceExit = options?.forceExit ?? false;
+    if (id === null) {
+      if (forceExit) {
+        suppressExitRef.current = false;
+        if (activeId !== null) setActiveId(null);
+        resetOverlayImmediate();
+        clearDeactivateTimeout();
+        return;
+      } else if (suppressExitRef.current) {
+        return;
+      }
+    }
+    if (id || forceExit) clearDeactivateTimeout();
     const sameActive = typeof id === "number" && id === activeId;
     if (sameActive) {
       if (row) moveOverlay(row);
@@ -240,6 +272,7 @@ export default function ProjectsList({
         overwrite: "auto",
       });
     } else {
+      suppressExitRef.current = false;
       lastRowTopRef.current = null;
       const content = overlayContentRef.current;
       const origin = wipeDirectionRef.current === "down" ? "50% 100%" : "50% 0%";
@@ -280,6 +313,10 @@ export default function ProjectsList({
       deactivateTimeoutRef.current = null;
       handleActivate(null);
     }, 60);
+  };
+
+  const forceHideOverlay = () => {
+    handleActivate(null, undefined, { forceExit: true });
   };
 
   useEffect(() => {
@@ -388,6 +425,10 @@ export default function ProjectsList({
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") startSuppressExit();
                   }}
+                  onKeyUp={(event) => {
+                    if (event.key === "Enter" || event.key === " ") forceHideOverlay();
+                  }}
+                  onClick={forceHideOverlay}
                 >
                   <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-center">
                     <div className="md:col-span-6 lg:col-span-6">

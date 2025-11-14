@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import BackButton from "@/components/common/BackButton";
 import { dataProjects } from "@/data/projects";
@@ -99,14 +100,18 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         )}
 
         {project.heroImage && (
-          <div className="relative overflow-hidden">
+          <div className="relative overflow-hidden rounded-2xl border border-charcoal/10 bg-white shadow-2xl">
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-transparent to-purple-500/10" aria-hidden="true" />
-            <img
-              src={project.heroImage}
-              alt={project.title}
-              className="relative h-[360px] w-full object-cover md:h-[420px]"
-              loading="lazy"
-            />
+            <div className="relative h-[360px] w-full md:h-[420px]">
+              <Image
+                src={project.heroImage}
+                alt={project.title}
+                fill
+                className="object-cover"
+                priority
+                sizes="(min-width: 1024px) 80vw, 100vw"
+              />
+            </div>
           </div>
         )}
 
@@ -140,11 +145,12 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
           <div className="relative overflow-hidden rounded-2xl bg-charcoal text-white shadow-md">
             {project.heroImage && (
-              <img
+              <Image
                 src={project.heroImage}
                 alt={`${project.title} overview`}
-                className="absolute inset-0 h-full w-full object-cover opacity-20"
-                loading="lazy"
+                fill
+                className="object-cover opacity-20"
+                sizes="(min-width: 1024px) 60vw, 100vw"
               />
             )}
             <div className="absolute inset-0 bg-gradient-to-br from-black via-charcoal/70 to-cyan-600/30" aria-hidden="true" />
@@ -259,11 +265,12 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                           aria-hidden="true"
                         />
                         {sectionImage && (
-                          <img
+                          <Image
                             src={sectionImage}
                             alt={`${project.title} detail ${index + 1}`}
-                            className="h-full w-full object-cover"
-                            loading="lazy"
+                            fill
+                            className="object-cover"
+                            sizes="(min-width: 1024px) 50vw, 100vw"
                           />
                         )}
                       </div>
