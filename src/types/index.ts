@@ -12,12 +12,9 @@ export interface SkillItemProps {
 }
 
 export interface BackButtonProps {
-  title: string;
-  subtitle: string;
-  titleColor?: string;
-  className?: string;
   href?: string;
   label?: string;
+  className?: string;
   disableTransition?: boolean;
 }
 
