@@ -26,14 +26,18 @@ type TransitionContextValue = {
 
 const TransitionContext = createContext<TransitionContextValue | null>(null);
 
+// Wave dengan bagian bawah benar-benar melengkung (bulat) pakai quadratic Bezier.
 const WAVE_START =
-  "path('M-400 -1200 L2400 -1200 L2400 200 Q1800 320 1200 200 T-400 200 Z')";
+  "path('M -200 -400 L 2200 -400 L 2200 40 Q 1000 220 -200 40 Z')";
+
 const WAVE_PEAK =
-  "path('M-400 -1500 L2400 -1500 L2400 600 Q1800 750 1200 600 T-400 600 Z')";
+  "path('M -200 -600 L 2200 -600 L 2200 360 Q 1000 640 -200 360 Z')";
+
 const WAVE_FULL =
-  "path('M-400 -1800 L2400 -1800 L2400 1400 Q1800 1600 1200 1400 T-400 1400 Z')";
+  "path('M -200 -800 L 2200 -800 L 2200 1200 Q 1000 1500 -200 1200 Z')";
+
 const WAVE_OVERFLOW =
-  "path('M-400 -2200 L2400 -2200 L2400 2400 Q1800 2650 1200 2400 T-400 2400 Z')";
+  "path('M -200 -1000 L 2200 -1000 L 2200 2200 Q 1000 2600 -200 2200 Z')";
 
 const formatLabel = (href: string) => {
   const withoutQuery = href.replace(/[?#].*$/, "");
@@ -91,11 +95,13 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!isClient) return;
     if (!wipeRef.current) return;
+
     gsap.set(wipeRef.current, {
       clipPath: WAVE_START,
       webkitClipPath: WAVE_START,
       opacity: 1,
     });
+
     gsap.set(overlayRef.current, { pointerEvents: "none" });
   }, [isClient]);
 
@@ -141,12 +147,14 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
       setIsTransitioning(false);
       return;
     }
+
     gsap.set(wipe, {
       clipPath: WAVE_OVERFLOW,
       webkitClipPath: WAVE_OVERFLOW,
       opacity: 1,
       yPercent: 0,
     });
+
     const tl = gsap.timeline({
       defaults: { ease: "power4.inOut" },
       onComplete: () => {
@@ -159,6 +167,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
         }
       },
     });
+
     tl.call(() => setShowTitle(false), undefined, 0);
     tl.to({}, { duration: TITLE_EXIT_DURATION + 0.15 });
     tl.to(wipe, { keyframes: WIPE_OUT_KEYFRAMES });
@@ -173,11 +182,13 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
     (targetPath: string) => {
       const wipe = wipeRef.current;
       const normalizedTarget = normalizePath(targetPath);
+
       if (!wipe) {
         setPendingPath(normalizedTarget);
         pushWithHashAwareScroll(targetPath);
         return;
       }
+
       const tl = gsap.timeline({
         defaults: { ease: "power4.inOut" },
         onComplete: () => {
@@ -185,15 +196,19 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
           pushWithHashAwareScroll(targetPath);
         },
       });
+
       if (overlayRef.current) {
         gsap.set(overlayRef.current, { pointerEvents: "auto" });
       }
+
       gsap.set(wipe, {
         clipPath: WAVE_START,
         webkitClipPath: WAVE_START,
         yPercent: -110,
       });
+
       gsap.set(wipe, { opacity: 1 });
+
       tl.call(() => setShowTitle(false), undefined, 0);
       tl.to(wipe, { keyframes: WIPE_IN_KEYFRAMES });
       tl.to(
@@ -212,14 +227,19 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
   const navigate = useCallback(
     (href: string, options?: NavigateOptions) => {
       if (!href || animatingRef.current) return;
+
       const target = href.toString();
       const normalizedTarget = normalizePath(target);
+
       if (normalizedTarget === pathname) return;
+
       rememberScrollPosition();
+
       if (options?.disableCurtain) {
         pushWithHashAwareScroll(target);
         return;
       }
+
       animatingRef.current = true;
       setIsTransitioning(true);
       setTitle((options?.label ?? formatLabel(target)).toUpperCase());
@@ -259,6 +279,9 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
           <div
             ref={wipeRef}
             className="absolute inset-0 bg-charcoal pointer-events-none"
+            style={{
+              willChange: "clip-path, -webkit-clip-path, transform",
+            }}
           />
           <AnimatePresence>
             {isOverlayVisible && showTitle && (
