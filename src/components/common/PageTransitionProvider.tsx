@@ -43,6 +43,14 @@ const WAVE_FULL =
 const WAVE_OVERFLOW =
   "path('M -200 -1000 Q 1000 -1350 2200 -1000 L 2200 2200 Q 1000 2600 -200 2200 Z')";
 
+/**
+ * Khusus OUTRO:
+ * Wave dengan top-edge melengkung ke bawah (smile) di dalam viewport.
+ * Ini yang dipakai saat wipe keluar (penutup).
+ */
+const WAVE_OUT_CURVE =
+  "path('M -200 0 Q 1000 260 2200 0 L 2200 1400 Q 1000 1660 -200 1400 Z')";
+
 const formatLabel = (href: string) => {
   const withoutQuery = href.replace(/[?#].*$/, "");
   if (!withoutQuery || withoutQuery === "/") return "Home";
@@ -53,11 +61,11 @@ const formatLabel = (href: string) => {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
-// Faster wipe timings to keep the intro/outro responsive.
+// INTRO: akhiri di WAVE_FULL (belum terlalu cekung)
 const WIPE_IN_KEYFRAMES = [
   { clipPath: WAVE_PEAK, webkitClipPath: WAVE_PEAK, duration: 0.55 },
   { clipPath: WAVE_FULL, webkitClipPath: WAVE_FULL, duration: 0.65 },
-  { clipPath: WAVE_OVERFLOW, webkitClipPath: WAVE_OVERFLOW, duration: 0.35 },
+  // kalau mau, bisa tambahin WAVE_OVERFLOW lagi, tapi sekarang kita cukup sampai FULL
 ];
 
 const WIPE_OUT_KEYFRAMES = [
@@ -141,6 +149,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
     [router]
   );
 
+  // OUTRO: penutup wipe (saat wave keluar)
   const openWipe = useCallback(() => {
     const wipe = wipeRef.current;
     if (!wipe) {
@@ -152,15 +161,11 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    gsap.set(wipe, {
-      clipPath: WAVE_OVERFLOW,
-      webkitClipPath: WAVE_OVERFLOW,
-      opacity: 1,
-      yPercent: 0,
-    });
-
+    // Di akhir intro, clipPath = WAVE_FULL & yPercent = 0
+    // Di outro: mulai dari shape itu (relatif "datar"), lalu cekungnya diperdalam (→ WAVE_OUT_CURVE)
+    // sambil bergerak turun.
     const tl = gsap.timeline({
-      defaults: { ease: "power4.inOut" },
+      defaults: { ease: "power3.inOut" },
       onComplete: () => {
         animatingRef.current = false;
         setOverlayVisible(false);
@@ -173,15 +178,41 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
     });
 
     tl.call(() => setShowTitle(false), undefined, 0);
-    tl.to({}, { duration: TITLE_EXIT_DURATION + 0.15 });
-    tl.to(wipe, { keyframes: WIPE_OUT_KEYFRAMES });
+
+    // Pastikan start di posisi akhir intro
+    tl.set(
+      wipe,
+      {
+        yPercent: 0,
+        opacity: 1,
+      },
+      0
+    );
+
+    // 1) Bentuk pelan2 jadi lebih cekung (FULL → OUT_CURVE)
     tl.to(
       wipe,
-      { yPercent: 110, duration: WIPE_SLIDE_DURATION, ease: "power3.inOut" },
-      "<"
+      {
+        clipPath: WAVE_OUT_CURVE,
+        webkitClipPath: WAVE_OUT_CURVE,
+        duration: 0.55,
+        ease: "power2.inOut",
+      },
+      0
+    );
+
+    // 2) Sambil geser turun keluar layar
+    tl.to(
+      wipe,
+      {
+        yPercent: 110,
+        duration: WIPE_SLIDE_DURATION,
+      },
+      0 // jalan bareng
     );
   }, []);
 
+  // INTRO: pembuka wipe (saat wave nutup layar sebelum ganti route)
   const closeWipe = useCallback(
     (targetPath: string) => {
       const wipe = wipeRef.current;
@@ -214,12 +245,17 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
       gsap.set(wipe, { opacity: 1 });
 
       tl.call(() => setShowTitle(false), undefined, 0);
+
+      // Intro: START -> PEAK -> FULL (akhirnya belum terlalu cekung)
       tl.to(wipe, { keyframes: WIPE_IN_KEYFRAMES });
+
+      // Sambil turun dari atas sampai full nutup
       tl.to(
         wipe,
         { yPercent: 0, duration: WIPE_SLIDE_DURATION, ease: "power3.inOut" },
         0
       );
+
       tl.add(() => setShowTitle(true));
       tl.to({}, { duration: TITLE_HOLD_DURATION });
       tl.to(wipe, { opacity: 1, duration: 0.12, overwrite: "auto" }, 0);
