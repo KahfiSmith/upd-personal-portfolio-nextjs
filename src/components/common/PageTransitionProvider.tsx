@@ -26,18 +26,22 @@ type TransitionContextValue = {
 
 const TransitionContext = createContext<TransitionContextValue | null>(null);
 
-// Wave dengan bagian bawah benar-benar melengkung (bulat) pakai quadratic Bezier.
+/**
+ * Wave dengan bagian atas & bawah melengkung (kayak pil).
+ * - Atas: M → Q (top curve)
+ * - Bawah: L → Q (bottom curve)
+ */
 const WAVE_START =
-  "path('M -200 -400 L 2200 -400 L 2200 40 Q 1000 220 -200 40 Z')";
+  "path('M -200 -400 Q 1000 -700 2200 -400 L 2200 40 Q 1000 220 -200 40 Z')";
 
 const WAVE_PEAK =
-  "path('M -200 -600 L 2200 -600 L 2200 360 Q 1000 640 -200 360 Z')";
+  "path('M -200 -600 Q 1000 -900 2200 -600 L 2200 360 Q 1000 660 -200 360 Z')";
 
 const WAVE_FULL =
-  "path('M -200 -800 L 2200 -800 L 2200 1200 Q 1000 1500 -200 1200 Z')";
+  "path('M -200 -800 Q 1000 -1100 2200 -800 L 2200 1200 Q 1000 1500 -200 1200 Z')";
 
 const WAVE_OVERFLOW =
-  "path('M -200 -1000 L 2200 -1000 L 2200 2200 Q 1000 2600 -200 2200 Z')";
+  "path('M -200 -1000 Q 1000 -1350 2200 -1000 L 2200 2200 Q 1000 2600 -200 2200 Z')";
 
 const formatLabel = (href: string) => {
   const withoutQuery = href.replace(/[?#].*$/, "");
