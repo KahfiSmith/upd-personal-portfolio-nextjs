@@ -15,7 +15,7 @@ export default function BlogPage() {
         <header className="space-y-4">
           <BackButton href="/" label="Back" className="mb-6" />
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-display leading-[1.05] bg-gradient-to-r from-cyan-600 via-black to-cyan-600 bg-clip-text text-transparent pb-2">
-            Stories & lessons gathered along the way.
+            Stories & lessons gathered along the way
           </h1>
           <p className="text-lg md:text-xl text-charcoal/70 max-w-3xl">
             A collection of reflections on craft, creativity, and the tiny

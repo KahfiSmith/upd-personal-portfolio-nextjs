@@ -53,7 +53,11 @@ export default function Hero() {
             © Code by Kahfi Smith
           </div>
 
-          <AnimatedPillButton data-get-in-touch label="Get in Touch" />
+          <AnimatedPillButton
+            data-get-in-touch
+            label="Contact Me"
+            href="/contact"
+          />
         </div>
 
         <div className="flex-1 flex items-center justify-center">
