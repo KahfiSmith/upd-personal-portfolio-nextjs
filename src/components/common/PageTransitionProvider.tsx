@@ -26,10 +26,14 @@ type TransitionContextValue = {
 
 const TransitionContext = createContext<TransitionContextValue | null>(null);
 
-const WAVE_START = "ellipse(130% 0% at 50% 0%)";
-const WAVE_PEAK = "ellipse(145% 60% at 50% 20%)";
-const WAVE_FULL = "ellipse(165% 130% at 50% 75%)";
-const WAVE_OVERFLOW = "ellipse(210% 240% at 50% 115%)";
+const WAVE_START =
+  "path('M-400 -1200 L2400 -1200 L2400 200 Q1800 320 1200 200 T-400 200 Z')";
+const WAVE_PEAK =
+  "path('M-400 -1500 L2400 -1500 L2400 600 Q1800 750 1200 600 T-400 600 Z')";
+const WAVE_FULL =
+  "path('M-400 -1800 L2400 -1800 L2400 1400 Q1800 1600 1200 1400 T-400 1400 Z')";
+const WAVE_OVERFLOW =
+  "path('M-400 -2200 L2400 -2200 L2400 2400 Q1800 2650 1200 2400 T-400 2400 Z')";
 
 const formatLabel = (href: string) => {
   const withoutQuery = href.replace(/[?#].*$/, "");
@@ -53,6 +57,10 @@ const WIPE_OUT_KEYFRAMES = [
   { clipPath: WAVE_PEAK, webkitClipPath: WAVE_PEAK, duration: 0.45 },
   { clipPath: WAVE_START, webkitClipPath: WAVE_START, duration: 0.4 },
 ];
+
+const TITLE_EXIT_DURATION = 0.6;
+const TITLE_HOLD_DURATION = 0.8;
+const WIPE_SLIDE_DURATION = 1.35;
 
 export const usePageTransition = () => {
   const ctx = useContext(TransitionContext);
@@ -137,6 +145,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
       clipPath: WAVE_OVERFLOW,
       webkitClipPath: WAVE_OVERFLOW,
       opacity: 1,
+      yPercent: 0,
     });
     const tl = gsap.timeline({
       defaults: { ease: "power4.inOut" },
@@ -151,7 +160,13 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
       },
     });
     tl.call(() => setShowTitle(false), undefined, 0);
+    tl.to({}, { duration: TITLE_EXIT_DURATION + 0.15 });
     tl.to(wipe, { keyframes: WIPE_OUT_KEYFRAMES });
+    tl.to(
+      wipe,
+      { yPercent: 110, duration: WIPE_SLIDE_DURATION, ease: "power3.inOut" },
+      "<"
+    );
   }, []);
 
   const closeWipe = useCallback(
@@ -176,11 +191,18 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
       gsap.set(wipe, {
         clipPath: WAVE_START,
         webkitClipPath: WAVE_START,
+        yPercent: -110,
       });
       gsap.set(wipe, { opacity: 1 });
       tl.call(() => setShowTitle(false), undefined, 0);
       tl.to(wipe, { keyframes: WIPE_IN_KEYFRAMES });
-      tl.add(() => setShowTitle(true), 0.45);
+      tl.to(
+        wipe,
+        { yPercent: 0, duration: WIPE_SLIDE_DURATION, ease: "power3.inOut" },
+        0
+      );
+      tl.add(() => setShowTitle(true));
+      tl.to({}, { duration: TITLE_HOLD_DURATION });
       tl.to(wipe, { opacity: 1, duration: 0.12, overwrite: "auto" }, 0);
       tl.to({}, { duration: 0.12 });
     },
