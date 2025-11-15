@@ -120,25 +120,6 @@
   --font-space-grotesk: var(--font-space-grotesk);
 }
 
-.brand-name {
-  font-family: var(--font-display, 'Playfair Display', serif);
-  text-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
-}
-
-.brand-subtitle {
-  font-family: var(--font-mono, 'Space Grotesk', monospace);
-  font-weight: 300;
-}
-
-.curtain-top,
-.curtain-bottom,
-.brand-name,
-.brand-subtitle,
-.brand-line {
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-}
-
 .floating-orb {
   animation: subtleFloat 8s ease-in-out infinite;
 }
@@ -151,11 +132,6 @@
     transform: translate(-50%, -45%) scale(1.05);
   }
 }
-
-#simple-curtain-loader { display: none; }
-html.is-reload #simple-curtain-loader { display: block; }
-html.needs-reveal #simple-curtain-loader { display: none !important; }
-html[data-astro-transition] #simple-curtain-loader { display: none !important; }
 
 .recent-work-marquee {
   animation: recentWorkMarquee 20s linear infinite;
