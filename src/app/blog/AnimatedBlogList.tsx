@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback } from "react";
+import { usePageTransition } from "@/hooks";
 import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
 import type { BlogPost } from "@/types";
 
@@ -21,6 +22,7 @@ export default function AnimatedBlogList({ posts }: AnimatedBlogListProps) {
 }
 
 function BlogCard({ post }: { post: BlogPost }) {
+  const { navigate } = usePageTransition();
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
 
@@ -53,6 +55,18 @@ function BlogCard({ post }: { post: BlogPost }) {
     pointerY.set(0);
   }, [pointerX, pointerY]);
 
+  const handleNavigate = useCallback(
+    (event: ReactMouseEvent<HTMLAnchorElement>) => {
+      if (event.defaultPrevented) return;
+      if (event.metaKey || event.altKey || event.ctrlKey || event.shiftKey || event.button !== 0) {
+        return;
+      }
+      event.preventDefault();
+      navigate(`/blog/${post.slug}`, { label: "Blog Detail" });
+    },
+    [navigate, post.slug]
+  );
+
   return (
     <motion.article
       onMouseMove={handleMouseMove}
@@ -66,7 +80,7 @@ function BlogCard({ post }: { post: BlogPost }) {
         className="pointer-events-none absolute inset-x-2 md:inset-x-6 inset-y-4 -z-10 blur-3xl opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100"
       />
 
-      <Link href={`/blog/${post.slug}`} className="block relative">
+      <Link href={`/blog/${post.slug}`} className="block relative" onClick={handleNavigate}>
         <div className="relative flex flex-col gap-6 py-10 md:py-12 px-0 rounded-none transition-all duration-500 group-hover:px-6 group-hover:rounded-[32px]">
           <span
             aria-hidden="true"

@@ -1,11 +1,13 @@
 "use client";
 
 import { FloatingDock } from "@/components/ui/floating-dock";
+import { usePageTransition } from "@/hooks";
 import { getAnchorScrollOffset } from "@/lib/utils/utils";
 import { Briefcase, FolderGit2, User2, BookText, Home } from "lucide-react";
 import { MouseEvent, useCallback, useMemo } from "react";
 
 export default function FloatingDockNav() {
+  const { navigate } = usePageTransition();
   const onAnchorClick = useCallback((e: MouseEvent<HTMLAnchorElement>, hash: string) => {
     if (!hash?.startsWith("#")) return;
     e.preventDefault();
@@ -38,6 +40,26 @@ export default function FloatingDockNav() {
     history.pushState(null, "", `#${id}`);
   }, []);
 
+  const handleRouteTransition = useCallback(
+    (event: MouseEvent<HTMLAnchorElement>, href: string, label: string) => {
+      if (event.defaultPrevented) return;
+      const targetAttr = event.currentTarget?.getAttribute("target");
+      if (
+        event.metaKey ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.button !== 0 ||
+        (targetAttr && targetAttr !== "_self")
+      ) {
+        return;
+      }
+      event.preventDefault();
+      navigate(href, { label });
+    },
+    [navigate]
+  );
+
   const items = useMemo(
     () => [
       {
@@ -68,9 +90,10 @@ export default function FloatingDockNav() {
         title: "Blog",
         icon: <BookText className="h-5 w-5 text-white" />,
         href: "/blog",
+        onClick: (event: MouseEvent<HTMLAnchorElement>) => handleRouteTransition(event, "/blog", "Blog"),
       },
     ],
-    [onAnchorClick]
+    [handleRouteTransition, onAnchorClick]
   );
 
   return (
