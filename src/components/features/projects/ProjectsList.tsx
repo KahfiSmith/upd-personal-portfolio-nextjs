@@ -36,8 +36,18 @@ const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   const uniqueText = Array.from(new Set(textBits));
   if (!uniqueText.length) uniqueText.push(project.title.toUpperCase());
 
-  const fallbackImages = [project.previewSrc, project.heroImage];
-  const imagePool = project.marqueeImages && project.marqueeImages.length > 0 ? project.marqueeImages : fallbackImages;
+  // Use marqueeImages first, then fallback to heroImage and previewSrc
+  const imagePool = [];
+  if (project.marqueeImages && project.marqueeImages.length > 0) {
+    imagePool.push(...project.marqueeImages);
+  }
+  if (project.heroImage && !imagePool.includes(project.heroImage)) {
+    imagePool.push(project.heroImage);
+  }
+  if (project.previewSrc && !imagePool.includes(project.previewSrc)) {
+    imagePool.push(project.previewSrc);
+  }
+  
   const filteredImages = imagePool.filter((src): src is string => typeof src === "string" && src.trim().length > 0);
 
   const tokens: MarqueeToken[] = [];
@@ -90,11 +100,19 @@ export default function ProjectsList({
   const entryTweenRef = useRef<gsap.core.Tween | null>(null);
   const suppressExitRef = useRef(false);
   const deactivateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const clearDeactivateTimeout = () => {
     if (deactivateTimeoutRef.current) {
       clearTimeout(deactivateTimeoutRef.current);
       deactivateTimeoutRef.current = null;
+    }
+  };
+
+  const clearDebounceTimeout = () => {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+      debounceTimeoutRef.current = null;
     }
   };
 
@@ -200,6 +218,10 @@ export default function ProjectsList({
                 alt={`${project.title} preview asset`}
                 className="h-[150px] w-full rounded-[24px] object-cover my-8"
                 loading="lazy"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                }}
               />
             </span>
           )
@@ -221,14 +243,14 @@ export default function ProjectsList({
       wipeDirectionRef.current = "down";
     }
     lastRowTopRef.current = top;
+    
     overlayMoveTweenRef.current?.kill();
     overlayMoveTweenRef.current = gsap.to(overlayRef.current, {
       y: top,
       height,
-      duration: 0.45,
-      ease: "power3.out",
+      duration: 0.4,
+      ease: "power2.out",
       overwrite: "auto",
-      force3D: true,
     });
   };
 
@@ -238,6 +260,7 @@ export default function ProjectsList({
     options?: { forceExit?: boolean }
   ) => {
     const forceExit = options?.forceExit ?? false;
+    
     if (id === null) {
       if (forceExit) {
         suppressExitRef.current = false;
@@ -249,18 +272,36 @@ export default function ProjectsList({
         return;
       }
     }
+    
     if (id || forceExit) clearDeactivateTimeout();
+    
     const sameActive = typeof id === "number" && id === activeId;
     if (sameActive) {
       if (row) moveOverlay(row);
       return;
     }
+
+    // Simple approach for switching between projects
+    if (typeof id === "number" && activeId !== null && id !== activeId) {
+      setActiveId(id);
+      const project = projects.find((p) => p.id === id) ?? null;
+      if (project) {
+        setOverlayState({ project: { ...project }, key: Date.now() });
+      }
+      if (row) {
+        moveOverlay(row);
+      }
+      return;
+    }
+
     setActiveId(id);
     const project = id ? projects.find((p) => p.id === id) ?? null : null;
     if (project) {
       setOverlayState({ project: { ...project }, key: Date.now() });
     }
+    
     if (!overlayRef.current) return;
+    
     if (id && row) {
       suppressExitRef.current = false;
       hideTimelineRef.current?.kill();
@@ -269,20 +310,23 @@ export default function ProjectsList({
       overlayOpacityTweenRef.current?.kill();
       overlayOpacityTweenRef.current = gsap.to(overlayRef.current, {
         opacity: 1,
-        duration: 0.35,
+        duration: 0.4,
         ease: "power2.out",
         overwrite: "auto",
       });
     } else {
       suppressExitRef.current = false;
       lastRowTopRef.current = null;
+      
       const content = overlayContentRef.current;
       const origin = wipeDirectionRef.current === "down" ? "50% 100%" : "50% 0%";
+      
       hideTimelineRef.current?.kill();
       overlayMoveTweenRef.current?.kill();
       overlayOpacityTweenRef.current?.kill();
+      
       const hideTween = gsap.timeline({
-        defaults: { ease: "power3.inOut" },
+        defaults: { ease: "power2.out" },
         onComplete: () => {
           gsap.set(overlayRef.current, { opacity: 0 });
           if (content) {
@@ -292,17 +336,19 @@ export default function ProjectsList({
           hideTimelineRef.current = null;
         },
       });
+      
       if (content && overlayState) {
         hideTween.to(content, {
           scaleY: 0,
           opacity: 1,
-          duration: 0.45,
+          duration: 0.4,
           transformOrigin: origin,
         });
         hideTween.to(overlayRef.current, { opacity: 0, duration: 0.2 }, ">-0.1");
       } else {
-        hideTween.to(overlayRef.current, { opacity: 0, duration: 0.25 });
+        hideTween.to(overlayRef.current, { opacity: 0, duration: 0.3 });
       }
+      
       hideTimelineRef.current = hideTween;
       firstRevealRef.current = true;
     }
@@ -314,7 +360,7 @@ export default function ProjectsList({
     deactivateTimeoutRef.current = setTimeout(() => {
       deactivateTimeoutRef.current = null;
       handleActivate(null);
-    }, 60);
+    }, 150);
   };
 
   const forceHideOverlay = () => {
@@ -339,13 +385,13 @@ export default function ProjectsList({
       return;
     }
     const fromOrigin = wipeDirectionRef.current === "down" ? "50% 0%" : "50% 100%";
-    const fromScale = firstRevealRef.current ? 0 : 0.85;
-    const duration = firstRevealRef.current ? 0.45 : 0.25;
+    const fromScale = firstRevealRef.current ? 0 : 0.95;
+    const duration = firstRevealRef.current ? 0.4 : 0.25;
     entryTweenRef.current?.kill();
     entryTweenRef.current = gsap.fromTo(
       el,
-      { scaleY: fromScale, opacity: firstRevealRef.current ? 0.85 : 1, transformOrigin: fromOrigin },
-      { scaleY: 1, opacity: 1, duration, ease: "power3.out" }
+      { scaleY: fromScale, opacity: firstRevealRef.current ? 0.9 : 1, transformOrigin: fromOrigin },
+      { scaleY: 1, opacity: 1, duration, ease: "power2.out" }
     );
     firstRevealRef.current = false;
     return () => {
@@ -358,6 +404,7 @@ export default function ProjectsList({
     return () => {
       suppressExitRef.current = false;
       clearDeactivateTimeout();
+      clearDebounceTimeout();
     };
   }, []);
 
