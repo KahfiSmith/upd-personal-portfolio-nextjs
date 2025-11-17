@@ -82,6 +82,7 @@ export default function ProjectsList({
   const roleRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const rowRefs = useRef<Record<number, HTMLElement | null>>({});
   const overlayContentRef = useRef<HTMLDivElement | null>(null);
+  const activeRowRef = useRef<HTMLElement | null>(null);
   const lastRowTopRef = useRef<number | null>(null);
   const wipeDirectionRef = useRef<"down" | "up">("down");
   const firstRevealRef = useRef(true);
@@ -125,6 +126,7 @@ export default function ProjectsList({
     hideTimelineRef.current = null;
     entryTweenRef.current = null;
     lastRowTopRef.current = null;
+    activeRowRef.current = null;
     firstRevealRef.current = true;
     if (overlayRef.current) {
       gsap.set(overlayRef.current, { opacity: 0 });
@@ -149,8 +151,9 @@ export default function ProjectsList({
     const map = new Map<number, MarqueeToken[]>();
     projects.forEach((project) => {
       const built = buildTokens(project);
-      const duplicated = built.length ? [...built, ...built, ...built] : built;
-      map.set(project.id, duplicated);
+      const normalized =
+        built.length >= 2 ? built : built.length === 1 ? [...built, ...built] : [];
+      map.set(project.id, normalized);
     });
     return map;
   }, [projects]);
@@ -181,7 +184,7 @@ export default function ProjectsList({
 
   const renderMarquee = (project: ProjectItem, isActive: boolean) => {
     const tokens = marqueeTokens.get(project.id) ?? [];
-    const duration = Math.max(18, tokens.length * 1.8);
+    const duration = Math.max(20, tokens.length * 2.2);
 
     const trackStyles = {
       animationPlayState: isActive ? "running" : "paused",
@@ -230,7 +233,7 @@ export default function ProjectsList({
     );
   };
 
-  const moveOverlay = (row: HTMLElement | null) => {
+  const moveOverlay = (row: HTMLElement | null, options?: { immediate?: boolean }) => {
     if (!overlayRef.current || !listRef.current || !row) return;
     const listRect = listRef.current.getBoundingClientRect();
     const rowRect = row.getBoundingClientRect();
@@ -243,7 +246,15 @@ export default function ProjectsList({
       wipeDirectionRef.current = "down";
     }
     lastRowTopRef.current = top;
-    
+    activeRowRef.current = row;
+
+    if (options?.immediate) {
+      overlayMoveTweenRef.current?.kill();
+      overlayMoveTweenRef.current = null;
+      gsap.set(overlayRef.current, { y: top, height });
+      return;
+    }
+
     overlayMoveTweenRef.current?.kill();
     overlayMoveTweenRef.current = gsap.to(overlayRef.current, {
       y: top,
@@ -316,8 +327,6 @@ export default function ProjectsList({
       });
     } else {
       suppressExitRef.current = false;
-      lastRowTopRef.current = null;
-      
       const content = overlayContentRef.current;
       const origin = wipeDirectionRef.current === "down" ? "50% 100%" : "50% 0%";
       
@@ -325,6 +334,10 @@ export default function ProjectsList({
       overlayMoveTweenRef.current?.kill();
       overlayOpacityTweenRef.current?.kill();
       
+      if (activeRowRef.current) {
+        moveOverlay(activeRowRef.current, { immediate: true });
+      }
+
       const hideTween = gsap.timeline({
         defaults: { ease: "power2.out" },
         onComplete: () => {
@@ -334,6 +347,8 @@ export default function ProjectsList({
           }
           setOverlayState(null);
           hideTimelineRef.current = null;
+          lastRowTopRef.current = null;
+          activeRowRef.current = null;
         },
       });
       
