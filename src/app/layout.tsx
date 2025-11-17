@@ -27,11 +27,13 @@ const spaceGrotesk = localFont({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const title = "Kahfi Smith | Frontend Web Developer";
 const description =
   "Personal portfolio of Kahfi Smith – frontend engineer crafting polished digital experiences with performance and precision.";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: title,
     template: "%s | Kahfi Smith",

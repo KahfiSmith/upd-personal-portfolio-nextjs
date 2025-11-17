@@ -36,19 +36,10 @@ const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   const uniqueText = Array.from(new Set(textBits));
   if (!uniqueText.length) uniqueText.push(project.title.toUpperCase());
 
-  // Use marqueeImages first, then fallback to heroImage and previewSrc
-  const imagePool = [];
-  if (project.marqueeImages && project.marqueeImages.length > 0) {
-    imagePool.push(...project.marqueeImages);
-  }
-  if (project.heroImage && !imagePool.includes(project.heroImage)) {
-    imagePool.push(project.heroImage);
-  }
-  if (project.previewSrc && !imagePool.includes(project.previewSrc)) {
-    imagePool.push(project.previewSrc);
-  }
-  
-  const filteredImages = imagePool.filter((src): src is string => typeof src === "string" && src.trim().length > 0);
+  const customMarqueeImages = Array.isArray(project.marqueeImages) ? project.marqueeImages : [];
+  const filteredImages = customMarqueeImages.filter(
+    (src): src is string => typeof src === "string" && src.trim().length > 0
+  );
 
   const tokens: MarqueeToken[] = [];
   uniqueText.forEach((text, index) => {
@@ -190,42 +181,51 @@ export default function ProjectsList({
 
   const renderMarquee = (project: ProjectItem, isActive: boolean) => {
     const tokens = marqueeTokens.get(project.id) ?? [];
-    const duration = Math.max(10, tokens.length * 1.2);
+    const duration = Math.max(18, tokens.length * 1.8);
+
+    const trackStyles = {
+      animationPlayState: isActive ? "running" : "paused",
+      ["--projects-marquee-duration" as "--projects-marquee-duration"]: `${duration}s`,
+    };
 
     return (
-      <div
-        className="recent-work-marquee flex flex-nowrap items-center gap-10 pr-14"
-        style={{
-          animationDuration: `${duration}s`,
-          animationPlayState: isActive ? "running" : "paused",
-        }}
-      >
-        {tokens.map((token, index) =>
-          token.type === "text" ? (
-            <span
-              key={`${project.id}-text-${index}`}
-              className="whitespace-nowrap text-4xl xl:text-5xl font-medium tracking-[0.2em]"
+      <div className="projects-marquee-viewport">
+        <div className="projects-marquee-track" style={trackStyles}>
+          {[0, 1].map((cloneIndex) => (
+            <div
+              key={`${project.id}-marquee-clone-${cloneIndex}`}
+              className="projects-marquee-group"
+              aria-hidden={cloneIndex === 1}
             >
-              {token.value}
-            </span>
-          ) : (
-            <span
-              key={`${project.id}-img-${index}`}
-              className="flex h-[260px] w-[340px] flex-shrink-0 overflow-hidden rounded-[32px] bg-charcoal/60 px-6 py-6 items-center"
-            >
-              <img
-                src={token.value}
-                alt={`${project.title} preview asset`}
-                className="h-[150px] w-full rounded-[24px] object-cover my-8"
-                loading="lazy"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                }}
-              />
-            </span>
-          )
-        )}
+              {tokens.map((token, index) =>
+                token.type === "text" ? (
+                  <span
+                    key={`${project.id}-text-${cloneIndex}-${index}`}
+                    className="projects-marquee-text"
+                  >
+                    {token.value}
+                  </span>
+                ) : (
+                  <span
+                    key={`${project.id}-img-${cloneIndex}-${index}`}
+                    className="projects-marquee-media"
+                  >
+                    <img
+                      src={token.value}
+                      alt={`${project.title} preview asset`}
+                      className="projects-marquee-media-image"
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = "none";
+                      }}
+                    />
+                  </span>
+                )
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
