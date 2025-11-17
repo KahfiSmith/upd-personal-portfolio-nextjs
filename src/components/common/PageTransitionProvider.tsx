@@ -178,6 +178,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
     });
 
     tl.call(() => setShowTitle(false), undefined, 0);
+    tl.to({}, { duration: TITLE_EXIT_DURATION }, 0);
 
     // Pastikan start di posisi akhir intro
     tl.set(
@@ -186,7 +187,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
         yPercent: 0,
         opacity: 1,
       },
-      0
+      ">",
     );
 
     // 1) Bentuk pelan2 jadi lebih cekung (FULL → OUT_CURVE)
@@ -198,7 +199,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
         duration: 0.55,
         ease: "power2.inOut",
       },
-      0
+      "<"
     );
 
     // 2) Sambil geser turun keluar layar
@@ -208,7 +209,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
         yPercent: 110,
         duration: WIPE_SLIDE_DURATION,
       },
-      0 // jalan bareng
+      "<" // jalan bareng
     );
   }, []);
 
