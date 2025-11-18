@@ -190,17 +190,12 @@
 .skills-marquee-track {
   display: flex;
   width: max-content;
-  animation: skillsMarquee var(--skills-marquee-duration, 32s) linear infinite;
   will-change: transform;
-}
-
-.skills-marquee-track--reverse {
-  animation-direction: reverse;
 }
 
 .skills-marquee-group {
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
   padding: 1rem 0;
 }
 
