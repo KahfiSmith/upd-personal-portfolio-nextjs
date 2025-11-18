@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import type { ProjectItem } from "@/types";
 import { dataProjects } from "@/data/projects";
 import AnimatedPillButton from "@/components/common/AnimatedPillButton";
 import { usePageTransition } from "@/hooks";
+import { AnimatePresence, motion } from "framer-motion";
 
 type ProjectsListProps = {
   limit?: number;
@@ -57,6 +58,24 @@ const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   return tokens;
 };
 
+const getPreviewImage = (project: ProjectItem): string | null => {
+  if (project.previewSrc) return project.previewSrc;
+  if (project.heroImage) return project.heroImage;
+  if (Array.isArray(project.detailImages) && project.detailImages.length > 0) {
+    return project.detailImages[0] ?? null;
+  }
+  if (Array.isArray(project.marqueeImages) && project.marqueeImages.length > 0) {
+    return project.marqueeImages[0] ?? null;
+  }
+  return null;
+};
+
+type PreviewLayer = {
+  projectId: number;
+  src: string;
+  key: string;
+};
+
 export default function ProjectsList({
   limit,
   showHeader = true,
@@ -74,7 +93,7 @@ export default function ProjectsList({
     return dataProjects;
   }, [limit]);
   const [activeId, setActiveId] = useState<number | null>(null);
-  const [overlayState, setOverlayState] = useState<{ project: ProjectItem; key: number } | null>(null);
+  const [overlayState, setOverlayState] = useState<{ project: ProjectItem; key: string } | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
@@ -83,6 +102,8 @@ export default function ProjectsList({
   const rowRefs = useRef<Record<number, HTMLElement | null>>({});
   const overlayContentRef = useRef<HTMLDivElement | null>(null);
   const activeRowRef = useRef<HTMLElement | null>(null);
+  const [previewLayers, setPreviewLayers] = useState<PreviewLayer[]>([]);
+  const previewImageRefs = useRef<Record<string, HTMLImageElement | null>>({});
   const lastRowTopRef = useRef<number | null>(null);
   const wipeDirectionRef = useRef<"down" | "up">("down");
   const firstRevealRef = useRef(true);
@@ -93,6 +114,7 @@ export default function ProjectsList({
   const suppressExitRef = useRef(false);
   const deactivateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const previewHideTimelineRef = useRef<gsap.core.Timeline | null>(null);
 
   const clearDeactivateTimeout = () => {
     if (deactivateTimeoutRef.current) {
@@ -297,7 +319,7 @@ export default function ProjectsList({
       setActiveId(id);
       const project = projects.find((p) => p.id === id) ?? null;
       if (project) {
-        setOverlayState({ project: { ...project }, key: Date.now() });
+        setOverlayState({ project: { ...project }, key: `${project.id}-${Date.now()}` });
       }
       if (row) {
         moveOverlay(row);
@@ -308,7 +330,7 @@ export default function ProjectsList({
     setActiveId(id);
     const project = id ? projects.find((p) => p.id === id) ?? null : null;
     if (project) {
-      setOverlayState({ project: { ...project }, key: Date.now() });
+      setOverlayState({ project: { ...project }, key: `${project.id}-${Date.now()}` });
     }
     
     if (!overlayRef.current) return;
@@ -369,13 +391,111 @@ export default function ProjectsList({
     }
   };
 
+  const previewProject = overlayState?.project ?? null;
+  const previewImage = previewProject ? getPreviewImage(previewProject) : null;
+
+  useEffect(() => {
+    if (!previewProject || !previewImage) return;
+    setPreviewLayers((layers) => {
+      return [
+        ...layers,
+        {
+          projectId: previewProject.id,
+          src: previewImage,
+          key: `${previewProject.id}-${Date.now()}-${Math.random()}`,
+        },
+      ].slice(-3);
+    });
+  }, [previewProject, previewImage]);
+
+  useEffect(() => {
+    if (overlayState) {
+      previewHideTimelineRef.current?.kill();
+      previewHideTimelineRef.current = null;
+      return;
+    }
+
+    const nodes = Object.values(previewImageRefs.current).filter(
+      (node): node is HTMLImageElement => Boolean(node)
+    );
+    if (!nodes.length) {
+      setPreviewLayers([]);
+      return;
+    }
+
+    previewHideTimelineRef.current?.kill();
+    previewHideTimelineRef.current = gsap.timeline({
+      defaults: { ease: "power2.inOut" },
+      onComplete: () => {
+        setPreviewLayers([]);
+        previewHideTimelineRef.current = null;
+      },
+    });
+
+    const topNode = nodes[nodes.length - 1];
+    const remainingNodes = nodes.slice(0, -1);
+
+    if (remainingNodes.length) {
+      previewHideTimelineRef.current.to(remainingNodes, {
+        opacity: 0,
+        scale: 0.75,
+        y: 24,
+        filter: "blur(8px)",
+        duration: 0.25,
+        stagger: 0.03,
+        transformOrigin: "50% 50%",
+      });
+    }
+
+    if (topNode) {
+      previewHideTimelineRef.current.to(
+        topNode,
+        {
+          opacity: 0,
+          scale: 0.35,
+          y: 50,
+          filter: "blur(14px)",
+          duration: 0.35,
+          transformOrigin: "50% 100%",
+          ease: "power3.inOut",
+        },
+        0
+      );
+    }
+  }, [overlayState]);
+
+  useLayoutEffect(() => {
+    if (!previewLayers.length) return;
+    const ctx = gsap.context(() => {
+      previewLayers.forEach((layer, index) => {
+        const node = previewImageRefs.current[layer.key];
+        if (!node) return;
+        const isTop = index === previewLayers.length - 1;
+        if (isTop) {
+          gsap.fromTo(
+            node,
+            { opacity: 0, scale: 0.65, y: 40, filter: "blur(12px)" },
+            { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 0.65, ease: "power3.out" }
+          );
+        } else {
+          gsap.to(node, {
+            opacity: 0.45,
+            scale: 0.88,
+            y: -22,
+            filter: "blur(4px)",
+            duration: 0.65,
+            ease: "power3.out",
+          });
+        }
+      });
+    });
+    return () => ctx.revert();
+  }, [previewLayers]);
+
   const requestDeactivate = () => {
     if (suppressExitRef.current) return;
     clearDeactivateTimeout();
-    deactivateTimeoutRef.current = setTimeout(() => {
-      deactivateTimeoutRef.current = null;
-      handleActivate(null);
-    }, 150);
+    handleActivate(null);
   };
 
   const forceHideOverlay = () => {
@@ -557,6 +677,35 @@ export default function ProjectsList({
             )}
           </div>
         </div>
+
+        {previewLayers.length > 0 && (
+          <div className="pointer-events-none fixed bottom-6 right-6 z-[60] hidden lg:block">
+            <div className="relative aspect-[4/3] w-[360px] sm:w-[460px] overflow-hidden rounded-md">
+              {previewLayers.map((layer, index) => {
+                const isTop = index === previewLayers.length - 1;
+                return (
+                  <img
+                    key={layer.key}
+                    ref={(node) => {
+                      if (node) {
+                        previewImageRefs.current[layer.key] = node;
+                      } else {
+                        delete previewImageRefs.current[layer.key];
+                      }
+                    }}
+                    src={layer.src}
+                    alt={`Preview ${layer.projectId}`}
+                    className="absolute inset-0 h-full w-full rounded-md object-cover"
+                    style={{
+                      zIndex: index + 1,
+                      boxShadow: isTop ? "0 20px 60px rgba(0,0,0,0.45)" : "none",
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {showCTA && (
           <div className="mt-16 text-center">
