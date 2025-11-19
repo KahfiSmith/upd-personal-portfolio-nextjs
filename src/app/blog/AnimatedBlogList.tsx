@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback } from "react";
 import { usePageTransition } from "@/hooks";
+import { shouldSkipClientNavigation } from "@/lib/utils";
 import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
 import type { BlogPost } from "@/types";
 
@@ -58,9 +59,7 @@ function BlogCard({ post }: { post: BlogPost }) {
   const handleNavigate = useCallback(
     (event: ReactMouseEvent<HTMLAnchorElement>) => {
       if (event.defaultPrevented) return;
-      if (event.metaKey || event.altKey || event.ctrlKey || event.shiftKey || event.button !== 0) {
-        return;
-      }
+      if (shouldSkipClientNavigation(event)) return;
       event.preventDefault();
       navigate(`/blog/${post.slug}`, { label: "Blog Detail" });
     },

@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
-import Link from "next/link";
-import { gsap } from "gsap";
-import type { ProjectItem } from "@/types";
-import { dataProjects } from "@/data/projects";
 import AnimatedPillButton from "@/components/common/AnimatedPillButton";
+import { dataProjects } from "@/data/projects";
 import { usePageTransition } from "@/hooks";
-import { AnimatePresence, motion } from "framer-motion";
+import { shouldSkipClientNavigation } from "@/lib/utils";
+import type { ProjectItem } from "@/types";
+import { gsap } from "gsap";
+import Link from "next/link";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 type ProjectsListProps = {
   limit?: number;
@@ -22,6 +22,18 @@ type ProjectsListProps = {
 type MarqueeToken =
   | { type: "text"; value: string }
   | { type: "image"; value: string };
+
+const MIN_MARQUEE_TOKENS = 8;
+
+const ensureMarqueeDensity = (tokens: MarqueeToken[]): MarqueeToken[] => {
+  if (tokens.length >= MIN_MARQUEE_TOKENS) return tokens;
+  if (!tokens.length) return tokens;
+  const extended: MarqueeToken[] = [...tokens];
+  while (extended.length < MIN_MARQUEE_TOKENS) {
+    extended.push(...tokens);
+  }
+  return extended;
+};
 
 const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   const fallbackTexts = [project.summary, project.role, ...(project.techStack ?? [])];
@@ -43,16 +55,44 @@ const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   );
 
   const tokens: MarqueeToken[] = [];
-  uniqueText.forEach((text, index) => {
-    tokens.push({ type: "text", value: text });
-    if (filteredImages.length) {
-      const imageIndex = index % filteredImages.length;
-      tokens.push({ type: "image", value: filteredImages[imageIndex]! });
+  const pairCount = Math.max(uniqueText.length, filteredImages.length);
+  for (let index = 0; index < pairCount; index += 1) {
+    const text = uniqueText[index];
+    if (text) {
+      tokens.push({ type: "text", value: text });
     }
-  });
+    const image = filteredImages[index];
+    if (image) {
+      tokens.push({ type: "image", value: image });
+    }
+  }
 
-  if (!uniqueText.length && filteredImages.length) {
+  if (!tokens.length && filteredImages.length) {
     tokens.push({ type: "image", value: filteredImages[0]! });
+  }
+
+  if (!tokens.length) {
+    tokens.push({ type: "text", value: project.title.toUpperCase() });
+  }
+
+  if (tokens.length === 1) {
+    const fallbackBase = project.role ?? project.summary ?? project.title ?? "PROJECT";
+    const fallbackText = fallbackBase.toUpperCase();
+    const firstToken = tokens[0];
+    if (firstToken.type === "text") {
+      if (firstToken.value !== fallbackText) {
+        tokens.push({ type: "text", value: fallbackText });
+      } else {
+        tokens.push({ type: "text", value: `${fallbackText} •` });
+      }
+    } else {
+      const nextImage = filteredImages[1] ?? filteredImages[0];
+      if (nextImage && nextImage !== firstToken.value) {
+        tokens.push({ type: "image", value: nextImage });
+      } else {
+        tokens.push({ type: "text", value: fallbackText });
+      }
+    }
   }
 
   return tokens;
@@ -173,8 +213,7 @@ export default function ProjectsList({
     const map = new Map<number, MarqueeToken[]>();
     projects.forEach((project) => {
       const built = buildTokens(project);
-      const normalized =
-        built.length >= 2 ? built : built.length === 1 ? [...built, ...built] : [];
+      const normalized = ensureMarqueeDensity(built);
       map.set(project.id, normalized);
     });
     return map;
@@ -502,16 +541,6 @@ export default function ProjectsList({
     handleActivate(null, undefined, { forceExit: true });
   };
 
-  const shouldBypassNavigation = (event: ReactMouseEvent<HTMLAnchorElement>) => {
-    return (
-      event.metaKey ||
-      event.altKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.button !== 0
-    );
-  };
-
   useEffect(() => {
     const el = overlayContentRef.current;
     if (!overlayState || !el) {
@@ -626,7 +655,7 @@ export default function ProjectsList({
                     navigate(`/projects/${project.slug}`, { label: project.title });
                   }}
                   onClick={(event) => {
-                    if (shouldBypassNavigation(event)) return;
+                    if (shouldSkipClientNavigation(event)) return;
                     event.preventDefault();
                     forceHideOverlay();
                     navigate(`/projects/${project.slug}`, { label: project.title });

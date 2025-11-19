@@ -14,13 +14,15 @@ const totalProjects = dataProjects.length;
 const uniqueStacks = new Set(
   dataProjects.flatMap((project) => project.techStack ?? [])
 ).size;
-const latestProject = dataProjects.reduce<ProjectItem | null>(
+const fallbackLatestProject = dataProjects.reduce<ProjectItem | null>(
   (latest, project) => {
     if (!latest) return project;
     return project.id > latest.id ? project : latest;
   },
   null
 );
+
+const latestProject = dataProjects.find((project) => project.isLatest) ?? fallbackLatestProject;
 
 export default function ProjectsPage() {
   return (
@@ -39,7 +41,7 @@ export default function ProjectsPage() {
         />
       </div>
 
-      <div className="max-w-[96rem] mx-auto px-6 md:px-10 space-y-12">
+      <div className="max-w-[96rem] mx-auto px-6 md:px-10 space-y-8">
         <header className="space-y-12">
           <div className="space-y-10 text-center md:text-left">
             <BackButton href="/" label="Back to home" className="justify-center md:justify-start" />
@@ -90,7 +92,7 @@ export default function ProjectsPage() {
           </div>
         </header>
 
-        <div className="pt-4">
+        <div className="pt-2">
           <ProjectsList
             showHeader={false}
             showCTA={false}

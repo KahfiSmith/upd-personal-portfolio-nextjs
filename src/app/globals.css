@@ -140,7 +140,7 @@
 .projects-marquee-track {
   display: flex;
   width: max-content;
-  gap: 3.5rem;
+  flex-wrap: nowrap;
   animation: projectsMarquee var(--projects-marquee-duration, 28s) linear infinite;
   will-change: transform;
 }
@@ -164,7 +164,7 @@
   align-items: center;
   justify-content: center;
   width: clamp(17rem, 22vw, 21rem);
-  height: clamp(9rem, 13vw, 11rem);
+  height: clamp(10rem, 14vw, 12rem);
   flex-shrink: 0;
   border-radius: 1.8rem;
   padding: 1rem;
@@ -180,10 +180,10 @@
 
 @keyframes projectsMarquee {
   0% {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 

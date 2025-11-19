@@ -62,6 +62,7 @@ export interface ProjectItem {
   links?: ProjectLink[];
   marqueeTexts?: string[];
   marqueeImages?: string[];
+  isLatest?: boolean;
 }
 
 export interface BlogPost {
