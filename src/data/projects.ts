@@ -21,7 +21,6 @@ export const dataProjects: ProjectItem[] = [
       "Quote-First Experience",
       "Community for Writers",
       "Trending & Hashtags",
-      "Clean Reading UI",
     ],
     marqueeImages: [
       "/images/quowrld/halloween.jpg",
@@ -96,7 +95,6 @@ export const dataProjects: ProjectItem[] = [
       "K-Pop Idol Gacha",
       "Local Collection Saves",
       "Pull History & Rarity Feel",
-      "Import / Export Collections",
     ],
     detailImages: [
       "/images/kpopulls.png",
@@ -165,7 +163,6 @@ export const dataProjects: ProjectItem[] = [
     marqueeTexts: [
       "AI Code Review with Personality",
       "Roasting & Brutal Honesty",
-      "Supportive Mentor Mode",
       "Best Practices & Security Focus",
     ],
     detailImages: [
@@ -235,7 +232,6 @@ export const dataProjects: ProjectItem[] = [
     ],
     marqueeTexts: [
       "Chicken farm dashboard",
-      "Population tracking",
       "Feed & finance management",
       "Articles for farmers",
     ],
@@ -292,6 +288,7 @@ export const dataProjects: ProjectItem[] = [
     slug: "orymu",
     title: "Orymu",
     role: "Frontend Development",
+    isLatest: true,
     summary:
       "A reading tracker web app that helps book lovers log their progress, strengthen memory through quizzes, and stay focused with a distraction-free reading mode.",
     description: [
@@ -300,7 +297,6 @@ export const dataProjects: ProjectItem[] = [
     ],
     marqueeTexts: [
       "Reading tracker dashboard",
-      "Chapter-based quizzes",
       "Distraction-free focus mode",
       "Reading habit insights",
     ],
@@ -310,9 +306,9 @@ export const dataProjects: ProjectItem[] = [
       "/images/orymu-2.png",
     ],
     marqueeImages: [
-      "/images/orymu/spiderman.jpg",
-      "/images/orymu/yuta.jpg",
-      "/images/orymu/catsmoke.jpg",
+      "/images/orymu/man.jpg",
+      "/images/orymu/catgreen.jpg",
+      "/images/orymu/yandere.jpg",
     ],
     previewSrc: "/images/pre_orymu.png",
     heroImage: "/images/pre_orymu.png",
@@ -377,7 +373,6 @@ export const dataProjects: ProjectItem[] = [
     ],
     marqueeTexts: [
       "PKK data dashboard",
-      "Household & dasawisma tracking",
       "Cadre & activity management",
       "Program reporting",
     ],
@@ -439,7 +434,6 @@ export const dataProjects: ProjectItem[] = [
     marqueeTexts: [
       "Online counseling platform",
       "Psychologist scheduling",
-      "Secure consultations",
       "Session history & profiles",
     ],
     detailImages: [
