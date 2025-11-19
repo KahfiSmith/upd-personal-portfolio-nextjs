@@ -34,3 +34,29 @@ export function getAnchorScrollOffset(targetId: string, el?: HTMLElement) {
   const maxOffset = window.innerHeight * 0.15;
   return Math.min(extra, maxOffset);
 }
+
+type ModifierKeyEvent = {
+  metaKey?: boolean;
+  altKey?: boolean;
+  ctrlKey?: boolean;
+  shiftKey?: boolean;
+  button?: number | null;
+};
+
+const hasNonPrimaryButton = (event?: ModifierKeyEvent) =>
+  typeof event?.button === "number" && event.button !== 0;
+
+export function isModifiedEvent(event?: ModifierKeyEvent) {
+  if (!event) return false;
+  return Boolean(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey || hasNonPrimaryButton(event));
+}
+
+/**
+ * Shared guard to decide whether a click should skip client-side routing.
+ * Keeps modifier-key and target checks consistent across components.
+ */
+export function shouldSkipClientNavigation(event?: ModifierKeyEvent, target?: string | null) {
+  if (isModifiedEvent(event)) return true;
+  if (!target) return false;
+  return target !== "_self";
+}

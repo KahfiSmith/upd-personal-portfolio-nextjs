@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 import { MouseEvent } from "react";
 import {

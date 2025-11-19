@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import BackButton from "@/components/common/BackButton";
 import { dataProjects } from "@/data/projects";
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 
 const techIconMap: Record<string, string> = {
   astro: "/Icons/astro.svg",
@@ -36,6 +36,9 @@ const techIconMap: Record<string, string> = {
   openaiapi: "/Icons/openaiapi.svg",
   alpinejs: "/Icons/alpine.svg",
   shadcnui: "/Icons/shadcn.svg",
+  tanstackquery: "/Icons/tanstackquery.svg",
+  prisma: "/Icons/prisma.svg",
+  reactrouterv7: "/Icons/reactrouterv7.svg",
 };
 
 const normalize = (name: string) => name.trim().toLowerCase().replace(/[\s.-]/g, "");
