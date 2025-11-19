@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { motion } from "framer-motion";
 import { usePageTransition } from "@/hooks";
+import { shouldSkipClientNavigation } from "@/lib/utils";
 
 type DivVariantProps = React.HTMLAttributes<HTMLDivElement> & { href?: undefined };
 type AnchorVariantProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
@@ -125,15 +126,7 @@ export default function AnimatedPillButton(props: AnimatedPillButtonProps) {
     const handleClick: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
       onClick?.(event);
       if (event.defaultPrevented) return;
-      if (
-        event.metaKey ||
-        event.altKey ||
-        event.ctrlKey ||
-        event.shiftKey ||
-        (target && target !== "_self")
-      ) {
-        return;
-      }
+      if (shouldSkipClientNavigation(event, target)) return;
       event.preventDefault();
       navigate(href, { label });
     };

@@ -3,7 +3,7 @@
 import { MoveLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, type MouseEvent, type KeyboardEvent } from "react";
-import { cn } from "@/lib/utils/utils";
+import { cn, shouldSkipClientNavigation } from "@/lib/utils";
 import { usePageTransition } from "@/hooks";
 import type { BackButtonProps } from "@/types";
 
@@ -19,9 +19,7 @@ export default function BackButton({
   const handleNavigate = useCallback(
     (event?: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>) => {
       if (href) {
-        if (event?.metaKey || event?.altKey || event?.ctrlKey || event?.shiftKey) {
-          return;
-        }
+        if (event && shouldSkipClientNavigation(event)) return;
         event?.preventDefault();
         navigate(href, { label, disableCurtain: disableTransition });
         return;

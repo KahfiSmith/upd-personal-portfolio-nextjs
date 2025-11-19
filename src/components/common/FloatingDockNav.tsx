@@ -2,7 +2,7 @@
 
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { usePageTransition } from "@/hooks";
-import { getAnchorScrollOffset } from "@/lib/utils/utils";
+import { getAnchorScrollOffset, shouldSkipClientNavigation } from "@/lib/utils";
 import { Briefcase, FolderGit2, User2, BookText, Home } from "lucide-react";
 import { MouseEvent, useCallback, useMemo } from "react";
 
@@ -44,16 +44,7 @@ export default function FloatingDockNav() {
     (event: MouseEvent<HTMLAnchorElement>, href: string, label: string) => {
       if (event.defaultPrevented) return;
       const targetAttr = event.currentTarget?.getAttribute("target");
-      if (
-        event.metaKey ||
-        event.altKey ||
-        event.ctrlKey ||
-        event.shiftKey ||
-        event.button !== 0 ||
-        (targetAttr && targetAttr !== "_self")
-      ) {
-        return;
-      }
+      if (shouldSkipClientNavigation(event, targetAttr)) return;
       event.preventDefault();
       navigate(href, { label });
     },
