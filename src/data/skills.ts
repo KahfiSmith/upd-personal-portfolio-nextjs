@@ -123,8 +123,23 @@ export const dataSkills: SkillItemProps[] = [
     desc: "Animation",
   },
   {
-    imgSrc: "/icons/adobe-photoshop.svg",
+    imgSrc: "/icons/adobephotoshop.svg",
     label: "Photoshop",
     desc: "Design Tool",
+  },
+  {
+    imgSrc: "/icons/tanstack.svg",
+    label: "TanStack",
+    desc: "Toolset",
+  },
+  {
+    imgSrc: "/icons/prism.svg",
+    label: "Prisma",
+    desc: "Syntax Highlighting",
+  },
+  {
+    imgSrc: "/icons/reactrouterv7.svg",
+    label: "React Router v7",
+    desc: "Routing Library",
   },
 ];

@@ -24,9 +24,9 @@ export const dataProjects: ProjectItem[] = [
       "Clean Reading UI",
     ],
     marqueeImages: [
-      "/images/halloween.jpg",
-      "/images/duck.jpg",
-      "/images/gojocat.jpg",
+      "/images/quowrld/halloween.jpg",
+      "/images/quowrld/duck.jpg",
+      "/images/quowrld/gojocat.jpg",
     ],
     previewSrc: "/images/pre_quowrld.png",
     heroImage: "/images/pre_quowrld.png",
@@ -37,11 +37,12 @@ export const dataProjects: ProjectItem[] = [
       "Tailwind CSS",
       "Zod",
       "Framer Motion",
+      "Shadcn UI",
       "Supabase",
     ],
     metrics: [
       { label: "Timeline", value: "Apr 15, 2025 – Jun 10, 2025" },
-      { label: "Role", value: "Solo designer & developer" },
+      { label: "Role", value: "Fullstack Development" },
       { label: "Focus", value: "Quote platform & writing community" },
     ],
     sections: [
@@ -103,9 +104,9 @@ export const dataProjects: ProjectItem[] = [
       "/images/kpopulls-2.png",
     ],
     marqueeImages: [
-      "/images/leafcat.jpg",
-      "/images/blackcat.jpg",
-      "/images/orange.jpg",
+      "/images/kpopulls/blackcat.jpg",
+      "/images/kpopulls/godzilla.jpg",
+      "/images/kpopulls/orange.jpg",
     ],
     previewSrc: "/images/pre_kpopulls.png",
     heroImage: "/images/pre_kpopulls.png",
@@ -119,7 +120,7 @@ export const dataProjects: ProjectItem[] = [
     ],
     metrics: [
       { label: "Timeline", value: "Jun 16, 2025 – Jul 21, 2025" },
-      { label: "Role", value: "Fullstack dev" },
+      { label: "Role", value: "Fullstack Development" },
       { label: "Focus", value: "K-pop idol gacha & collection" },
     ],
     sections: [
@@ -173,9 +174,9 @@ export const dataProjects: ProjectItem[] = [
       "/images/coderoaster-2.png",
     ],
     marqueeImages: [
-      "/images/yor.jpg",
-      "/images/blueberry.jpg",
-      "/images/flowercat.jpg",
+      "/images/coderoaster/yor.jpg",
+      "/images/coderoaster/blueberry.jpg",
+      "/images/coderoaster/flowercat.jpg",
     ],
     previewSrc: "/images/pre_coderoaster.png",
     heroImage: "/images/pre_coderoaster.png",
@@ -190,7 +191,7 @@ export const dataProjects: ProjectItem[] = [
     ],
     metrics: [
       { label: "Timeline", value: "Jul 22, 2025 – Aug 19, 2025" },
-      { label: "Role", value: "Solo fullstack developer" },
+      { label: "Role", value: "Fullstack Development" },
       { label: "Focus", value: "AI-powered code review" },
     ],
     sections: [
@@ -223,72 +224,9 @@ export const dataProjects: ProjectItem[] = [
   },
   {
     id: 4,
-    slug: "eduverse",
-    title: "Eduverse",
-    role: "Frontend Development",
-    summary:
-      "A React-based learning interface that turns static curriculum into modular, snackable lessons with a clean, student-first UI.",
-    description: [
-      "Built an educational front-end experience with interactive lesson cards and clear subject grouping.",
-      "Implemented responsive components and reusable layouts with modern React + TypeScript patterns.",
-    ],
-    marqueeTexts: [
-      "Interactive lessons",
-      "Student-friendly layout",
-      "Reusable course components",
-    ],
-    detailImages: [
-      "/images/eduverse.png",
-      "/images/eduverse-1.png",
-      "/images/eduverse-2.png",
-    ],
-    marqueeImages: [
-      "/images/watermelon.jpg",
-      "/images/otter.jpg",
-      "/images/anime.jpg",
-    ],
-    previewSrc: "/images/pre_eduverse.png",
-    heroImage: "/images/pre_eduverse.png",
-    timeline: "Apr 5, 2022 – Jun 18, 2022",
-    techStack: ["React.js", "TypeScript", "Tailwind CSS", "Shadcn UI"],
-    metrics: [
-      { label: "Timeline", value: "Apr 5, 2022 – Jun 18, 2022" },
-      { label: "Role", value: "Frontend lead" },
-      { label: "Focus", value: "Learning modules & UI" },
-    ],
-    sections: [
-      {
-        title: "Brief",
-        paragraphs: [
-          "Eduverse explores how a modern learning interface can make lessons feel lighter and less intimidating. Instead of dumping long blocks of text, content is broken down into focused, card-based lessons that are easy to scan and revisit.",
-          "The goal was to design a front-end that could sit on top of different backends or LMS systems, acting as a clean, white-label style shell for schools or courses.",
-        ],
-      },
-      {
-        title: "Interaction Model",
-        paragraphs: [
-          "Each lesson is treated as a small module with a consistent structure: title, key idea, and call-to-action to dive deeper. Components are built as composable units so they can be reused across subjects, grades, or course types.",
-          "Layouts are optimized for both desktop and mobile, with responsive grids, clear hierarchy, and smooth transitions to keep learners focused on the content instead of fighting the UI.",
-        ],
-        highlights: [
-          "Reusable React components for subjects, lessons, and sections.",
-          "Mobile-first layout so students can browse content comfortably on any device.",
-        ],
-      },
-      {
-        title: "Outcome",
-        paragraphs: [
-          "Eduverse became a solid playground for experimenting with education-focused UX: typography, spacing, and layout choices that make reading long-form content less tiring.",
-          "The component-driven approach means new subjects, lesson types, or even a future analytics layer can be added without rewriting the core UI patterns.",
-        ],
-      },
-    ],
-  },
-  {
-    id: 5,
     slug: "ternakq",
     title: "TernakQ",
-    role: "Web Development",
+    role: "Fullstack Development",
     summary:
       "A chicken farm management web app that combines educational articles with tools to track flock population, feed, finances, and coop conditions.",
     description: [
@@ -307,9 +245,9 @@ export const dataProjects: ProjectItem[] = [
       "/images/ternakq-2.png",
     ],
     marqueeImages: [
-      "/images/capybara.jpg",
-      "/images/ponyo.jpg",
-      "/images/sailormoon.jpg",
+      "/images/ternakq/capybara.jpg",
+      "/images/ternakq/ponyo.jpg",
+      "/images/ternakq/sailormoon.jpg",
     ],
     previewSrc: "/images/pre_ternakq.png",
     heroImage: "/images/pre_ternakq.png",
@@ -317,7 +255,7 @@ export const dataProjects: ProjectItem[] = [
     techStack: ["Laravel", "Tailwind CSS", "Alpine.js", "MySQL"],
     metrics: [
       { label: "Timeline", value: "Jan 12, 2025 – May 22, 2025" },
-      { label: "Role", value: "Web dev" },
+      { label: "Role", value: "Fullstack Development" },
       { label: "Focus", value: "Chicken farm management" },
     ],
     sections: [
@@ -345,6 +283,272 @@ export const dataProjects: ProjectItem[] = [
         paragraphs: [
           "By putting population, feed, and financial data in one dashboard, farmers can more easily see whether their farm is growing, losing stock, or overspending on feed.",
           "The combination of data and articles helps new farmers understand not just what is happening on their farm, but also why it happens and how to improve it.",
+        ],
+      },
+    ],
+  },
+  {
+    id: 5,
+    slug: "orymu",
+    title: "Orymu",
+    role: "Frontend Development",
+    summary:
+      "A reading tracker web app that helps book lovers log their progress, strengthen memory through quizzes, and stay focused with a distraction-free reading mode.",
+    description: [
+      "Built a web platform for users to track the books they’re reading, log progress by chapter or pages, and visualize their reading activity over time.",
+      "Added quiz modules after each chapter to help reinforce key ideas, plus a focus mode that provides a clean, distraction-free reading experience.",
+    ],
+    marqueeTexts: [
+      "Reading tracker dashboard",
+      "Chapter-based quizzes",
+      "Distraction-free focus mode",
+      "Reading habit insights",
+    ],
+    detailImages: [
+      "/images/orymu.png",
+      "/images/orymu-1.png",
+      "/images/orymu-2.png",
+    ],
+    marqueeImages: [
+      "/images/orymu/spiderman.jpg",
+      "/images/orymu/yuta.jpg",
+      "/images/orymu/catsmoke.jpg",
+    ],
+    previewSrc: "/images/pre_orymu.png",
+    heroImage: "/images/pre_orymu.png",
+    timeline: "Jul 2025 – Present",
+    techStack: [
+      "React Router V7",
+      "TypeScript",
+      "Express.js",
+      "Tailwind CSS",
+      "Tanstack Query",
+      "Framer Motion",
+      "Shadcn UI",
+      "Zod",
+      "Zustand",
+      "Prisma",
+      "PostgreSQL",
+    ],
+    metrics: [
+      { label: "Timeline", value: "Jul 2025 – Present" },
+      { label: "Role", value: "Frontend Development" },
+      { label: "Focus", value: "Reading tracker & focus mode" },
+    ],
+    sections: [
+      {
+        title: "Challenge",
+        paragraphs: [
+          "Many readers struggle to remember what they’ve read and to build a consistent reading habit, especially when reading on screens full of distractions.",
+          "Orymu aims to help book lovers keep their reading organized, remember key ideas through quick quizzes, and enter a dedicated focus mode when it’s time to read.",
+        ],
+      },
+      {
+        title: "Solution",
+        paragraphs: [
+          "Users can add books to their personal library, log current page or chapter, and see a visual overview of their progress and reading streaks.",
+          "After finishing a chapter, Orymu offers short quizzes to reinforce memory. A built-in focus mode provides a minimal reading layout with reduced UI elements, dark background options, and optional reading timers to stay in flow.",
+        ],
+        highlights: [
+          "Reading tracker with per-book progress and activity history.",
+          "Chapter-based quizzes to strengthen recall and understanding.",
+          "Focus mode with distraction-free reading layout and session timers.",
+        ],
+      },
+      {
+        title: "Impact",
+        paragraphs: [
+          "By combining tracking, quizzes, and focus mode in one place, Orymu makes it easier for users to build a more consistent reading routine.",
+          "The structured flow—from picking a book, entering focus mode, to reviewing chapters with quizzes—helps readers stay engaged and retain more of what they read.",
+        ],
+      },
+    ],
+  },
+  {
+    id: 6,
+    slug: "e-pkk",
+    title: "E-PKK Kab. Nganjuk",
+    role: "Fullstack Development",
+    summary:
+      "A web-based information system for PKK Kabupaten Nganjuk to centralize household, dasawisma, cadre, and activity data into one structured dashboard.",
+    description: [
+      "Built a management system for PKK Kabupaten Nganjuk to record households, dasawisma groups, cadres, and activity reports in a single application.",
+      "Added modules for program indicators, basic statistics, and reporting so sub-districts and villages can submit data consistently to the regency level.",
+    ],
+    marqueeTexts: [
+      "PKK data dashboard",
+      "Household & dasawisma tracking",
+      "Cadre & activity management",
+      "Program reporting",
+    ],
+    detailImages: ["/images/pkk.png", "/images/pkk-1.png", "/images/pkk-2.png"],
+    marqueeImages: [
+      "/images/pkk/ghost.jpg",
+      "/images/pkk/leafcat.jpg",
+      "/images/pkk/skycat.jpg",
+    ],
+    previewSrc: "/images/pre_pkk.png",
+    heroImage: "/images/pre_pkk.png",
+    timeline: "Jan 12, 2025 – May 22, 2025",
+    techStack: ["Laravel", "Bootstrap", "Alpine.js", "MySQL"],
+    metrics: [
+      { label: "Timeline", value: "Jan 12, 2025 – May 22, 2025" },
+      { label: "Role", value: "Fullstack Development" },
+      { label: "Focus", value: "PKK data management" },
+    ],
+    sections: [
+      {
+        title: "Challenge",
+        paragraphs: [
+          "Before e-PKK, data for PKK Kabupaten Nganjuk—such as households, dasawisma groups, cadres, and activities—was spread across paper forms, Excel files, and chat apps. Compiling reports from desa and kecamatan to the regency level was slow and error-prone.",
+          "The organization needed a centralized system where each level (kabupaten, kecamatan, desa, dasawisma) could input and update data in a consistent format to support reporting and decision-making.",
+        ],
+      },
+      {
+        title: "Solution",
+        paragraphs: [
+          "Laravel powers the core logic and database for managing households, dasawisma groups, cadre lists, and periodic activity or program reports. Role-based access allows different user types (admin kabupaten, kecamatan, desa, and kader) to work in the same system with the right permissions.",
+          "Alpine.js and Tailwind CSS are used to build a responsive, form-focused interface so staff can quickly input data, filter records, and generate simple summaries without needing heavy frontend frameworks.",
+        ],
+        highlights: [
+          "Household and dasawisma data tracking per village and kecamatan.",
+          "Cadre and activity records aligned with PKK program indicators.",
+          "Structured reporting flows from village level up to kabupaten.",
+        ],
+      },
+      {
+        title: "Impact",
+        paragraphs: [
+          "By centralizing PKK data, e-PKK reduces manual recaps and duplicate data entry when compiling reports for the regency level.",
+          "Structured forms and clear data models help PKK officers and cadres in Nganjuk see more accurate statistics across villages, making it easier to monitor participation and program coverage.",
+        ],
+      },
+    ],
+  },
+  {
+    id: 7,
+    slug: "relive",
+    title: "ReLive",
+    role: "Fullstack Development",
+    summary:
+      "An online psychology consultation platform that connects clients with licensed psychologists through secure, scheduled sessions.",
+    description: [
+      "Built a web-based platform for users to register, browse available psychologists, and book online consultation sessions.",
+      "Implemented modules for schedules, session history, and basic profile management for both clients and psychologists.",
+    ],
+    marqueeTexts: [
+      "Online counseling platform",
+      "Psychologist scheduling",
+      "Secure consultations",
+      "Session history & profiles",
+    ],
+    detailImages: [
+      "/images/relive.png",
+      "/images/relive-1.png",
+      "/images/relive-2.png",
+    ],
+    marqueeImages: [
+      "/images/relive/anya.jpg",
+      "/images/relive/dawncat.jpg",
+      "/images/relive/skeleton.jpg",
+    ],
+    previewSrc: "/images/pre_relive.png",
+    heroImage: "/images/pre_relive.png",
+    timeline: "Feb 16, 2024 – Jun 28, 2024",
+    techStack: ["Laravel", "Bootstrap", "Alpine.js", "MySQL"],
+    metrics: [
+      { label: "Timeline", value: "Feb 16, 2024 – Jun 28, 2024" },
+      { label: "Role", value: "Fullstack Development" },
+      { label: "Focus", value: "Online psychology consultation" },
+    ],
+    sections: [
+      {
+        title: "Challenge",
+        paragraphs: [
+          "Many people who need psychological help feel intimidated to visit a clinic directly, and managing appointments is often still done manually via chat or phone calls.",
+          "ReLive aims to make psychological consultation more approachable by providing a structured online platform where users can discover psychologists, understand their specialties, and book sessions without friction.",
+        ],
+      },
+      {
+        title: "Solution",
+        paragraphs: [
+          "Laravel handles authentication, user roles (admin, psychologist, client), schedules, and consultation records. Psychologists can manage their available time slots, while users can book sessions based on those schedules.",
+          "Bootstrap and Alpine.js are used to build a responsive interface for registration, psychologist profiles, booking forms, and simple dashboards that show upcoming sessions and past consultation history.",
+        ],
+        highlights: [
+          "Role-based access for admins, psychologists, and clients.",
+          "Schedule and booking system for online consultation sessions.",
+          "Psychologist profiles with specialization and basic information.",
+        ],
+      },
+      {
+        title: "Impact",
+        paragraphs: [
+          "By moving appointment management into a web platform, ReLive reduces back-and-forth coordination via chat and makes it easier for users to consistently follow up on their mental health.",
+          "The structured flow—from discovering psychologists to booking and tracking sessions—helps both sides stay organized and reduces missed or forgotten appointments.",
+        ],
+      },
+    ],
+  },
+  {
+    id: 8,
+    slug: "eduverse",
+    title: "Eduverse",
+    role: "UI/UX Design",
+    summary:
+      "A React-based learning interface that turns static curriculum into modular, snackable lessons with a clean, student-first UI.",
+    description: [
+      "Built an educational front-end experience with interactive lesson cards and clear subject grouping.",
+      "Implemented responsive components and reusable layouts with modern React + TypeScript patterns.",
+    ],
+    marqueeTexts: [
+      "Interactive lessons",
+      "Student-friendly layout",
+      "Reusable course components",
+    ],
+    detailImages: [
+      "/images/eduverse.png",
+      "/images/eduverse-1.png",
+      "/images/eduverse-2.png",
+    ],
+    marqueeImages: [
+      "/images/eduverse/watermelon.jpg",
+      "/images/eduverse/otter.jpg",
+      "/images/eduverse/anime.jpg",
+    ],
+    previewSrc: "/images/pre_eduverse.png",
+    heroImage: "/images/pre_eduverse.png",
+    timeline: "Apr 5, 2022 – Jun 18, 2022",
+    techStack: ["React.js", "TypeScript", "Tailwind CSS", "Shadcn UI"],
+    metrics: [
+      { label: "Timeline", value: "Apr 5, 2022 – Jun 18, 2022" },
+      { label: "Role", value: "UI/UX Design" },
+      { label: "Focus", value: "Learning modules & UI" },
+    ],
+    sections: [
+      {
+        title: "Brief",
+        paragraphs: [
+          "Eduverse explores how a modern learning interface can make lessons feel lighter and less intimidating. Instead of dumping long blocks of text, content is broken down into focused, card-based lessons that are easy to scan and revisit.",
+          "The goal was to design a front-end that could sit on top of different backends or LMS systems, acting as a clean, white-label style shell for schools or courses.",
+        ],
+      },
+      {
+        title: "Interaction Model",
+        paragraphs: [
+          "Each lesson is treated as a small module with a consistent structure: title, key idea, and call-to-action to dive deeper. Components are built as composable units so they can be reused across subjects, grades, or course types.",
+          "Layouts are optimized for both desktop and mobile, with responsive grids, clear hierarchy, and smooth transitions to keep learners focused on the content instead of fighting the UI.",
+        ],
+        highlights: [
+          "Reusable React components for subjects, lessons, and sections.",
+          "Mobile-first layout so students can browse content comfortably on any device.",
+        ],
+      },
+      {
+        title: "Outcome",
+        paragraphs: [
+          "Eduverse became a solid playground for experimenting with education-focused UX: typography, spacing, and layout choices that make reading long-form content less tiring.",
+          "The component-driven approach means new subjects, lesson types, or even a future analytics layer can be added without rewriting the core UI patterns.",
         ],
       },
     ],
