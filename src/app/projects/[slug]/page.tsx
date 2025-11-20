@@ -25,7 +25,7 @@ const techIconMap: Record<string, string> = {
   vitest: "/Icons/vitest.svg",
   zustand: "/Icons/zustand.svg",
   cypress: "/Icons/cypress.svg",
-  expressjs: "/Icons/express.svg",
+  expressjs: "/Icons/expressjs.svg",
   git: "/Icons/git.svg",
   html: "/Icons/html.svg",
   css: "/Icons/css.svg",
