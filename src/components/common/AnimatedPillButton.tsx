@@ -54,7 +54,6 @@ export default function AnimatedPillButton(props: AnimatedPillButtonProps) {
     tl.to(bg, { clipPath: CLIP_END, webkitClipPath: CLIP_END, duration: 0.8, ease: "power3.out" }, 0)
       .to(labelEl, { color: "#F5F3EE", duration: 0.45, ease: "power2.out" }, 0.12);
 
-    // Control tween to animate timeline progress for smooth, interruptible transitions
     let ctrl: gsap.core.Tween | null = null;
     const tweenProgress = (to: number, duration: number, ease: string) => {
       if (ctrl) ctrl.kill();
@@ -62,14 +61,12 @@ export default function AnimatedPillButton(props: AnimatedPillButtonProps) {
     };
     const onEnter: EventListener = () => {
       const p = tl.progress();
-      // Durasi dinamis berdasar sisa progress supaya terasa menerus, bukan restart
-      const base = 0.8; // semula total fill 0.8s
+      const base = 0.8; 
       const dur = Math.max(0.06, (1 - p) * base);
       tweenProgress(1, dur, "none");
     };
     const onLeave: EventListener = () => {
       const p = tl.progress();
-      // Perlambat keluar supaya transisi tidak terasa terlalu cepat
       const base = 0.5;
       const dur = Math.max(0.08, p * base);
       tweenProgress(0, dur, "none");
@@ -110,18 +107,23 @@ export default function AnimatedPillButton(props: AnimatedPillButtonProps) {
   );
 
   if (hasHref(variantProps)) {
-    const { 
-      href, 
-      onClick, 
-      target, 
-      onDrag, 
-      onDragEnd, 
-      onDragStart, 
+    const {
+      href,
+      onClick,
+      target,
+      onDrag,
+      onDragStart,
+      onDragEnd,
+      onDragEnter,
+      onDragLeave,
+      onDragOver,
+      onDragCapture,
+      onDrop,
       onAnimationStart,
       onAnimationEnd,
       onAnimationIteration,
       onTransitionEnd,
-      ...anchorRest 
+      ...anchorRest
     } = variantProps;
     const handleClick: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
       onClick?.(event);
@@ -146,24 +148,24 @@ export default function AnimatedPillButton(props: AnimatedPillButtonProps) {
     );
   }
 
-  const { 
-    onDrag, 
-    onDragEnd, 
-    onDragStart, 
+  const {
+    onDrag,
+    onDragStart,
+    onDragEnd,
+    onDragEnter,
+    onDragLeave,
+    onDragOver,
+    onDragCapture,
+    onDrop,
     onAnimationStart,
     onAnimationEnd,
     onAnimationIteration,
     onTransitionEnd,
-    ...divRest 
+    ...divRest
   } = variantProps;
 
   return (
-    <motion.div
-      ref={setContainerRef}
-      whileTap={{ scale: 0.98 }}
-      className={sharedClassName}
-      {...divRest}
-    >
+    <motion.div ref={setContainerRef} whileTap={{ scale: 0.98 }} className={sharedClassName} {...divRest}>
       {content}
     </motion.div>
   );
