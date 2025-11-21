@@ -14,7 +14,12 @@ type RowConfig = {
   scrollDirection: ScrollDirection;
 };
 
-const MarqueeRow = ({ reverse = false, duration, wrapperClassName, scrollDirection }: RowConfig) => {
+const MarqueeRow = ({
+  reverse = false,
+  duration,
+  wrapperClassName,
+  scrollDirection,
+}: RowConfig) => {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const offsetRef = useRef(0);
   const directionRef = useRef(1);
@@ -27,7 +32,7 @@ const MarqueeRow = ({ reverse = false, duration, wrapperClassName, scrollDirecti
   }, [baseRate, directionMultiplier]);
 
   useEffect(() => {
-    const distance = 50; // amount we translate before looping
+    const distance = 50; 
     const durationMs = duration * 1000;
     const shiftPerMs = distance / durationMs;
     let frameId: number;
@@ -65,10 +70,18 @@ const MarqueeRow = ({ reverse = false, duration, wrapperClassName, scrollDirecti
   }, [duration]);
 
   return (
-    <div className={`relative select-none overflow-hidden ${wrapperClassName ?? ""}`}>
+    <div
+      className={`relative select-none overflow-hidden ${
+        wrapperClassName ?? ""
+      }`}
+    >
       <div ref={trackRef} className="skills-marquee-track">
         {[0, 1].map((clone) => (
-          <div key={clone} className="skills-marquee-group" aria-hidden={clone > 0}>
+          <div
+            key={clone}
+            className="skills-marquee-group"
+            aria-hidden={clone > 0}
+          >
             {duplicatedSkills.map((skill, index) => (
               <img
                 key={`${skill.label}-${clone}-${index}`}
@@ -86,7 +99,8 @@ const MarqueeRow = ({ reverse = false, duration, wrapperClassName, scrollDirecti
 };
 
 export default function SkillsMarque() {
-  const [scrollDirection, setScrollDirection] = useState<ScrollDirection>("down");
+  const [scrollDirection, setScrollDirection] =
+    useState<ScrollDirection>("down");
   const lastScrollY = useRef(0);
 
   useEffect(() => {
@@ -98,8 +112,11 @@ export default function SkillsMarque() {
         return;
       }
 
-      const nextDirection: ScrollDirection = currentY > lastScrollY.current ? "down" : "up";
-      setScrollDirection((prev) => (prev === nextDirection ? prev : nextDirection));
+      const nextDirection: ScrollDirection =
+        currentY > lastScrollY.current ? "down" : "up";
+      setScrollDirection((prev) =>
+        prev === nextDirection ? prev : nextDirection
+      );
       lastScrollY.current = currentY;
     };
 
@@ -114,11 +131,20 @@ export default function SkillsMarque() {
           className="w-full max-w-none bg-charcoal text-cream px-6 py-8 md:px-10 md:py-12 overflow-x-hidden overflow-y-visible shadow-lg ring-1 ring-white/10 -rotate-6 origin-center relative z-20 mb-8 translate-y-2 md:translate-y-3"
           style={{ width: "calc(100% + 16rem)", marginLeft: "-8rem" }}
         >
-          <MarqueeRow duration={18} wrapperClassName="overflow-visible py-4" scrollDirection={scrollDirection} />
+          <MarqueeRow
+            duration={18}
+            wrapperClassName="overflow-visible py-4"
+            scrollDirection={scrollDirection}
+          />
         </div>
 
         <div className="w-full bg-charcoal text-cream px-6 py-8 md:px-10 md:py-12 overflow-x-hidden shadow-lg ring-1 ring-white/10 relative z-10 -mt-6">
-          <MarqueeRow duration={24} reverse wrapperClassName="py-4" scrollDirection={scrollDirection} />
+          <MarqueeRow
+            duration={24}
+            reverse
+            wrapperClassName="py-4"
+            scrollDirection={scrollDirection}
+          />
         </div>
       </div>
     </section>

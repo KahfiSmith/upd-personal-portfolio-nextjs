@@ -18,7 +18,8 @@ export default function WorkExperience() {
       const nodes = sectionEl.querySelectorAll<HTMLElement>("[data-reveal]");
       nodes.forEach((node) => {
         const type = node.getAttribute("data-reveal");
-        const delay = parseFloat(node.getAttribute("data-reveal-delay") || "0") || 0;
+        const delay =
+          parseFloat(node.getAttribute("data-reveal-delay") || "0") || 0;
 
         const fromVars: gsap.TweenVars = { opacity: 0 };
         if (type === "up") fromVars.y = 32;
@@ -61,8 +62,8 @@ export default function WorkExperience() {
           className="absolute inset-0"
           style={{
             backgroundImage:
-              'radial-gradient(circle at 1px 1px, rgb(0 0 0 / 0.15) 1px, transparent 0)',
-            backgroundSize: '24px 24px',
+              "radial-gradient(circle at 1px 1px, rgb(0 0 0 / 0.15) 1px, transparent 0)",
+            backgroundSize: "24px 24px",
           }}
         ></div>
       </div>
@@ -77,7 +78,8 @@ export default function WorkExperience() {
         </div>
         <div className="divide-y-2 divide-charcoal" id="work-grid">
           {works.map((w, index) => (
-            <article key={w.id}
+            <article
+              key={w.id}
               className="group relative py-6 md:py-8"
               data-reveal="up"
               data-reveal-delay={String(Math.min(index * 0.08, 0.4))}
@@ -119,7 +121,9 @@ export default function WorkExperience() {
 
                   <div className="flex flex-wrap gap-2">
                     {(() => {
-                      const tags: string[] = Array.isArray(w.tags) ? w.tags : [w.tags];
+                      const tags: string[] = Array.isArray(w.tags)
+                        ? w.tags
+                        : [w.tags];
                       return tags.map((tag: string, tagIndex: number) => (
                         <span
                           key={`${w.id}-tag-${tagIndex}`}

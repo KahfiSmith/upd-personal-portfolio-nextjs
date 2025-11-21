@@ -11,7 +11,6 @@ export default function AboutPageEnhancer() {
     const root = document.getElementById("about-page") || document;
     const hoverCleanups: Array<() => void> = [];
     const ctx = gsap.context(() => {
-      // Reveal animations for elements with data-animate
       const nodes = root.querySelectorAll<HTMLElement>("[data-animate]");
       nodes.forEach((node) => {
         const type = node.getAttribute("data-animate");
@@ -42,34 +41,68 @@ export default function AboutPageEnhancer() {
         );
       });
 
-      // Title underline removed per request; no animation attached
-
-      // Hover animations for What Drives Me items
       const items = root.querySelectorAll<HTMLElement>(".drives-item");
       items.forEach((item) => {
-        const numberGradient = item.querySelector<HTMLElement>(".drives-number-gradient");
+        const numberGradient = item.querySelector<HTMLElement>(
+          ".drives-number-gradient"
+        );
         const underline = item.querySelector<HTMLElement>(".drives-underline");
         const divider = item.querySelector<HTMLElement>(".drives-divider");
         const title = item.querySelector<HTMLElement>(".drives-title");
         const desc = item.querySelector<HTMLElement>(".drives-description");
 
-        // Initial states
         if (underline) {
-          const origin = underline.classList.contains("ml-auto") ? "right" : "left";
-          gsap.set(underline, { scaleX: 0, transformOrigin: `${origin} center` });
+          const origin = underline.classList.contains("ml-auto")
+            ? "right"
+            : "left";
+          gsap.set(underline, {
+            scaleX: 0,
+            transformOrigin: `${origin} center`,
+          });
         }
         if (numberGradient) gsap.set(numberGradient, { opacity: 0 });
-        if (divider) gsap.set(divider, { scaleY: 1, transformOrigin: "center" });
+        if (divider)
+          gsap.set(divider, { scaleY: 1, transformOrigin: "center" });
 
         const tl = gsap.timeline({ paused: true });
-        if (underline) tl.to(underline, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 0);
-        if (numberGradient) tl.to(numberGradient, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0);
-        if (divider) tl.to(divider, { scaleY: 1.15, duration: 0.35, ease: "power2.out" }, 0);
-        if (title) tl.to(title, { color: "#0a0a0a", duration: 0.35, ease: "power2.out" }, 0);
-        if (desc) tl.to(desc, { color: "rgba(10,10,10,0.9)", y: -2, duration: 0.4, ease: "power2.out" }, 0);
+        if (underline)
+          tl.to(underline, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 0);
+        if (numberGradient)
+          tl.to(
+            numberGradient,
+            { opacity: 1, duration: 0.4, ease: "power2.out" },
+            0
+          );
+        if (divider)
+          tl.to(
+            divider,
+            { scaleY: 1.15, duration: 0.35, ease: "power2.out" },
+            0
+          );
+        if (title)
+          tl.to(
+            title,
+            { color: "#0a0a0a", duration: 0.35, ease: "power2.out" },
+            0
+          );
+        if (desc)
+          tl.to(
+            desc,
+            {
+              color: "rgba(10,10,10,0.9)",
+              y: -2,
+              duration: 0.4,
+              ease: "power2.out",
+            },
+            0
+          );
 
         let hoverTween: gsap.core.Tween | null = null;
-        const playTo = (time: number, duration: number, ease = "power2.out") => {
+        const playTo = (
+          time: number,
+          duration: number,
+          ease = "power2.out"
+        ) => {
           hoverTween?.kill();
           hoverTween = tl.tweenTo(time, {
             duration,

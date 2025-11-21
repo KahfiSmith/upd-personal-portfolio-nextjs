@@ -5,7 +5,13 @@ import { useState, type FormEvent, type ChangeEvent } from "react";
 const fieldStyle =
   "w-full border-b border-charcoal/20 bg-transparent px-1 pb-3 text-charcoal placeholder:text-charcoal/50 focus:border-charcoal focus:outline-none transition";
 
-const PROJECT_OPTIONS = ["Landing Page", "Dashboard", "Design System", "UI Revamp", "Other"];
+const PROJECT_OPTIONS = [
+  "Landing Page",
+  "Dashboard",
+  "Design System",
+  "UI Revamp",
+  "Other",
+];
 
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sent">("idle");
@@ -27,9 +33,7 @@ export default function ContactForm() {
     const name = (data.get("name") as string) ?? "";
     const email = (data.get("email") as string) ?? "";
     const projectType =
-      projectChoice === "Other"
-        ? customProject.trim()
-        : projectChoice || "";
+      projectChoice === "Other" ? customProject.trim() : projectChoice || "";
     const message = (data.get("message") as string) ?? "";
 
     const subject = encodeURIComponent(
@@ -53,10 +57,7 @@ export default function ContactForm() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-8"
-    >
+    <form onSubmit={handleSubmit} className="space-y-8">
       <div className="space-y-2">
         <p className="text-xs font-mono uppercase tracking-[0.35em] text-charcoal/50">
           Start a Conversation
@@ -102,18 +103,18 @@ export default function ContactForm() {
                     ? "border-charcoal bg-charcoal text-cream"
                     : "border-charcoal/20 text-charcoal/70 hover:border-charcoal/50"
                 }`}
-                >
-                  <input
-                    type="radio"
-                    name="projectType"
-                    value={option}
-                    className="sr-only"
-                    onChange={handleProjectChange}
-                    checked={isActive}
-                    required={projectChoice === "" && index === 0}
-                  />
-                  {option}
-                </label>
+              >
+                <input
+                  type="radio"
+                  name="projectType"
+                  value={option}
+                  className="sr-only"
+                  onChange={handleProjectChange}
+                  checked={isActive}
+                  required={projectChoice === "" && index === 0}
+                />
+                {option}
+              </label>
             );
           })}
         </div>
