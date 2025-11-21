@@ -128,12 +128,12 @@ export const dataSkills: SkillItemProps[] = [
     desc: "Design Tool",
   },
   {
-    imgSrc: "/icons/tanstack.svg",
+    imgSrc: "/icons/tanstackquery.svg",
     label: "TanStack",
     desc: "Toolset",
   },
   {
-    imgSrc: "/icons/prism.svg",
+    imgSrc: "/icons/prisma.svg",
     label: "Prisma",
     desc: "Syntax Highlighting",
   },
