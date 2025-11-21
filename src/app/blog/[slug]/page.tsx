@@ -5,15 +5,16 @@ import { BlogContentRenderer } from "@/components/features/blog/BlogContentRende
 import BackButton from "@/components/common/BackButton";
 
 type BlogPageProps = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export function generateStaticParams() {
   return blogPosts.map((post) => ({ slug: post.slug }));
 }
 
-export function generateMetadata({ params }: BlogPageProps): Metadata {
-  const post = blogPosts.find((item) => item.slug === params.slug);
+export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = blogPosts.find((item) => item.slug === slug);
   if (!post) return { title: "Post Not Found" };
   return {
     title: `${post.title} | Journal`,
@@ -26,8 +27,9 @@ export function generateMetadata({ params }: BlogPageProps): Metadata {
   };
 }
 
-export default function BlogDetailPage({ params }: BlogPageProps) {
-  const post = blogPosts.find((item) => item.slug === params.slug);
+export default async function BlogDetailPage({ params }: BlogPageProps) {
+  const { slug } = await params;
+  const post = blogPosts.find((item) => item.slug === slug);
   if (!post) notFound();
 
   return (
@@ -56,11 +58,11 @@ export default function BlogDetailPage({ params }: BlogPageProps) {
         </header>
 
         {post.heroImage && (
-          <div className="mb-12 overflow-hidden rounded-xl border border-charcoal/10 shadow-md">
+          <div className="relative mb-12 overflow-hidden rounded-xl border border-charcoal/10 shadow-md aspect-[16/9]">
             <img
               src={post.heroImage}
               alt={post.title}
-              className="w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover"
               loading="lazy"
             />
           </div>

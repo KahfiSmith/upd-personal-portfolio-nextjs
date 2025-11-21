@@ -61,7 +61,7 @@ function BlogCard({ post }: { post: BlogPost }) {
       if (event.defaultPrevented) return;
       if (shouldSkipClientNavigation(event)) return;
       event.preventDefault();
-      navigate(`/blog/${post.slug}`, { label: "Blog Detail" });
+      navigate(`/blog/${post.slug}`, { label: "Story Spotlight" });
     },
     [navigate, post.slug]
   );
@@ -105,11 +105,11 @@ function BlogCard({ post }: { post: BlogPost }) {
             </div>
 
             {post.heroImage && (
-              <div className="relative w-full lg:w-72 overflow-hidden rounded-xl transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-lg">
+              <div className="relative shrink-0 w-full lg:w-72 aspect-[4/3] overflow-hidden rounded-xl transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-lg">
                 <img
                   src={post.heroImage}
                   alt={post.title}
-                  className="h-44 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 group-hover:rotate-[0.8deg]"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 group-hover:rotate-[0.8deg]"
                   loading="lazy"
                 />
                 <span
