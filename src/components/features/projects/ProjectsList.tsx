@@ -7,18 +7,7 @@ import { shouldSkipClientNavigation } from "@/lib/utils";
 import type { ProjectItem } from "@/types";
 import { gsap } from "gsap";
 import Link from "next/link";
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-  type FocusEvent,
-  type KeyboardEvent,
-  type MouseEvent as ReactMouseEvent,
-  type MutableRefObject,
-} from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 type ProjectsListProps = {
   limit?: number;
@@ -47,8 +36,15 @@ const ensureMarqueeDensity = (tokens: MarqueeToken[]): MarqueeToken[] => {
 };
 
 const buildTokens = (project: ProjectItem): MarqueeToken[] => {
-  const fallbackTexts = [project.summary, project.role, ...(project.techStack ?? [])];
-  const rawTexts = project.marqueeTexts && project.marqueeTexts.length > 0 ? project.marqueeTexts : fallbackTexts;
+  const fallbackTexts = [
+    project.summary,
+    project.role,
+    ...(project.techStack ?? []),
+  ];
+  const rawTexts =
+    project.marqueeTexts && project.marqueeTexts.length > 0
+      ? project.marqueeTexts
+      : fallbackTexts;
 
   const textBits = rawTexts
     .filter(
@@ -60,7 +56,9 @@ const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   const uniqueText = Array.from(new Set(textBits));
   if (!uniqueText.length) uniqueText.push(project.title.toUpperCase());
 
-  const customMarqueeImages = Array.isArray(project.marqueeImages) ? project.marqueeImages : [];
+  const customMarqueeImages = Array.isArray(project.marqueeImages)
+    ? project.marqueeImages
+    : [];
   const filteredImages = customMarqueeImages.filter(
     (src): src is string => typeof src === "string" && src.trim().length > 0
   );
@@ -87,7 +85,8 @@ const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   }
 
   if (tokens.length === 1) {
-    const fallbackBase = project.role ?? project.summary ?? project.title ?? "PROJECT";
+    const fallbackBase =
+      project.role ?? project.summary ?? project.title ?? "PROJECT";
     const fallbackText = fallbackBase.toUpperCase();
     const firstToken = tokens[0];
     if (firstToken.type === "text") {
@@ -115,7 +114,10 @@ const getPreviewImage = (project: ProjectItem): string | null => {
   if (Array.isArray(project.detailImages) && project.detailImages.length > 0) {
     return project.detailImages[0] ?? null;
   }
-  if (Array.isArray(project.marqueeImages) && project.marqueeImages.length > 0) {
+  if (
+    Array.isArray(project.marqueeImages) &&
+    project.marqueeImages.length > 0
+  ) {
     return project.marqueeImages[0] ?? null;
   }
   return null;
@@ -143,346 +145,21 @@ export default function ProjectsList({
     }
     return dataProjects;
   }, [limit]);
+  const [activeId, setActiveId] = useState<number | null>(null);
+  const [overlayState, setOverlayState] = useState<{
+    project: ProjectItem;
+    key: string;
+  } | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
+  const overlayRef = useRef<HTMLDivElement | null>(null);
   const titleRefs = useRef<Record<number, HTMLElement | null>>({});
   const roleRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const rowRefs = useRef<Record<number, HTMLElement | null>>({});
-
-  const {
-    activeId,
-    overlayState,
-    previewLayers,
-    registerPreviewImageRef,
-    overlayRef,
-    overlayContentRef,
-    marqueeTokens,
-    activateRow,
-    requestDeactivate,
-    startSuppressExit,
-    forceHideOverlay,
-  } = useProjectOverlay({
-    projects,
-    sectionRef,
-    listRef,
-    rowRefs,
-    titleRefs,
-    roleRefs,
-  });
-  const navigateToProject = useCallback(
-    (project: ProjectItem) => {
-      navigate(`/projects/${project.slug}`, { label: project.title });
-    },
-    [navigate]
-  );
-  const registerRowRef = useCallback((projectId: number, node: HTMLElement | null) => {
-    if (node) {
-      rowRefs.current[projectId] = node;
-    } else {
-      delete rowRefs.current[projectId];
-    }
-  }, []);
-  const registerTitleRef = useCallback((projectId: number, node: HTMLElement | null) => {
-    if (node) {
-      titleRefs.current[projectId] = node;
-    } else {
-      delete titleRefs.current[projectId];
-    }
-  }, []);
-  const registerRoleRef = useCallback((projectId: number, node: HTMLDivElement | null) => {
-    if (node) {
-      roleRefs.current[projectId] = node;
-    } else {
-      delete roleRefs.current[projectId];
-    }
-  }, []);
-
-  return (
-    <section
-      ref={sectionRef}
-      id={sectionId}
-      className="relative py-16 md:py-20 overflow-hidden"
-    >
-      <div className="absolute inset-0 -z-10 opacity-[0.03]">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px, rgb(0 0 0 / 0.15) 1px, transparent 0)",
-            backgroundSize: "24px 24px",
-          }}
-        />
-      </div>
-
-      <div className={wrapperClassName?.trim() ? wrapperClassName : undefined}>
-        {showHeader && (
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
-            <div className="mb-4" data-reveal="right">
-              <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-charcoal font-medium leading-tight">
-                <span className="bg-gradient-to-r from-cyan-600 to-black bg-clip-text text-transparent">
-                  Projects
-                </span>
-              </h2>
-            </div>
-          </div>
-        )}
-
-        <div id="projects-list" ref={listRef} className="relative" onPointerLeave={requestDeactivate}>
-          {projects.map((project, index) => (
-            <ProjectRow
-              key={project.id}
-              project={project}
-              index={index}
-              registerRow={registerRowRef}
-              registerTitle={registerTitleRef}
-              registerRole={registerRoleRef}
-              onActivate={activateRow}
-              onRequestDeactivate={requestDeactivate}
-              startSuppressExit={startSuppressExit}
-              forceHideOverlay={forceHideOverlay}
-              onNavigate={navigateToProject}
-            />
-          ))}
-
-          <div
-            ref={overlayRef}
-            className="pointer-events-none absolute left-0 top-0 w-full opacity-0"
-            style={{ zIndex: 5 }}
-          >
-            {overlayState && (
-              <div
-                ref={overlayContentRef}
-                className="h-full w-full bg-charcoal text-white overflow-hidden"
-              >
-                <div className="flex h-full items-center">
-                  <ProjectsMarquee
-                    project={overlayState.project}
-                    tokens={marqueeTokens.get(overlayState.project.id) ?? []}
-                    isActive={Boolean(activeId)}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <ProjectPreviewStack layers={previewLayers} registerImageRef={registerPreviewImageRef} />
-
-        {showCTA && (
-          <div className="mt-16 text-center">
-            <AnimatedPillButton
-              href={ctaHref}
-              data-discover-button
-              data-magnetic
-              label={ctaLabel}
-              className="inline-flex"
-            />
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-type ProjectRowProps = {
-  project: ProjectItem;
-  index: number;
-  registerRow: (id: number, node: HTMLElement | null) => void;
-  registerTitle: (id: number, node: HTMLElement | null) => void;
-  registerRole: (id: number, node: HTMLDivElement | null) => void;
-  onActivate: (id: number) => void;
-  onRequestDeactivate: () => void;
-  startSuppressExit: () => void;
-  forceHideOverlay: () => void;
-  onNavigate: (project: ProjectItem) => void;
-};
-
-function ProjectRow({
-  project,
-  index,
-  registerRow,
-  registerTitle,
-  registerRole,
-  onActivate,
-  onRequestDeactivate,
-  startSuppressExit,
-  forceHideOverlay,
-  onNavigate,
-}: ProjectRowProps) {
-  const handleKeyDown = (event: KeyboardEvent<HTMLAnchorElement>) => {
-    if (event.key === "Enter" || event.key === " ") startSuppressExit();
-  };
-
-  const handleKeyUp = (event: KeyboardEvent<HTMLAnchorElement>) => {
-    if (event.key !== "Enter" && event.key !== " ") return;
-    event.preventDefault();
-    forceHideOverlay();
-    onNavigate(project);
-  };
-
-  const handleClick = (event: ReactMouseEvent<HTMLAnchorElement>) => {
-    if (shouldSkipClientNavigation(event)) return;
-    event.preventDefault();
-    forceHideOverlay();
-    onNavigate(project);
-  };
-
-  const handleBlur = (event: FocusEvent<HTMLElement>) => {
-    const next = event.relatedTarget as Node | null;
-    if (!next || !event.currentTarget.contains(next)) {
-      onRequestDeactivate();
-    }
-  };
-
-  return (
-    <article
-      ref={(node) => registerRow(project.id, node)}
-      className="group relative"
-      onPointerEnter={() => onActivate(project.id)}
-      onFocusCapture={() => onActivate(project.id)}
-      onBlurCapture={handleBlur}
-    >
-      {index === 0 && (
-        <div className="pointer-events-none absolute top-0 left-0 w-full h-[2px] bg-charcoal/70 origin-left" aria-hidden="true" />
-      )}
-      <div className="pointer-events-none absolute bottom-0 left-0 w-full h-[2px] bg-charcoal/50 origin-left" aria-hidden="true" />
-
-      <Link
-        href={`/projects/${project.slug}`}
-        className="block w-full relative z-0 py-8 md:py-10 lg:py-16 focus:outline-none"
-        aria-label={`Open ${project.title}`}
-        onPointerDown={startSuppressExit}
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
-        onClick={handleClick}
-      >
-        <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-center">
-          <div className="md:col-span-6 lg:col-span-6">
-            <h3
-              ref={(node) => registerTitle(project.id, node)}
-              className="text-3xl md:text-4xl lg:text-6xl font-display font-bold text-charcoal transition-colors duration-300"
-            >
-              {project.title}
-            </h3>
-          </div>
-
-          <div className="md:col-span-6 lg:col-span-6 flex md:justify-end">
-            <div
-              ref={(node) => registerRole(project.id, node)}
-              className="text-charcoal/80 text-lg md:text-xl font-medium transition-all duration-300"
-            >
-              {project.role}
-            </div>
-          </div>
-        </div>
-      </Link>
-    </article>
-  );
-}
-
-type ProjectsMarqueeProps = {
-  project: ProjectItem;
-  tokens: MarqueeToken[];
-  isActive: boolean;
-};
-
-function ProjectsMarquee({ project, tokens, isActive }: ProjectsMarqueeProps) {
-  const duration = Math.max(20, tokens.length * 2.2);
-  const trackStyles = {
-    animationPlayState: isActive ? "running" : "paused",
-    ["--projects-marquee-duration" as "--projects-marquee-duration"]: `${duration}s`,
-  };
-
-  return (
-    <div className="projects-marquee-viewport">
-      <div className="projects-marquee-track" style={trackStyles}>
-        {[0, 1].map((cloneIndex) => (
-          <div key={`${project.id}-marquee-clone-${cloneIndex}`} className="projects-marquee-group" aria-hidden={cloneIndex === 1}>
-            {tokens.map((token, index) =>
-              token.type === "text" ? (
-                <span key={`${project.id}-text-${cloneIndex}-${index}`} className="projects-marquee-text">
-                  {token.value}
-                </span>
-              ) : (
-                <span key={`${project.id}-img-${cloneIndex}-${index}`} className="projects-marquee-media">
-                  <img
-                    src={token.value}
-                    alt={`${project.title} preview asset`}
-                    className="projects-marquee-media-image"
-                    loading="lazy"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = "none";
-                    }}
-                  />
-                </span>
-              )
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-type ProjectPreviewStackProps = {
-  layers: PreviewLayer[];
-  registerImageRef: (key: string, node: HTMLImageElement | null) => void;
-};
-
-function ProjectPreviewStack({ layers, registerImageRef }: ProjectPreviewStackProps) {
-  if (!layers.length) return null;
-
-  return (
-    <div className="pointer-events-none fixed bottom-6 right-6 z-[60] hidden lg:block">
-      <div className="relative aspect-[4/3] w-[360px] sm:w-[460px] overflow-hidden rounded-md">
-        {layers.map((layer, index) => {
-          const isTop = index === layers.length - 1;
-          return (
-            <img
-              key={layer.key}
-              ref={(node) => registerImageRef(layer.key, node)}
-              src={layer.src}
-              alt={`Preview ${layer.projectId}`}
-              className="absolute inset-0 h-full w-full rounded-md object-cover"
-              style={{
-                zIndex: index + 1,
-                boxShadow: isTop ? "0 20px 60px rgba(0,0,0,0.45)" : "none",
-              }}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-type OverlayHookOptions = {
-  projects: ProjectItem[];
-  sectionRef: React.MutableRefObject<HTMLElement | null>;
-  listRef: React.MutableRefObject<HTMLDivElement | null>;
-  rowRefs: React.MutableRefObject<Record<number, HTMLElement | null>>;
-  titleRefs: React.MutableRefObject<Record<number, HTMLElement | null>>;
-  roleRefs: React.MutableRefObject<Record<number, HTMLDivElement | null>>;
-};
-
-type OverlayState = { project: ProjectItem; key: string } | null;
-
-function useProjectOverlay({
-  projects,
-  sectionRef,
-  listRef,
-  rowRefs,
-  titleRefs,
-  roleRefs,
-}: OverlayHookOptions) {
-  const [activeId, setActiveId] = useState<number | null>(null);
-  const [overlayState, setOverlayState] = useState<OverlayState>(null);
-  const overlayRef = useRef<HTMLDivElement | null>(null);
   const overlayContentRef = useRef<HTMLDivElement | null>(null);
+  const activeRowRef = useRef<HTMLElement | null>(null);
   const [previewLayers, setPreviewLayers] = useState<PreviewLayer[]>([]);
   const previewImageRefs = useRef<Record<string, HTMLImageElement | null>>({});
-  const activeRowRef = useRef<HTMLElement | null>(null);
   const lastRowTopRef = useRef<number | null>(null);
   const wipeDirectionRef = useRef<"down" | "up">("down");
   const firstRevealRef = useRef(true);
@@ -491,24 +168,25 @@ function useProjectOverlay({
   const overlayOpacityTweenRef = useRef<gsap.core.Tween | null>(null);
   const entryTweenRef = useRef<gsap.core.Tween | null>(null);
   const suppressExitRef = useRef(false);
+  const deactivateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+  const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const previewHideTimelineRef = useRef<gsap.core.Timeline | null>(null);
 
-  const marqueeTokens = useMemo(() => {
-    const map = new Map<number, MarqueeToken[]>();
-    projects.forEach((project) => {
-      const built = buildTokens(project);
-      map.set(project.id, ensureMarqueeDensity(built));
-    });
-    return map;
-  }, [projects]);
-
-  const registerPreviewImageRef = useCallback((key: string, node: HTMLImageElement | null) => {
-    if (node) {
-      previewImageRefs.current[key] = node;
-    } else {
-      delete previewImageRefs.current[key];
+  const clearDeactivateTimeout = () => {
+    if (deactivateTimeoutRef.current) {
+      clearTimeout(deactivateTimeoutRef.current);
+      deactivateTimeoutRef.current = null;
     }
-  }, []);
+  };
+
+  const clearDebounceTimeout = () => {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+      debounceTimeoutRef.current = null;
+    }
+  };
 
   const finishTween = (tween: gsap.core.Tween | gsap.core.Timeline | null) => {
     if (!tween) return;
@@ -536,25 +214,130 @@ function useProjectOverlay({
     setOverlayState(null);
   };
 
-  const moveOverlay = (row: HTMLElement | null, options?: { immediate?: boolean }) => {
+  const startSuppressExit = () => {
+    suppressExitRef.current = true;
+    clearDeactivateTimeout();
+    finishTween(overlayMoveTweenRef.current);
+    finishTween(overlayOpacityTweenRef.current);
+    finishTween(hideTimelineRef.current);
+    finishTween(entryTweenRef.current);
+    overlayMoveTweenRef.current = null;
+    overlayOpacityTweenRef.current = null;
+    hideTimelineRef.current = null;
+    entryTweenRef.current = null;
+  };
+
+  const marqueeTokens = useMemo(() => {
+    const map = new Map<number, MarqueeToken[]>();
+    projects.forEach((project) => {
+      const built = buildTokens(project);
+      const normalized = ensureMarqueeDensity(built);
+      map.set(project.id, normalized);
+    });
+    return map;
+  }, [projects]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      Object.values(titleRefs.current).forEach((node) => {
+        if (!node) return;
+        gsap.set(node, {
+          color: "#171717",
+          opacity: 1,
+        });
+      });
+      Object.entries(roleRefs.current).forEach(([id, node]) => {
+        if (!node) return;
+        const isActive = Number(id) === activeId;
+        gsap.to(node, {
+          opacity: isActive ? 1 : 0.65,
+          y: isActive ? 0 : 4,
+          duration: 0.45,
+          ease: "power2.out",
+        });
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [activeId]);
+
+  const renderMarquee = (project: ProjectItem, isActive: boolean) => {
+    const tokens = marqueeTokens.get(project.id) ?? [];
+    const duration = Math.max(20, tokens.length * 2.2);
+
+    const trackStyles = {
+      animationPlayState: isActive ? "running" : "paused",
+      ["--projects-marquee-duration" as "--projects-marquee-duration"]: `${duration}s`,
+    };
+
+    return (
+      <div className="projects-marquee-viewport">
+        <div className="projects-marquee-track" style={trackStyles}>
+          {[0, 1].map((cloneIndex) => (
+            <div
+              key={`${project.id}-marquee-clone-${cloneIndex}`}
+              className="projects-marquee-group"
+              aria-hidden={cloneIndex === 1}
+            >
+              {tokens.map((token, index) =>
+                token.type === "text" ? (
+                  <span
+                    key={`${project.id}-text-${cloneIndex}-${index}`}
+                    className="projects-marquee-text"
+                  >
+                    {token.value}
+                  </span>
+                ) : (
+                  <span
+                    key={`${project.id}-img-${cloneIndex}-${index}`}
+                    className="projects-marquee-media"
+                  >
+                    <img
+                      src={token.value}
+                      alt={`${project.title} preview asset`}
+                      className="projects-marquee-media-image"
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = "none";
+                      }}
+                    />
+                  </span>
+                )
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const moveOverlay = (
+    row: HTMLElement | null,
+    options?: { immediate?: boolean }
+  ) => {
     if (!overlayRef.current || !listRef.current || !row) return;
     const listRect = listRef.current.getBoundingClientRect();
     const rowRect = row.getBoundingClientRect();
     const top = rowRect.top - listRect.top;
     const height = rowRect.height;
     const prevTop = lastRowTopRef.current;
-    wipeDirectionRef.current = prevTop !== null && top < prevTop ? "up" : "down";
+    if (prevTop !== null) {
+      wipeDirectionRef.current = top >= prevTop ? "down" : "up";
+    } else {
+      wipeDirectionRef.current = "down";
+    }
     lastRowTopRef.current = top;
     activeRowRef.current = row;
 
     if (options?.immediate) {
-      finishTween(overlayMoveTweenRef.current);
+      overlayMoveTweenRef.current?.kill();
       overlayMoveTweenRef.current = null;
       gsap.set(overlayRef.current, { y: top, height });
       return;
     }
 
-    finishTween(overlayMoveTweenRef.current);
+    overlayMoveTweenRef.current?.kill();
     overlayMoveTweenRef.current = gsap.to(overlayRef.current, {
       y: top,
       height,
@@ -564,7 +347,11 @@ function useProjectOverlay({
     });
   };
 
-  const handleActivate = (id: number | null, row?: HTMLElement | null, options?: { forceExit?: boolean }) => {
+  const handleActivate = (
+    id: number | null,
+    row?: HTMLElement | null,
+    options?: { forceExit?: boolean }
+  ) => {
     const forceExit = options?.forceExit ?? false;
 
     if (id === null) {
@@ -572,10 +359,14 @@ function useProjectOverlay({
         suppressExitRef.current = false;
         if (activeId !== null) setActiveId(null);
         resetOverlayImmediate();
+        clearDeactivateTimeout();
+        return;
+      } else if (suppressExitRef.current) {
         return;
       }
-      if (suppressExitRef.current) return;
     }
+
+    if (id || forceExit) clearDeactivateTimeout();
 
     const sameActive = typeof id === "number" && id === activeId;
     if (sameActive) {
@@ -583,24 +374,39 @@ function useProjectOverlay({
       return;
     }
 
-    if (typeof id === "number") {
+    // Simple approach for switching between projects
+    if (typeof id === "number" && activeId !== null && id !== activeId) {
       setActiveId(id);
       const project = projects.find((p) => p.id === id) ?? null;
       if (project) {
-        setOverlayState({ project: { ...project }, key: `${project.id}-${Date.now()}` });
+        setOverlayState({
+          project: { ...project },
+          key: `${project.id}-${Date.now()}`,
+        });
       }
-    } else {
-      setActiveId(null);
+      if (row) {
+        moveOverlay(row);
+      }
+      return;
+    }
+
+    setActiveId(id);
+    const project = id ? projects.find((p) => p.id === id) ?? null : null;
+    if (project) {
+      setOverlayState({
+        project: { ...project },
+        key: `${project.id}-${Date.now()}`,
+      });
     }
 
     if (!overlayRef.current) return;
 
     if (id && row) {
       suppressExitRef.current = false;
-      finishTween(hideTimelineRef.current);
+      hideTimelineRef.current?.kill();
       hideTimelineRef.current = null;
       moveOverlay(row);
-      finishTween(overlayOpacityTweenRef.current);
+      overlayOpacityTweenRef.current?.kill();
       overlayOpacityTweenRef.current = gsap.to(overlayRef.current, {
         opacity: 1,
         duration: 0.4,
@@ -610,11 +416,12 @@ function useProjectOverlay({
     } else {
       suppressExitRef.current = false;
       const content = overlayContentRef.current;
-      const origin = wipeDirectionRef.current === "down" ? "50% 100%" : "50% 0%";
+      const origin =
+        wipeDirectionRef.current === "down" ? "50% 100%" : "50% 0%";
 
-      finishTween(hideTimelineRef.current);
-      finishTween(overlayMoveTweenRef.current);
-      finishTween(overlayOpacityTweenRef.current);
+      hideTimelineRef.current?.kill();
+      overlayMoveTweenRef.current?.kill();
+      overlayOpacityTweenRef.current?.kill();
 
       if (activeRowRef.current) {
         moveOverlay(activeRowRef.current, { immediate: true });
@@ -625,7 +432,11 @@ function useProjectOverlay({
         onComplete: () => {
           gsap.set(overlayRef.current, { opacity: 0 });
           if (content) {
-            gsap.set(content, { scaleY: 1, opacity: 1, transformOrigin: "50% 0%" });
+            gsap.set(content, {
+              scaleY: 1,
+              opacity: 1,
+              transformOrigin: "50% 0%",
+            });
           }
           setOverlayState(null);
           hideTimelineRef.current = null;
@@ -641,7 +452,11 @@ function useProjectOverlay({
           duration: 0.4,
           transformOrigin: origin,
         });
-        hideTween.to(overlayRef.current, { opacity: 0, duration: 0.2 }, ">-0.1");
+        hideTween.to(
+          overlayRef.current,
+          { opacity: 0, duration: 0.2 },
+          ">-0.1"
+        );
       } else {
         hideTween.to(overlayRef.current, { opacity: 0, duration: 0.3 });
       }
@@ -655,56 +470,35 @@ function useProjectOverlay({
   const previewImage = previewProject ? getPreviewImage(previewProject) : null;
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      Object.values(titleRefs.current).forEach((node) => {
-        if (!node) return;
-        gsap.set(node, { color: "#171717", opacity: 1 });
-      });
-      Object.entries(roleRefs.current).forEach(([id, node]) => {
-        if (!node) return;
-        const isActive = Number(id) === activeId;
-        gsap.to(node, {
-          opacity: isActive ? 1 : 0.65,
-          y: isActive ? 0 : 4,
-          duration: 0.45,
-          ease: "power2.out",
-        });
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [activeId, roleRefs, sectionRef, titleRefs]);
-
-  useEffect(() => {
     if (!previewProject || !previewImage) return;
-    setPreviewLayers((layers) =>
-      [
+    setPreviewLayers((layers) => {
+      return [
         ...layers,
         {
           projectId: previewProject.id,
           src: previewImage,
           key: `${previewProject.id}-${Date.now()}-${Math.random()}`,
         },
-      ].slice(-3)
-    );
+      ].slice(-3);
+    });
   }, [previewProject, previewImage]);
 
   useEffect(() => {
     if (overlayState) {
-      finishTween(previewHideTimelineRef.current);
+      previewHideTimelineRef.current?.kill();
       previewHideTimelineRef.current = null;
       return;
     }
 
-    const nodes = Object.values(previewImageRefs.current).filter((node): node is HTMLImageElement =>
-      Boolean(node)
+    const nodes = Object.values(previewImageRefs.current).filter(
+      (node): node is HTMLImageElement => Boolean(node)
     );
     if (!nodes.length) {
       setPreviewLayers([]);
       return;
     }
 
-    finishTween(previewHideTimelineRef.current);
+    previewHideTimelineRef.current?.kill();
     previewHideTimelineRef.current = gsap.timeline({
       defaults: { ease: "power2.inOut" },
       onComplete: () => {
@@ -756,7 +550,14 @@ function useProjectOverlay({
           gsap.fromTo(
             node,
             { opacity: 0, scale: 0.65, y: 40, filter: "blur(12px)" },
-            { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 0.65, ease: "power3.out" }
+            {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              filter: "blur(0px)",
+              duration: 0.65,
+              ease: "power3.out",
+            }
           );
         } else {
           gsap.to(node, {
@@ -773,25 +574,40 @@ function useProjectOverlay({
     return () => ctx.revert();
   }, [previewLayers]);
 
+  const requestDeactivate = () => {
+    if (suppressExitRef.current) return;
+    clearDeactivateTimeout();
+    handleActivate(null);
+  };
+
+  const forceHideOverlay = () => {
+    handleActivate(null, undefined, { forceExit: true });
+  };
+
   useEffect(() => {
     const el = overlayContentRef.current;
     if (!overlayState || !el) {
-      finishTween(entryTweenRef.current);
+      entryTweenRef.current?.kill();
       entryTweenRef.current = null;
       return;
     }
-    const fromOrigin = wipeDirectionRef.current === "down" ? "50% 0%" : "50% 100%";
+    const fromOrigin =
+      wipeDirectionRef.current === "down" ? "50% 0%" : "50% 100%";
     const fromScale = firstRevealRef.current ? 0 : 0.95;
     const duration = firstRevealRef.current ? 0.4 : 0.25;
-    finishTween(entryTweenRef.current);
+    entryTweenRef.current?.kill();
     entryTweenRef.current = gsap.fromTo(
       el,
-      { scaleY: fromScale, opacity: firstRevealRef.current ? 0.9 : 1, transformOrigin: fromOrigin },
+      {
+        scaleY: fromScale,
+        opacity: firstRevealRef.current ? 0.9 : 1,
+        transformOrigin: fromOrigin,
+      },
       { scaleY: 1, opacity: 1, duration, ease: "power2.out" }
     );
     firstRevealRef.current = false;
     return () => {
-      finishTween(entryTweenRef.current);
+      entryTweenRef.current?.kill();
       entryTweenRef.current = null;
     };
   }, [overlayState]);
@@ -799,45 +615,200 @@ function useProjectOverlay({
   useEffect(() => {
     return () => {
       suppressExitRef.current = false;
+      clearDeactivateTimeout();
+      clearDebounceTimeout();
     };
   }, []);
 
-  const requestDeactivate = () => {
-    if (suppressExitRef.current) return;
-    handleActivate(null);
-  };
+  return (
+    <section
+      ref={sectionRef}
+      id={sectionId}
+      className="relative py-16 md:py-20 overflow-hidden"
+    >
+      <div className="absolute inset-0 -z-10 opacity-[0.03]">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, rgb(0 0 0 / 0.15) 1px, transparent 0)",
+            backgroundSize: "24px 24px",
+          }}
+        />
+      </div>
 
-  const activateRow = (projectId: number) => {
-    handleActivate(projectId, rowRefs.current[projectId] ?? null);
-  };
+      <div className={wrapperClassName?.trim() ? wrapperClassName : undefined}>
+        {showHeader && (
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
+            <div className="mb-4" data-reveal="right">
+              <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-charcoal font-medium leading-tight">
+                <span className="bg-gradient-to-r from-cyan-600 to-black bg-clip-text text-transparent">
+                  Projects
+                </span>
+              </h2>
+            </div>
+          </div>
+        )}
 
-  const forceHideOverlay = () => {
-    handleActivate(null, undefined, { forceExit: true });
-  };
+        <div
+          id="projects-list"
+          ref={listRef}
+          className="relative"
+          onPointerLeave={requestDeactivate}
+        >
+          {projects.map((project, index) => {
+            return (
+              <article
+                key={project.id}
+                ref={(node) => {
+                  rowRefs.current[project.id] = node;
+                }}
+                className="group relative"
+                onPointerEnter={() =>
+                  handleActivate(
+                    project.id,
+                    rowRefs.current[project.id] ?? null
+                  )
+                }
+                onFocusCapture={() =>
+                  handleActivate(
+                    project.id,
+                    rowRefs.current[project.id] ?? null
+                  )
+                }
+                onBlurCapture={(event) => {
+                  const next = event.relatedTarget as Node | null;
+                  if (!next || !event.currentTarget.contains(next)) {
+                    requestDeactivate();
+                  }
+                }}
+              >
+                {index === 0 && (
+                  <div
+                    className="pointer-events-none absolute top-0 left-0 w-full h-[2px] bg-charcoal/70 origin-left"
+                    aria-hidden="true"
+                  />
+                )}
+                <div
+                  className="pointer-events-none absolute bottom-0 left-0 w-full h-[2px] bg-charcoal/50 origin-left"
+                  aria-hidden="true"
+                />
 
-  const startSuppressExit = () => {
-    suppressExitRef.current = true;
-    finishTween(overlayMoveTweenRef.current);
-    finishTween(overlayOpacityTweenRef.current);
-    finishTween(hideTimelineRef.current);
-    finishTween(entryTweenRef.current);
-    overlayMoveTweenRef.current = null;
-    overlayOpacityTweenRef.current = null;
-    hideTimelineRef.current = null;
-    entryTweenRef.current = null;
-  };
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="block w-full relative z-0 py-8 md:py-10 lg:py-16 focus:outline-none"
+                  aria-label={`Open ${project.title}`}
+                  onPointerDown={startSuppressExit}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ")
+                      startSuppressExit();
+                  }}
+                  onKeyUp={(event) => {
+                    if (event.key !== "Enter" && event.key !== " ") return;
+                    event.preventDefault();
+                    forceHideOverlay();
+                    navigate(`/projects/${project.slug}`, {
+                      label: project.title,
+                    });
+                  }}
+                  onClick={(event) => {
+                    if (shouldSkipClientNavigation(event)) return;
+                    event.preventDefault();
+                    forceHideOverlay();
+                    navigate(`/projects/${project.slug}`, {
+                      label: project.title,
+                    });
+                  }}
+                >
+                  <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-center">
+                    <div className="md:col-span-6 lg:col-span-6">
+                      <h3
+                        ref={(node) => {
+                          titleRefs.current[project.id] = node;
+                        }}
+                        className="text-3xl md:text-4xl lg:text-6xl font-display font-bold text-charcoal transition-colors duration-300"
+                      >
+                        {project.title}
+                      </h3>
+                    </div>
 
-  return {
-    activeId,
-    overlayState,
-    previewLayers,
-    registerPreviewImageRef,
-    overlayRef,
-    overlayContentRef,
-    marqueeTokens,
-    activateRow,
-    requestDeactivate,
-    startSuppressExit,
-    forceHideOverlay,
-  };
+                    <div className="md:col-span-6 lg:col-span-6 flex md:justify-end">
+                      <div
+                        ref={(node) => {
+                          roleRefs.current[project.id] = node;
+                        }}
+                        className="text-charcoal/80 text-lg md:text-xl font-medium transition-all duration-300"
+                      >
+                        {project.role}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </article>
+            );
+          })}
+
+          <div
+            ref={overlayRef}
+            className="pointer-events-none absolute left-0 top-0 w-full opacity-0"
+            style={{ zIndex: 5 }}
+          >
+            {overlayState && (
+              <div
+                ref={overlayContentRef}
+                className="h-full w-full bg-charcoal text-white overflow-hidden"
+              >
+                <div className="flex h-full items-center">
+                  {renderMarquee(overlayState.project, Boolean(activeId))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {previewLayers.length > 0 && (
+          <div className="pointer-events-none fixed bottom-6 right-6 z-[60] hidden lg:block">
+            <div className="relative aspect-[4/3] w-[360px] sm:w-[460px] overflow-hidden rounded-md">
+              {previewLayers.map((layer, index) => {
+                const isTop = index === previewLayers.length - 1;
+                return (
+                  <img
+                    key={layer.key}
+                    ref={(node) => {
+                      if (node) {
+                        previewImageRefs.current[layer.key] = node;
+                      } else {
+                        delete previewImageRefs.current[layer.key];
+                      }
+                    }}
+                    src={layer.src}
+                    alt={`Preview ${layer.projectId}`}
+                    className="absolute inset-0 h-full w-full rounded-md object-cover"
+                    style={{
+                      zIndex: index + 1,
+                      boxShadow: isTop
+                        ? "0 20px 60px rgba(0,0,0,0.45)"
+                        : "none",
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {showCTA && (
+          <div className="mt-16 text-center">
+            <AnimatedPillButton
+              href={ctaHref}
+              data-discover-button
+              data-magnetic
+              label={ctaLabel}
+              className="inline-flex"
+            />
+          </div>
+        )}
+      </div>
+    </section>
+  );
 }
