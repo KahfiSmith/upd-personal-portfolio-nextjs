@@ -1,3 +1,4 @@
+import SimpleCurtainLoader from "@/components/common/SimpleCurtainLoader";
 import AboutIntro from "@/components/features/about/AboutIntro";
 import Hero from "@/components/features/home/Hero";
 import ProjectsList from "@/components/features/projects/ProjectsList";
@@ -8,6 +9,7 @@ import FloatingDockNav from "@/components/common/FloatingDockNav";
 export default function Home() {
   return (
     <>
+      <SimpleCurtainLoader />
       <Hero />
       <SkillsMarque />
       <AboutIntro/>
