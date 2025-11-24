@@ -133,11 +133,6 @@ export const dataSkills: SkillItemProps[] = [
     desc: "Toolset",
   },
   {
-    imgSrc: "/icons/prisma.svg",
-    label: "Prisma",
-    desc: "Syntax Highlighting",
-  },
-  {
     imgSrc: "/icons/reactrouterv7.svg",
     label: "React Router v7",
     desc: "Routing Library",
