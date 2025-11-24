@@ -8,17 +8,22 @@ const CURTAIN_SLIDE_DURATION = 1100; // ms for the top/bottom panels to move awa
 const CURTAIN_REVEAL_DELAY = 250; // ms pause at 100% before the curtain opens
 const HIDE_DELAY = 500; // ms to keep the overlay mounted once the fade out starts
 
+let hasShownCurtainLoader = false;
+
 export default function SimpleCurtainLoader() {
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState(0);
   const [isCurtainOpen, setIsCurtainOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [shouldShow] = useState(() => !hasShownCurtainLoader);
+  const [isVisible, setIsVisible] = useState(() => !hasShownCurtainLoader);
   const revealStartedRef = useRef(false);
   const rafIdRef = useRef<number | null>(null);
   const revealTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    if (!shouldShow) return;
+
     const timers: Array<ReturnType<typeof setTimeout>> = [];
 
     timers.push(setTimeout(() => setStage(1), 100));
@@ -28,10 +33,15 @@ export default function SimpleCurtainLoader() {
     return () => {
       timers.forEach((timer) => clearTimeout(timer));
     };
-  }, []);
+  }, [shouldShow]);
 
   useEffect(() => {
-    if (!isVisible || stage < 3) return undefined;
+    if (!shouldShow) return;
+    hasShownCurtainLoader = true;
+  }, [shouldShow]);
+
+  useEffect(() => {
+    if (!shouldShow || !isVisible || stage < 3) return undefined;
 
     const start = performance.now();
 
@@ -55,10 +65,18 @@ export default function SimpleCurtainLoader() {
         cancelAnimationFrame(rafIdRef.current);
       }
     };
-  }, [isVisible, stage]);
+  }, [isVisible, shouldShow, stage]);
 
   useEffect(() => {
-    if (!isVisible || stage < 3 || progress < 100 || revealStartedRef.current) return undefined;
+    if (
+      !shouldShow ||
+      !isVisible ||
+      stage < 3 ||
+      progress < 100 ||
+      revealStartedRef.current
+    ) {
+      return undefined;
+    }
 
     revealStartedRef.current = true;
 
@@ -75,17 +93,19 @@ export default function SimpleCurtainLoader() {
       if (revealTimeoutRef.current !== null) clearTimeout(revealTimeoutRef.current);
       if (hideTimeoutRef.current !== null) clearTimeout(hideTimeoutRef.current);
     };
-  }, [progress, isVisible, stage]);
+  }, [isVisible, progress, shouldShow, stage]);
 
   useEffect(() => {
+    if (!shouldShow) return undefined;
+
     return () => {
       if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
       if (revealTimeoutRef.current !== null) clearTimeout(revealTimeoutRef.current);
       if (hideTimeoutRef.current !== null) clearTimeout(hideTimeoutRef.current);
     };
-  }, []);
+  }, [shouldShow]);
 
-  if (!isVisible) {
+  if (!shouldShow || !isVisible) {
     return null;
   }
 
@@ -98,18 +118,18 @@ export default function SimpleCurtainLoader() {
       )}
     >
       <div
-      className={clsx(
-        'curtain-top absolute top-0 left-0 z-10 h-1/2 w-full bg-neutral-950 transition-transform duration-[1100ms] ease-in-out will-change-transform',
-        isCurtainOpen ? '-translate-y-full' : 'translate-y-0',
-      )}
-    />
+        className={clsx(
+          'curtain-top absolute top-0 left-0 z-10 h-1/2 w-full bg-neutral-950 transition-transform duration-[1100ms] ease-in-out will-change-transform',
+          isCurtainOpen ? '-translate-y-full' : 'translate-y-0',
+        )}
+      />
       <div className="curtain-divider absolute left-0 top-1/2 z-10 h-px w-full bg-white/10" />
       <div
-      className={clsx(
-        'curtain-bottom absolute bottom-0 left-0 z-10 h-1/2 w-full bg-neutral-950 transition-transform duration-[1100ms] ease-in-out will-change-transform',
-        isCurtainOpen ? 'translate-y-full' : 'translate-y-0',
-      )}
-    />
+        className={clsx(
+          'curtain-bottom absolute bottom-0 left-0 z-10 h-1/2 w-full bg-neutral-950 transition-transform duration-[1100ms] ease-in-out will-change-transform',
+          isCurtainOpen ? 'translate-y-full' : 'translate-y-0',
+        )}
+      />
 
       <div
         className={clsx(
