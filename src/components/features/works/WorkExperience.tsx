@@ -68,9 +68,9 @@ export default function WorkExperience() {
         ></div>
       </div>
 
-      <div className="max-w-[96rem] mx-auto px-6 md:px-8 lg:px-12">
+      <div className="max-w-[96rem] mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         <div className="mb-4" data-reveal="right">
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-charcoal font-medium leading-tight">
+          <h2 className="font-display text-[clamp(2.5rem,6vw,3.6rem)] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-charcoal font-medium leading-tight">
             <span className="bg-gradient-to-r from-cyan-600 to-black bg-clip-text text-transparent">
               Work Experience
             </span>
@@ -89,15 +89,15 @@ export default function WorkExperience() {
               <div className="grid md:grid-cols-12 gap-6 md:gap-8">
                 <div className="md:col-span-4 lg:col-span-3">
                   <div className="space-y-3">
-                    <h3 className="work-title text-2xl md:text-3xl font-display font-bold text-charcoal">
+                    <h3 className="work-title text-xl sm:text-2xl md:text-3xl font-display font-bold text-charcoal">
                       {w.title}
                     </h3>
-                    <div className="space-y-1 text-base md:text-lg text-charcoal/60">
+                    <div className="space-y-1 text-sm sm:text-base md:text-lg text-charcoal/60">
                       <p className="work-role font-semibold text-charcoal/80">
                         {w.role}
                       </p>
                       <p className="work-company">{w.company}</p>
-                      <p className="work-period text-sm flex space-x-3 items-center">
+                      <p className="work-period text-xs sm:text-sm flex space-x-3 items-center">
                         <Calendar className="inline-block mr-2 h-4 w-4 text-charcoal/60" />
                         {w.period}
                       </p>
@@ -105,13 +105,13 @@ export default function WorkExperience() {
                   </div>
                 </div>
 
-                <div className="md:col-span-8 lg:col-span-9 space-y-4">
+                <div className="md:col-span-8 lg:col-span-9 space-y-3 sm:space-y-4">
                   {(() => {
                     const descriptions: string[] = Array.isArray(w.description)
                       ? w.description
                       : [w.description];
                     return (
-                      <ul className="work-description list-disc pl-5 text-charcoal/70 text-base md:text-lg leading-relaxed space-y-1">
+                      <ul className="work-description list-disc pl-5 text-charcoal/70 text-sm sm:text-base md:text-lg leading-relaxed space-y-1.5">
                         {descriptions.map((item, i) => (
                           <li key={`${w.id}-desc-${i}`}>{item}</li>
                         ))}
@@ -127,7 +127,7 @@ export default function WorkExperience() {
                       return tags.map((tag: string, tagIndex: number) => (
                         <span
                           key={`${w.id}-tag-${tagIndex}`}
-                          className="work-tag inline-flex items-center px-3 py-1.5 bg-charcoal text-cream text-sm md:text-base font-medium rounded-lg border border-transparent"
+                          className="work-tag inline-flex items-center px-2.5 py-1.5 bg-charcoal text-cream text-xs sm:text-sm md:text-base font-medium rounded-lg border border-transparent"
                           data-tag-index={tagIndex}
                         >
                           {tag}

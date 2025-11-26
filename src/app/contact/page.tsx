@@ -29,7 +29,7 @@ const availabilityNotes = [
 
 export default function ContactPage() {
   return (
-    <main className="relative min-h-screen bg-cream text-charcoal">
+    <main className="relative min-h-screen text-charcoal">
       <div aria-hidden="true" className="fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute top-20 -left-16 h-72 w-72 rounded-full bg-gradient-to-br from-orange-200/70 via-pink-100/50 to-transparent blur-[140px]" />
         <div className="absolute bottom-10 right-10 h-[22rem] w-[28rem] rounded-[999px] bg-gradient-to-br from-cyan-100/50 via-indigo-100/50 to-transparent blur-[150px]" />
