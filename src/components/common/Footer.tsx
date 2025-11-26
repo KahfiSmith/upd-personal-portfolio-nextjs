@@ -47,13 +47,13 @@ export default function Footer({
               <div className="absolute inset-0 bg-gradient-radial from-cream/5 via-transparent to-transparent blur-2xl opacity-60"></div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-4 w-full">
               {primaryButton && (
                 <a
                   href={primaryButton.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="primary-cta-btn magnetic-button group relative inline-flex items-center gap-2 px-8 py-4 bg-cream text-charcoal rounded-full transition-all duration-500 hover:scale-110 overflow-hidden text-lg font-medium cursor-pointer"
+                  className="primary-cta-btn magnetic-button group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto min-w-[220px] px-6 sm:px-8 py-3 sm:py-4 bg-cream text-charcoal rounded-full transition-all duration-500 hover:scale-110 overflow-hidden text-base sm:text-lg font-medium cursor-pointer"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
 
@@ -71,7 +71,7 @@ export default function Footer({
               {secondaryButton && (
                 <a
                   href={secondaryButton.href}
-                  className="get-in-touch-btn magnetic-button group relative inline-flex items-center gap-2 px-8 py-4 rounded-full border-2 border-cream/30 text-cream transition-all duration-500 hover:scale-110 text-lg font-medium overflow-hidden cursor-pointer"
+                  className="get-in-touch-btn magnetic-button group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto min-w-[220px] px-6 sm:px-8 py-3 sm:py-4 rounded-full border-2 border-cream/30 text-cream transition-all duration-500 hover:scale-110 text-base sm:text-lg font-medium overflow-hidden cursor-pointer"
                 >
                   <div className="absolute inset-0 rounded-full bg-charcoal"></div>
 
