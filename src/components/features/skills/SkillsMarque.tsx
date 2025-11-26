@@ -126,10 +126,9 @@ export default function SkillsMarque() {
 
   return (
     <section className="my-12 md:my-20 relative overflow-x-hidden overflow-y-visible pt-16 md:pt-24">
-      <div className="relative py-16 md:py-20 overflow-visible">
+      <div className="relative py-12 md:py-16 overflow-visible">
         <div
-          className="w-full max-w-none bg-charcoal text-cream px-6 py-8 md:px-10 md:py-12 overflow-x-hidden overflow-y-visible shadow-lg ring-1 ring-white/10 -rotate-6 origin-center relative z-20 mb-8 translate-y-2 md:translate-y-3"
-          style={{ width: "calc(100% + 16rem)", marginLeft: "-8rem" }}
+          className="w-[calc(100%+8rem)] sm:w-[calc(100%+12rem)] md:w-[calc(100%+16rem)] ml-[-4rem] sm:ml-[-6rem] md:ml-[-8rem] max-w-none bg-charcoal text-cream px-5 sm:px-6 md:px-10 py-6 sm:py-7 md:py-10 overflow-x-hidden overflow-y-visible shadow-lg ring-1 ring-white/10 -rotate-2 sm:-rotate-4 md:-rotate-6 origin-center relative z-20 mb-8 translate-y-2 md:translate-y-3"
         >
           <MarqueeRow
             duration={18}
@@ -138,7 +137,7 @@ export default function SkillsMarque() {
           />
         </div>
 
-        <div className="w-full bg-charcoal text-cream px-6 py-8 md:px-10 md:py-12 overflow-x-hidden shadow-lg ring-1 ring-white/10 relative z-10 -mt-6">
+        <div className="w-full bg-charcoal text-cream px-5 sm:px-6 md:px-10 py-6 sm:py-7 md:py-10 overflow-x-hidden shadow-lg ring-1 ring-white/10 relative z-10 -mt-6">
           <MarqueeRow
             duration={24}
             reverse
