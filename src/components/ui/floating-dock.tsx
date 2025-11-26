@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Menu } from "lucide-react";
 import { MouseEvent } from "react";
 import {
   AnimatePresence,
@@ -38,54 +37,20 @@ const FloatingDockMobile = ({
   items: { title: string; icon: React.ReactNode; href: string; onClick?: (e: MouseEvent<HTMLAnchorElement>, href: string) => void }[];
   className?: string;
 }) => {
-  const [open, setOpen] = useState(false);
   return (
     <div className={cn("relative block md:hidden", className)}>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            layoutId="nav"
-            className="absolute inset-x-0 bottom-full mb-2 flex flex-col gap-2"
+      <div className="flex items-center gap-3 rounded-full bg-neutral-900/90 px-3 py-2 shadow-lg ring-1 ring-white/10 backdrop-blur">
+        {items.map((item) => (
+          <a
+            href={item.href}
+            key={item.title}
+            onClick={(e) => item.onClick?.(e, item.href)}
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-800 text-white shadow-md active:scale-95 transition"
           >
-            {items.map((item, idx) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  y: 10,
-                  transition: {
-                    delay: idx * 0.05,
-                  },
-                }}
-                transition={{ delay: (items.length - 1 - idx) * 0.05 }}
-              >
-                <a
-                  href={item.href}
-                  key={item.title}
-                  onClick={(e) => {
-                    item.onClick?.(e, item.href);
-                    setOpen(false);
-                  }}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-900 text-white"
-                >
-                  <div className="h-4 w-4">{item.icon}</div>
-                </a>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-900 text-white"
-      >
-        <Menu className="h-5 w-5" />
-      </button>
+            <div className="h-5 w-5">{item.icon}</div>
+          </a>
+        ))}
+      </div>
     </div>
   );
 };
