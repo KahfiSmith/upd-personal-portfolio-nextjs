@@ -88,7 +88,7 @@
   }
   
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans overflow-x-hidden;
   }
   
   body::-webkit-scrollbar {
@@ -195,22 +195,26 @@
 
 .skills-marquee-group {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   padding: 1rem 0;
 }
 
 .skills-marquee-item {
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
   flex-shrink: 0;
   opacity: 0.9;
   transition: opacity 200ms ease;
 }
 
 @media (min-width: 768px) {
+  .skills-marquee-group {
+    gap: 2rem;
+  }
+
   .skills-marquee-item {
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 3.25rem;
+    height: 3.25rem;
   }
 }
 
