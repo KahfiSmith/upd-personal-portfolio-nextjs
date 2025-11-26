@@ -197,6 +197,7 @@
   display: flex;
   gap: 1.5rem;
   padding: 1rem 0;
+  margin-right: 1.5rem;
 }
 
 .skills-marquee-item {
@@ -210,6 +211,7 @@
 @media (min-width: 768px) {
   .skills-marquee-group {
     gap: 2rem;
+    margin-right: 2rem;
   }
 
   .skills-marquee-item {

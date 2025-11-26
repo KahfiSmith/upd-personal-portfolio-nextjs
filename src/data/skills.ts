@@ -132,9 +132,4 @@ export const dataSkills: SkillItemProps[] = [
     label: "TanStack",
     desc: "Toolset",
   },
-  {
-    imgSrc: "/icons/reactrouterv7.svg",
-    label: "React Router v7",
-    desc: "Routing Library",
-  },
 ];
