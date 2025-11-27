@@ -63,6 +63,9 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   return {
     title: `${project.title} | Case Study`,
     description: project.summary ?? (Array.isArray(project.description) ? project.description[0] : project.description),
+    alternates: {
+      canonical: `/projects/${project.slug}`,
+    },
   };
 }
 

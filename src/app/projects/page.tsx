@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "Projects | Personal Portfolio",
   description:
     "Explore every featured build, experiment, and shipped engagement in one archive.",
+  alternates: {
+    canonical: "/projects",
+  },
 };
 
 const totalProjects = dataProjects.length;

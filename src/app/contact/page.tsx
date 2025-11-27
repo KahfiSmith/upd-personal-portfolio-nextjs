@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Contact | Let's build together",
   description:
     "Reach out for collaborations, freelance work, or just to say hello.",
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 const contactMethods = [

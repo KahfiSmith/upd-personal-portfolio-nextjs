@@ -6,6 +6,9 @@ import BackButton from "@/components/common/BackButton";
 export const metadata: Metadata = {
   title: "About | Behind the Code",
   description: "Discover my story, what drives me, and the technologies I love.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 const driveItemClasses =

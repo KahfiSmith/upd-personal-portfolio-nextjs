@@ -6,6 +6,9 @@ import BackButton from "@/components/common/BackButton";
 export const metadata: Metadata = {
   title: "Blog",
   description: "Stories, lessons, and reflections from the studio.",
+  alternates: {
+    canonical: "/blog",
+  },
 };
 
 export default function BlogPage() {

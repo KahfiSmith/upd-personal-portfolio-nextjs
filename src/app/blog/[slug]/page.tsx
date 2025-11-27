@@ -19,6 +19,9 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   return {
     title: `${post.title} | Journal`,
     description: post.excerpt,
+    alternates: {
+      canonical: `/blog/${post.slug}`,
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt,
