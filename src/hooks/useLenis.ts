@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 
+interface LenisWindow extends Window {
+  __lenis?: Lenis;
+}
+
 export const useLenis = () => {
   useEffect(() => {
     const lenis = new Lenis({
@@ -8,7 +12,8 @@ export const useLenis = () => {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     });
 
-    (window as any).__lenis = lenis;
+    const lenisWindow = window as LenisWindow;
+    lenisWindow.__lenis = lenis;
 
     let rafId = 0;
     const raf = (time: number) => {
@@ -21,8 +26,8 @@ export const useLenis = () => {
     return () => {
       window.cancelAnimationFrame(rafId);
       try {
-        if ((window as any).__lenis === lenis) {
-          delete (window as any).__lenis;
+        if (lenisWindow.__lenis === lenis) {
+          delete lenisWindow.__lenis;
         }
       } catch {}
       lenis.destroy();
