@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback } from "react";
@@ -106,11 +107,12 @@ function BlogCard({ post }: { post: BlogPost }) {
 
             {post.heroImage && (
               <div className="relative shrink-0 w-full lg:w-72 aspect-[4/3] overflow-hidden rounded-xl transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-lg">
-                <img
+                <Image
                   src={post.heroImage}
                   alt={post.title}
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 group-hover:rotate-[0.8deg]"
-                  loading="lazy"
+                  fill
+                  sizes="(min-width:1024px) 18rem, 100vw"
+                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 group-hover:rotate-[0.8deg]"
                 />
                 <span
                   className="absolute inset-0 bg-gradient-to-br from-cyan-400/25 via-transparent to-purple-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100"

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { BlogContentText, BlogContentImage } from "@/types";
 
 interface BlogContentRendererProps {
@@ -30,21 +31,24 @@ export function BlogContentRenderer({
         <div
           key={`${postSlug}-group-${startIdx}`}
           className="my-10 md:my-12 overflow-hidden"
-        >
-          <div
-            className={
-              isImageLeft
-                ? "float-left w-1/3 lg:w-1/3 mr-6 mb-4"
-                : "float-right w-1/3 lg:w-1/3 ml-6 mb-4"
-            }
           >
-            <img
-              src={imageItem.src}
-              alt={imageItem.alt}
-              className="w-full h-auto object-cover rounded-md"
-              loading="lazy"
-            />
-          </div>
+            <div
+              className={
+                isImageLeft
+                  ? "float-left w-1/3 lg:w-1/3 mr-6 mb-4"
+                  : "float-right w-1/3 lg:w-1/3 ml-6 mb-4"
+              }
+            >
+              <div className="relative w-full h-full min-h-[140px]">
+                <Image
+                  src={imageItem.src}
+                  alt={imageItem.alt}
+                  fill
+                  className="object-cover rounded-md"
+                  sizes="(min-width: 1024px) 33vw, 50vw"
+                />
+              </div>
+            </div>
 
           <div className="prose max-w-none space-y-5">
             <p className={paragraphClasses}>{textItem.content}</p>
@@ -84,12 +88,15 @@ export function BlogContentRenderer({
             className="my-10 md:my-12"
           >
             <div className="overflow-hidden rounded-lg">
-              <img
-                src={item.src}
-                alt={item.alt}
-                className="w-full h-auto object-cover"
-                loading="lazy"
-              />
+              <div className="relative w-full h-full min-h-[240px]">
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 80vw, 100vw"
+                />
+              </div>
             </div>
           </figure>
         );

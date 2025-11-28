@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { blogPosts } from "@/data/blog-posts";
@@ -62,11 +63,13 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
 
         {post.heroImage && (
           <div className="relative mb-12 overflow-hidden rounded-xl border border-charcoal/10 shadow-md aspect-[16/9]">
-            <img
+            <Image
               src={post.heroImage}
               alt={post.title}
-              className="absolute inset-0 w-full h-full object-cover"
-              loading="lazy"
+              fill
+              className="object-cover"
+              sizes="(min-width: 1024px) 1024px, 100vw"
+              priority
             />
           </div>
         )}

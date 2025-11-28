@@ -139,7 +139,14 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                     >
                       <div className="flex h-7 w-7 sm:h-9 sm:w-9 items-center justify-center">
                         {icon ? (
-                          <img src={icon} alt={tech} className="h-7 w-7 sm:h-9 sm:w-9" loading="lazy" />
+                          <Image
+                            src={icon}
+                            alt={tech}
+                            width={36}
+                            height={36}
+                            className="h-7 w-7 sm:h-9 sm:w-9"
+                            sizes="36px"
+                          />
                         ) : (
                           <span className="text-sm font-semibold text-charcoal">{tech.charAt(0)}</span>
                         )}
