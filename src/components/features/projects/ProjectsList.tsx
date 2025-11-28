@@ -6,8 +6,9 @@ import { usePageTransition } from "@/hooks";
 import { shouldSkipClientNavigation } from "@/lib/utils";
 import type { ProjectItem } from "@/types";
 import { gsap } from "gsap";
+import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 type ProjectsListProps = {
   limit?: number;
@@ -265,9 +266,9 @@ export default function ProjectsList({
     const tokens = marqueeTokens.get(project.id) ?? [];
     const duration = Math.max(20, tokens.length * 2.2);
 
-    const trackStyles = {
+    const trackStyles: CSSProperties & { "--projects-marquee-duration": string } = {
       animationPlayState: isActive ? "running" : "paused",
-      ["--projects-marquee-duration" as "--projects-marquee-duration"]: `${duration}s`,
+      "--projects-marquee-duration": `${duration}s`,
     };
 
     return (
@@ -290,15 +291,16 @@ export default function ProjectsList({
                 ) : (
                   <span
                     key={`${project.id}-img-${cloneIndex}-${index}`}
-                    className="projects-marquee-media"
+                    className="projects-marquee-media relative"
                   >
-                    <img
+                    <Image
                       src={token.value}
                       alt={`${project.title} preview asset`}
-                      className="projects-marquee-media-image"
-                      loading="lazy"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
+                      fill
+                      className="projects-marquee-media-image object-cover"
+                      sizes="120px"
+                      onError={(event) => {
+                        const target = event.currentTarget;
                         target.style.display = "none";
                       }}
                     />
@@ -772,7 +774,7 @@ export default function ProjectsList({
               {previewLayers.map((layer, index) => {
                 const isTop = index === previewLayers.length - 1;
                 return (
-                  <img
+                  <Image
                     key={layer.key}
                     ref={(node) => {
                       if (node) {
@@ -783,12 +785,12 @@ export default function ProjectsList({
                     }}
                     src={layer.src}
                     alt={`Preview ${layer.projectId}`}
+                    fill
                     className="absolute inset-0 h-full w-full rounded-md object-cover"
+                    sizes="(min-width: 1024px) 460px, 360px"
                     style={{
                       zIndex: index + 1,
-                      boxShadow: isTop
-                        ? "0 20px 60px rgba(0,0,0,0.45)"
-                        : "none",
+                      boxShadow: isTop ? "0 20px 60px rgba(0,0,0,0.45)" : "none",
                     }}
                   />
                 );
