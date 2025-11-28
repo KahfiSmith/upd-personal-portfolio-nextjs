@@ -15,6 +15,53 @@ type AnimatedPillButtonProps = {
   className?: string;
 } & (DivVariantProps | AnchorVariantProps);
 
+type MotionConflictKeys =
+  | "onDrag"
+  | "onDragStart"
+  | "onDragEnd"
+  | "onDragEnter"
+  | "onDragLeave"
+  | "onDragOver"
+  | "onDragCapture"
+  | "onDrop"
+  | "onAnimationStart"
+  | "onAnimationEnd"
+  | "onAnimationIteration"
+  | "onTransitionEnd";
+
+const omitMotionConflicts = <T extends VariantProps>(props: T) => {
+  const {
+    onDrag,
+    onDragStart,
+    onDragEnd,
+    onDragEnter,
+    onDragLeave,
+    onDragOver,
+    onDragCapture,
+    onDrop,
+    onAnimationStart,
+    onAnimationEnd,
+    onAnimationIteration,
+    onTransitionEnd,
+    ...rest
+  } = props;
+  void [
+    onDrag,
+    onDragStart,
+    onDragEnd,
+    onDragEnter,
+    onDragLeave,
+    onDragOver,
+    onDragCapture,
+    onDrop,
+    onAnimationStart,
+    onAnimationEnd,
+    onAnimationIteration,
+    onTransitionEnd,
+  ];
+  return rest as Omit<T, MotionConflictKeys>;
+};
+
 const hasHref = (props: VariantProps): props is AnchorVariantProps =>
   typeof props.href === "string";
 
@@ -107,24 +154,8 @@ export default function AnimatedPillButton(props: AnimatedPillButtonProps) {
   );
 
   if (hasHref(variantProps)) {
-    const {
-      href,
-      onClick,
-      target,
-      onDrag,
-      onDragStart,
-      onDragEnd,
-      onDragEnter,
-      onDragLeave,
-      onDragOver,
-      onDragCapture,
-      onDrop,
-      onAnimationStart,
-      onAnimationEnd,
-      onAnimationIteration,
-      onTransitionEnd,
-      ...anchorRest
-    } = variantProps;
+    const sanitizedAnchorProps = omitMotionConflicts(variantProps);
+    const { href, onClick, target, ...anchorRest } = sanitizedAnchorProps;
     const handleClick: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
       onClick?.(event);
       if (event.defaultPrevented) return;
@@ -148,21 +179,7 @@ export default function AnimatedPillButton(props: AnimatedPillButtonProps) {
     );
   }
 
-  const {
-    onDrag,
-    onDragStart,
-    onDragEnd,
-    onDragEnter,
-    onDragLeave,
-    onDragOver,
-    onDragCapture,
-    onDrop,
-    onAnimationStart,
-    onAnimationEnd,
-    onAnimationIteration,
-    onTransitionEnd,
-    ...divRest
-  } = variantProps;
+  const divRest = omitMotionConflicts(variantProps);
 
   return (
     <motion.div ref={setContainerRef} whileTap={{ scale: 0.98 }} className={sharedClassName} {...divRest}>

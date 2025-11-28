@@ -6,6 +6,10 @@ import { getAnchorScrollOffset, shouldSkipClientNavigation } from "@/lib/utils";
 import { Briefcase, FolderGit2, User2, BookText, Home } from "lucide-react";
 import { MouseEvent, useCallback, useMemo } from "react";
 
+type LenisLike = {
+  scrollTo?: (target: HTMLElement, options?: { duration?: number; easing?: (t: number) => number; offset?: number }) => void;
+};
+
 export default function FloatingDockNav() {
   const { navigate } = usePageTransition();
   const onAnchorClick = useCallback((e: MouseEvent<HTMLAnchorElement>, hash: string) => {
@@ -15,7 +19,7 @@ export default function FloatingDockNav() {
     // On home: smooth scroll to section
     const el = document.getElementById(id);
     if (!el) return;
-    const lenis: any = (window as any).__lenis;
+    const lenis = (window as typeof window & { __lenis?: LenisLike }).__lenis;
     const offset = getAnchorScrollOffset(id, el);
     if (lenis?.scrollTo) {
       const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);

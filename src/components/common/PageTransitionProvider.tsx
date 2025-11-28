@@ -40,9 +40,6 @@ const WAVE_PEAK =
 const WAVE_FULL =
   "path('M -200 -800 Q 1000 -1100 2200 -800 L 2200 1200 Q 1000 1500 -200 1200 Z')";
 
-const WAVE_OVERFLOW =
-  "path('M -200 -1000 Q 1000 -1350 2200 -1000 L 2200 2200 Q 1000 2600 -200 2200 Z')";
-
 /**
  * Khusus OUTRO:
  * Wave dengan top-edge melengkung ke bawah (smile) di dalam viewport.
@@ -61,17 +58,16 @@ const formatLabel = (href: string) => {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
+type LenisGlobal = {
+  scroll?: number;
+  scrollTo?: (target: HTMLElement | number, options?: { duration?: number; easing?: (t: number) => number; offset?: number }) => void;
+};
+
 // INTRO: akhiri di WAVE_FULL (belum terlalu cekung)
 const WIPE_IN_KEYFRAMES = [
   { clipPath: WAVE_PEAK, webkitClipPath: WAVE_PEAK, duration: 0.55 },
   { clipPath: WAVE_FULL, webkitClipPath: WAVE_FULL, duration: 0.65 },
   // kalau mau, bisa tambahin WAVE_OVERFLOW lagi, tapi sekarang kita cukup sampai FULL
-];
-
-const WIPE_OUT_KEYFRAMES = [
-  { clipPath: WAVE_FULL, webkitClipPath: WAVE_FULL, duration: 0.5 },
-  { clipPath: WAVE_PEAK, webkitClipPath: WAVE_PEAK, duration: 0.45 },
-  { clipPath: WAVE_START, webkitClipPath: WAVE_START, duration: 0.4 },
 ];
 
 const TITLE_EXIT_DURATION = 0.6;
@@ -124,7 +120,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
 
   const rememberScrollPosition = useCallback(() => {
     if (typeof window === "undefined") return;
-    const lenis: any = (window as any).__lenis;
+    const lenis = (window as typeof window & { __lenis?: LenisGlobal }).__lenis;
     const currentScroll =
       typeof lenis?.scroll === "number"
         ? lenis.scroll
