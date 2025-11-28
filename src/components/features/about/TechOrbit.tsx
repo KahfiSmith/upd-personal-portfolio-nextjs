@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 
@@ -112,12 +113,7 @@ export default function TechOrbit({
             >
               <div data-icon-inner data-angle={angle}>
                 <div className="w-16 h-16 rounded-full bg-charcoal border border-charcoal/10 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
-                  <img
-                    src={icon.src}
-                    alt={icon.alt}
-                    className="w-10 h-10"
-                    loading="eager"
-                  />
+                  <Image src={icon.src} alt={icon.alt} width={40} height={40} className="w-10 h-10" priority />
                 </div>
               </div>
             </div>

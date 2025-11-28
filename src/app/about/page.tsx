@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import TechOrbit from "@/components/features/about/TechOrbit";
 import AboutPageEnhancer from "@/components/features/about/AboutPageEnhancer";
@@ -13,6 +14,11 @@ export const metadata: Metadata = {
 
 const driveItemClasses =
   "drives-item group cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1";
+
+const reverseSpinStyle: CSSProperties = {
+  animationDuration: "12s",
+  animationDirection: "reverse",
+};
 
 export default function AboutPage() {
   return (
@@ -68,7 +74,7 @@ export default function AboutPage() {
                       <div className="relative z-10 w-8 h-8 flex items-center justify-center">
                         <div className="w-3 h-3 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 shadow-lg animate-pulse" />
                         <div className="absolute inset-0 border border-cyan-400/30 rounded-full animate-spin" style={{ animationDuration: "8s" }} />
-                        <div className="absolute inset-1 border border-blue-400/20 rounded-full animate-spin" style={{ animationDuration: "12s", animationDirection: "reverse" as any }} />
+                        <div className="absolute inset-1 border border-blue-400/20 rounded-full animate-spin" style={reverseSpinStyle} />
                       </div>
 
                       <div className="absolute inset-0 opacity-30">
