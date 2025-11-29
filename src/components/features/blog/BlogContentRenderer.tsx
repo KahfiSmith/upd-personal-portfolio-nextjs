@@ -17,42 +17,25 @@ export function BlogContentRenderer({
     items: (BlogContentText | BlogContentImage)[],
     startIdx: number
   ) => {
-    if (
-      items.length >= 2 &&
-      items[0].type === "image" &&
-      items[1].type === "text"
-    ) {
+    if (items.length >= 2 && items[0].type === "image") {
       const imageItem = items[0] as BlogContentImage;
-      const textItem = items[1] as BlogContentText;
-
-      const isImageLeft = startIdx % 2 === 0;
-
       return (
-        <div
-          key={`${postSlug}-group-${startIdx}`}
-          className="my-10 md:my-12 overflow-hidden"
-          >
-            <div
-              className={
-                isImageLeft
-                  ? "float-left w-1/3 lg:w-1/3 mr-6 mb-4"
-                  : "float-right w-1/3 lg:w-1/3 ml-6 mb-4"
-              }
-            >
-              <div className="relative w-full h-full min-h-[140px]">
-                <Image
-                  src={imageItem.src}
-                  alt={imageItem.alt}
-                  fill
-                  className="object-cover rounded-md"
-                  sizes="(min-width: 1024px) 33vw, 50vw"
-                />
-              </div>
+        <div key={`${postSlug}-group-${startIdx}`} className="my-10 md:my-12 space-y-6">
+          <figure className="overflow-hidden rounded-xl shadow-sm">
+            <div className="relative w-full aspect-[16/9]">
+              <Image
+                src={imageItem.src}
+                alt={imageItem.alt}
+                fill
+                className="object-cover"
+                sizes="(min-width: 1024px) 90vw, 100vw"
+                priority={startIdx === 0}
+              />
             </div>
+          </figure>
 
           <div className="prose max-w-none space-y-5">
-            <p className={paragraphClasses}>{textItem.content}</p>
-            {items.slice(2).map((item, idx) =>
+            {items.slice(1).map((item, idx) =>
               item.type === "text" ? (
                 <p
                   key={`${postSlug}-additional-text-${startIdx}-${idx}`}
@@ -63,8 +46,6 @@ export function BlogContentRenderer({
               ) : null
             )}
           </div>
-
-          <div className="clear-both" />
         </div>
       );
     }
@@ -87,14 +68,14 @@ export function BlogContentRenderer({
             key={`${postSlug}-image-${actualIdx}`}
             className="my-10 md:my-12"
           >
-            <div className="overflow-hidden rounded-lg">
-              <div className="relative w-full h-full min-h-[240px]">
+            <div className="overflow-hidden rounded-xl shadow-sm">
+              <div className="relative w-full aspect-[16/9]">
                 <Image
                   src={item.src}
                   alt={item.alt}
                   fill
                   className="object-cover"
-                  sizes="(min-width: 1024px) 80vw, 100vw"
+                  sizes="(min-width: 1024px) 90vw, 100vw"
                 />
               </div>
             </div>

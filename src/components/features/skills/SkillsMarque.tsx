@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { dataSkills } from "@/data/skills";
 
@@ -84,15 +83,24 @@ const MarqueeRow = ({
             aria-hidden={clone > 0}
           >
             {duplicatedSkills.map((skill, index) => (
-              <img
+              <span
                 key={`${skill.label}-${clone}-${index}`}
-                src={skill.imgSrc}
-                alt={skill.label}
-                className="skills-marquee-item"
-                width={64}
-                height={64}
-                loading="lazy"
-              />
+                className="skills-marquee-item flex items-center justify-center"
+              >
+                <img
+                  src={skill.imgSrc}
+                  alt={skill.label}
+                  className="block h-full w-full object-contain"
+                  width={64}
+                  height={64}
+                  loading="lazy"
+                  onError={(event) => {
+                    const target = event.currentTarget;
+                    target.onerror = null;
+                    target.src = "/Icons/logos.svg";
+                  }}
+                />
+              </span>
             ))}
           </div>
         ))}

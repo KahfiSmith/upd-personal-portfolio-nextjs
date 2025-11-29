@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 
@@ -118,8 +117,13 @@ export default function TechOrbit({
                     alt={icon.alt}
                     width={40}
                     height={40}
-                    className="w-10 h-10"
+                    className="w-10 h-10 object-contain"
                     loading="lazy"
+                    onError={(event) => {
+                      const target = event.currentTarget;
+                      target.onerror = null;
+                      target.src = "/icons/logos.svg";
+                    }}
                   />
                 </div>
               </div>
