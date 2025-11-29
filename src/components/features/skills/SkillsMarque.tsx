@@ -97,7 +97,7 @@ const MarqueeRow = ({
                   onError={(event) => {
                     const target = event.currentTarget;
                     target.onerror = null;
-                    target.src = "/Icons/logos.svg";
+                    target.src = "/icons/logos.svg";
                   }}
                 />
               </span>
