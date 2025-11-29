@@ -7,6 +7,12 @@ const usePolling = process.env.NEXT_DEV_POLL === "1";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  images: {
+    // Serve images as static files (no optimization server needed for static hosting)
+    unoptimized: true,
+    // Allow local SVG icons to render in next/image
+    dangerouslyAllowSVG: true,
+  },
   // Enable file watching via polling when using Webpack dev (useful on WSL or network drives)
   ...(isDev && usePolling
     ? {
