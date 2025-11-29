@@ -160,6 +160,7 @@ export default function AnimatedPillButton(props: AnimatedPillButtonProps) {
       onClick?.(event);
       if (event.defaultPrevented) return;
       if (shouldSkipClientNavigation(event, target)) return;
+      // Keep hover/press state visible until navigation begins
       event.preventDefault();
       navigate(href, { label });
     };

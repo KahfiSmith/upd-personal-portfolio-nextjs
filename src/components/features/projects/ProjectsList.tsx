@@ -708,7 +708,7 @@ export default function ProjectsList({
                   onKeyUp={(event) => {
                     if (event.key !== "Enter" && event.key !== " ") return;
                     event.preventDefault();
-                    forceHideOverlay();
+                    suppressExitRef.current = true;
                     navigate(`/projects/${project.slug}`, {
                       label: project.title,
                     });
@@ -716,7 +716,7 @@ export default function ProjectsList({
                   onClick={(event) => {
                     if (shouldSkipClientNavigation(event)) return;
                     event.preventDefault();
-                    forceHideOverlay();
+                    suppressExitRef.current = true;
                     navigate(`/projects/${project.slug}`, {
                       label: project.title,
                     });
