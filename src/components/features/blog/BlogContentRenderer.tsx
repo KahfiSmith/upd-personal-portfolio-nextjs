@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { BlogContentText, BlogContentImage } from "@/types";
 
 interface BlogContentRendererProps {
@@ -17,25 +16,41 @@ export function BlogContentRenderer({
     items: (BlogContentText | BlogContentImage)[],
     startIdx: number
   ) => {
-    if (items.length >= 2 && items[0].type === "image") {
+    if (
+      items.length >= 2 &&
+      items[0].type === "image" &&
+      items[1].type === "text"
+    ) {
       const imageItem = items[0] as BlogContentImage;
+      const textItem = items[1] as BlogContentText;
+
+      const isImageLeft = startIdx % 2 === 0;
+
       return (
-        <div key={`${postSlug}-group-${startIdx}`} className="my-10 md:my-12 space-y-6">
-          <figure className="overflow-hidden rounded-xl shadow-sm">
-            <div className="relative w-full aspect-[16/9]">
-              <Image
+        <div
+          key={`${postSlug}-group-${startIdx}`}
+          className="my-10 md:my-12 overflow-hidden"
+        >
+          <div
+            className={
+              isImageLeft
+                ? "float-left w-1/3 lg:w-1/3 mr-6 mb-4"
+                : "float-right w-1/3 lg:w-1/3 ml-6 mb-4"
+            }
+          >
+            <div className="w-full">
+              <img
                 src={imageItem.src}
                 alt={imageItem.alt}
-                fill
-                className="object-cover"
-                sizes="(min-width: 1024px) 90vw, 100vw"
-                priority={startIdx === 0}
+                className="w-full h-auto rounded-md object-contain"
+                loading={startIdx === 0 ? "eager" : "lazy"}
               />
             </div>
-          </figure>
+          </div>
 
           <div className="prose max-w-none space-y-5">
-            {items.slice(1).map((item, idx) =>
+            <p className={paragraphClasses}>{textItem.content}</p>
+            {items.slice(2).map((item, idx) =>
               item.type === "text" ? (
                 <p
                   key={`${postSlug}-additional-text-${startIdx}-${idx}`}
@@ -46,6 +61,8 @@ export function BlogContentRenderer({
               ) : null
             )}
           </div>
+
+          <div className="clear-both" />
         </div>
       );
     }
@@ -69,15 +86,12 @@ export function BlogContentRenderer({
             className="my-10 md:my-12"
           >
             <div className="overflow-hidden rounded-xl shadow-sm">
-              <div className="relative w-full aspect-[16/9]">
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 1024px) 90vw, 100vw"
-                />
-              </div>
+              <img
+                src={item.src}
+                alt={item.alt}
+                className="w-full h-auto object-contain"
+                loading={actualIdx === 0 ? "eager" : "lazy"}
+              />
             </div>
           </figure>
         );
