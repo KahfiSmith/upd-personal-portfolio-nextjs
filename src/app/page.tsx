@@ -12,8 +12,8 @@ export default function Home() {
       <SimpleCurtainLoader />
       <Hero />
       <SkillsMarque />
-      <AboutIntro/>
-      <WorkExperience/>      
+      <AboutIntro />
+      <WorkExperience />
       <ProjectsList limit={5} />
       <FloatingDockNav />
     </>

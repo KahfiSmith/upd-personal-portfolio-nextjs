@@ -84,14 +84,14 @@ const MarqueeRow = ({
             aria-hidden={clone > 0}
           >
             {duplicatedSkills.map((skill, index) => (
-              <Image
+              <img
                 key={`${skill.label}-${clone}-${index}`}
                 src={skill.imgSrc}
                 alt={skill.label}
                 className="skills-marquee-item"
                 width={64}
                 height={64}
-                sizes="64px"
+                loading="lazy"
               />
             ))}
           </div>
