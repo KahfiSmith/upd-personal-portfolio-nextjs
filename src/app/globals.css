@@ -164,7 +164,7 @@
   align-items: center;
   justify-content: center;
   width: clamp(17rem, 22vw, 21rem);
-  height: clamp(10rem, 14vw, 12rem);
+  height: clamp(8rem, 12vw, 10rem);
   flex-shrink: 0;
   border-radius: 1.8rem;
   padding: 1rem;

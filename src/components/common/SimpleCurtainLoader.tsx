@@ -112,6 +112,12 @@ export default function SimpleCurtainLoader() {
   return (
     <div
       id="simple-curtain-loader"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        backgroundColor: isCurtainOpen ? 'transparent' : '#0b0b0b',
+      }}
       className={clsx(
         'fixed inset-0 z-[9999] overflow-hidden transition-colors duration-700 ease-in-out opacity-100',
         isCurtainOpen ? 'bg-transparent pointer-events-none' : 'bg-[#0b0b0b]',
