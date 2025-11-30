@@ -112,7 +112,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         {project.heroImage && (
           <div className="relative overflow-hidden rounded-2xl border border-charcoal/10 bg-white">
             <div className="absolute inset-0 z-10 bg-gradient-to-r from-cyan-500/10 via-transparent to-purple-500/10 pointer-events-none" aria-hidden="true" />
-            <div className="relative z-0 h-[240px] sm:h-[320px] w-full md:h-[420px]">
+            <div className="relative z-0 h-[300px] sm:h-[400px] w-full md:h-[520px]">
               <Image
                 src={project.heroImage}
                 alt={project.title}
