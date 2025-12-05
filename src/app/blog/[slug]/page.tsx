@@ -37,10 +37,11 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
   if (!post) notFound();
 
   return (
-    <main className="relative min-h-screen py-16 md:py-24">
-      <article className="max-w-4xl mx-auto px-6 md:px-0 space-y-10">
-        <BackButton href="/blog" label="Back to all posts" className="mb-6" />
-        <header className="space-y-6 mb-12">
+    <main className="relative min-h-screen py-12 md:py-20">
+      <article className="max-w-4xl mx-auto px-6 md:px-8 space-y-8">
+        <BackButton href="/blog" label="Back to all posts" className="mb-8" />
+        
+        <header className="space-y-6">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-display leading-[1.05] text-charcoal">
             {post.title}
           </h1>
@@ -62,7 +63,7 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
         </header>
 
         {post.heroImage && (
-          <div className="relative mb-12 overflow-hidden rounded-xl border border-charcoal/10 shadow-md aspect-[16/9]">
+          <div className="relative my-10 overflow-hidden rounded-xl border border-charcoal/10 shadow-md aspect-[16/9]">
             <Image
               src={post.heroImage}
               alt={post.title}
@@ -74,7 +75,9 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
           </div>
         )}
 
-        <BlogContentRenderer content={post.content} postSlug={post.slug} />
+        <div className="pt-4">
+          <BlogContentRenderer content={post.content} postSlug={post.slug} />
+        </div>
       </article>
     </main>
   );

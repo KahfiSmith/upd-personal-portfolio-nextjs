@@ -6,7 +6,7 @@ interface BlogContentRendererProps {
 }
 
 const paragraphClasses =
-  "text-lg md:text-xl leading-8 md:leading-9 text-charcoal/90 text-justify";
+  "text-lg md:text-xl leading-relaxed md:leading-relaxed text-charcoal/90 text-justify";
 
 export function BlogContentRenderer({
   content,
@@ -29,26 +29,26 @@ export function BlogContentRenderer({
       return (
         <div
           key={`${postSlug}-group-${startIdx}`}
-          className="my-10 md:my-12 overflow-hidden"
+          className="my-8 md:my-10 overflow-hidden"
         >
           <div
             className={
               isImageLeft
-                ? "float-left w-1/3 lg:w-1/3 mr-6 mb-4"
-                : "float-right w-1/3 lg:w-1/3 ml-6 mb-4"
+                ? "float-left w-1/3 lg:w-2/5 mr-6 md:mr-8 mb-4"
+                : "float-right w-1/3 lg:w-2/5 ml-6 md:ml-8 mb-4"
             }
           >
             <div className="w-full">
               <img
                 src={imageItem.src}
                 alt={imageItem.alt}
-                className="w-full h-auto rounded-md object-contain"
+                className="w-full h-auto rounded-lg object-contain shadow-sm"
                 loading={startIdx === 0 ? "eager" : "lazy"}
               />
             </div>
           </div>
 
-          <div className="prose max-w-none space-y-5">
+          <div className="prose max-w-none space-y-4 md:space-y-5">
             <p className={paragraphClasses}>{textItem.content}</p>
             {items.slice(2).map((item, idx) =>
               item.type === "text" ? (
@@ -74,7 +74,7 @@ export function BlogContentRenderer({
         return (
           <p
             key={`${postSlug}-text-${actualIdx}`}
-            className={`${paragraphClasses} mb-8 md:mb-10 last:mb-0`}
+            className={`${paragraphClasses} mb-6 md:mb-8 last:mb-0`}
           >
             {item.content}
           </p>
@@ -83,9 +83,9 @@ export function BlogContentRenderer({
         return (
           <figure
             key={`${postSlug}-image-${actualIdx}`}
-            className="my-10 md:my-12"
+            className="my-8 md:my-10"
           >
-            <div className="overflow-hidden rounded-xl shadow-sm">
+            <div className="overflow-hidden rounded-lg shadow-sm border border-charcoal/5">
               <img
                 src={item.src}
                 alt={item.alt}
@@ -124,7 +124,7 @@ export function BlogContentRenderer({
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-9 md:space-y-12">
+    <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
       {groupedContent.map(({ items, startIdx }) =>
         renderContentGroup(items, startIdx)
       )}
