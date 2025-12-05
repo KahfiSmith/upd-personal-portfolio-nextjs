@@ -50,7 +50,7 @@ export default function WorkExperience() {
 
     return () => ctx.revert();
   }, []);
-  const works = dataWorkExperience;
+  const works = [...dataWorkExperience].sort((a, b) => b.id - a.id);
   return (
     <section
       ref={sectionRef}
