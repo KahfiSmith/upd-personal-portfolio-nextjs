@@ -132,4 +132,9 @@ export const dataSkills: SkillItemProps[] = [
     label: "TanStack",
     desc: "Toolset",
   },
+  {
+    imgSrc: "/icons/golang.svg",
+    label: "TanStack",
+    desc: "Toolset",
+  },
 ];
