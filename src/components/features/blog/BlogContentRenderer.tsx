@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { BlogContentText, BlogContentImage } from "@/types";
 
 interface BlogContentRendererProps {
@@ -39,11 +40,14 @@ export function BlogContentRenderer({
             }
           >
             <div className="w-full">
-              <img
+              <Image
                 src={imageItem.src}
                 alt={imageItem.alt}
+                width={1200}
+                height={800}
+                sizes="(max-width: 1024px) 100vw, 40vw"
                 className="w-full h-auto rounded-lg object-contain shadow-sm"
-                loading={startIdx === 0 ? "eager" : "lazy"}
+                priority={startIdx === 0}
               />
             </div>
           </div>
@@ -86,11 +90,14 @@ export function BlogContentRenderer({
             className="my-8 md:my-10"
           >
             <div className="overflow-hidden rounded-lg shadow-sm border border-charcoal/5">
-              <img
+              <Image
                 src={item.src}
                 alt={item.alt}
+                width={1400}
+                height={900}
+                sizes="100vw"
                 className="w-full h-auto object-contain"
-                loading={actualIdx === 0 ? "eager" : "lazy"}
+                priority={actualIdx === 0}
               />
             </div>
           </figure>

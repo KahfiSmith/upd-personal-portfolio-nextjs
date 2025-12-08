@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { dataSkills } from "@/data/skills";
 
@@ -87,12 +88,13 @@ const MarqueeRow = ({
                 key={`${skill.label}-${clone}-${index}`}
                 className="skills-marquee-item flex items-center justify-center"
               >
-                <img
+                <Image
                   src={skill.imgSrc}
                   alt={skill.label}
                   className="block h-full w-full object-contain"
                   width={64}
                   height={64}
+                  sizes="64px"
                   loading="lazy"
                   onError={(event) => {
                     const target = event.currentTarget;
