@@ -12,7 +12,7 @@ export default function Footer({
     { name: 'facebook', href: 'https://www.facebook.com/kahfi.smith.2025/' },
     { name: 'instagram', href: 'https://www.instagram.com/alkaahfi__/' },
   ],
-  copyright = 'Portfolio 2025',
+  copyright = `Portfolio ${new Date().getFullYear()}`,
   tagline = 'Made with ❤️ and coffee',
 }: FooterProps) {
   return (
