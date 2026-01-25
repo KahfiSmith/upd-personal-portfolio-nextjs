@@ -547,4 +547,67 @@ export const dataProjects: ProjectItem[] = [
       },
     ],
   },
+    {                                                                                                                                                                                                                        
+    id: 9,                                                                                                                                                                                                                 
+    slug: "ventura-marketplace",                                                                                                                                                                                           
+    title: "Ventura",                                                                                                                                                                                                      
+    role: "Frontend Development",                                                                                                                                                                                                  
+    summary:                                                                                                                                                                                                               
+      "A Next.js marketplace for buying and selling businesses, focused on verified listings, clear financial snapshots, and direct buyer-seller communication.",                                                          
+    description: [                                                                                                                                                                                                         
+      "Designed a trust-first marketplace experience with listing cards, filters, and a clean, finance-forward layout.",
+      "Implemented reusable components and responsive sections with Next.js, TypeScript, Tailwind CSS, and motion-driven UI polish.",                                                                                      
+    ],                                                                                                                                                                                                                     
+    marqueeTexts: [                                                                                                                                                                                                        
+      "Verified listings",                                                                                                                                                                                                 
+      "Buyer-seller matching",                                                                                                                                                                                             
+      "Deal-ready insights",                                                                                                                                                                                               
+    ],                                                                                                                                                                                                                     
+    detailImages: [
+      "/images/ventura.png",                                                                                                                                                                                                  
+      "/images/ventura-1.png",                                                                                                                                                                                             
+      "/images/ventura-2.png",                                                                                                                                                                                                
+    ],
+    marqueeImages: [                                                                                                                                                                                                       
+      "/images/ventura/tv.jpg",                                                                                                                                                                                                
+      "/images/ventura/girl.jpg",                                                                                                                                                                                                
+      "/images/ventura/book.jpg",                                                                                                                                                                                                
+    ],
+    previewSrc: "/images/ventura.png",                                                                                                                                                                                        
+    heroImage: "/images/ventura.png",                                                                                                                                                                                         
+    timeline: "Jan 5, 2025 - Jan 25, 2025",                                                                                                                                                                               
+    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Shadcn UI"],                                                                                                                                    
+    metrics: [                                                                                                                                                                                                             
+      { label: "Timeline", value: "Jan 5, 2025 - Jan 25, 2025" },                                                                                                                                                         
+      { label: "Role", value: "Frontend Development" },                                                                                                                                                                            
+      { label: "Focus", value: "Business marketplace and listing detail UX" },
+    ],                                                                                                                                                                                                                     
+    sections: [                                                                                                                                                                                                            
+      {                                                                                                                                                                                                                    
+        title: "Brief",                                                                                                                                                                                                    
+        paragraphs: [                                                                                                                                                                                                      
+          "Ventura is a business acquisition marketplace that helps founders list companies and helps buyers evaluate opportunities quickly. The UI surfaces price ranges, revenue, and verification status so trust is earned upfront.",                                                                                                                                                                                                        
+          "The goal was to deliver a premium, finance-forward front end that combines marketing pages with functional marketplace flows while keeping the experience clean and approachable.",                             
+        ],
+      },                                                                                                                                                                                                                   
+      {                                                                                                                                                                                                                    
+        title: "Interaction Model",                                                                                                                                                                                        
+        paragraphs: [                                                                                                                                                                                                      
+          "Listings are built as cards with consistent metadata (industry tag, status, owner, and key financials) so users can scan and compare fast. Filters and category chips make discovery feel lightweight.",        
+          "Detail pages expand into a structured data layout with business info, documents, and contact actions, while motion cues guide attention without distracting from due diligence.",                               
+        ],
+        highlights: [                                                                                                                                                                                                      
+          "Reusable listing cards, category chips, and detail blocks for buyer and seller flows.",                                                                                                                         
+          "Responsive layout for landing, marketplace, and detail screens with clear hierarchy.",
+        ],                                                                                                                                                                                                                 
+      },                                                                                                                                                                                                                   
+      {                                                                                                                                                                                                                    
+        title: "Outcome",                                                                                                                                                                                                  
+        paragraphs: [                                                                                                                                                                                                      
+          "Ventura now has a cohesive component system that supports the buyer journey from discovery to outreach while keeping verification and trust signals prominent.",                                                
+          "The structure is ready for scaling into deal rooms, messaging, and analytics without redesigning the core UI.",                                                                                                 
+        ],                                                                                                                                                                                                                 
+      },                                                                                                                                                                                                                   
+    ],                                                                                                                                                                                                                     
+  },   
 ];
