@@ -50,6 +50,19 @@ export const dataWorkExperience: WorkExperienceItemProps[] = [
   },
   {
     id: 4,
+    title: "Ventura Marketplace",
+    role: "Frontend Developer (Freelance)",
+    period: "Jan 2025 - Feb 2025",
+    company: "Ventura (Freelance Project)",
+    description: [
+      "Built a trust-first marketplace interface for buying and selling businesses using Next.js and TypeScript, focused on verified listings and clear financial highlights.",
+      "Developed reusable listing cards, category filters, and detail page sections to support fast discovery and comparison for potential buyers.",
+      "Implemented responsive UI and motion-enhanced interactions to keep the browsing flow smooth across desktop and mobile devices.",
+    ],
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Shadcn UI"],
+  },
+  {
+    id: 5,
     title: "Baby Care Services & Equipment E-Commerce Website",
     role: "Fullstack Web Developer (Internship)",
     period: "Nov 2025 - Present",

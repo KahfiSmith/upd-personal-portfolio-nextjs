@@ -575,10 +575,10 @@ export const dataProjects: ProjectItem[] = [
     ],
     previewSrc: "/images/ventura.png",                                                                                                                                                                                        
     heroImage: "/images/ventura.png",                                                                                                                                                                                         
-    timeline: "Jan 5, 2025 - Jan 25, 2025",                                                                                                                                                                               
+    timeline: "Jan 5, 2025 - Feb 3, 2025",                                                                                                                                                                               
     techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Shadcn UI"],                                                                                                                                    
     metrics: [                                                                                                                                                                                                             
-      { label: "Timeline", value: "Jan 5, 2025 - Jan 25, 2025" },                                                                                                                                                         
+      { label: "Timeline", value: "Jan 5, 2025 - Feb 3, 2025" },                                                                                                                                                         
       { label: "Role", value: "Frontend Development" },                                                                                                                                                                            
       { label: "Focus", value: "Business marketplace and listing detail UX" },
     ],                                                                                                                                                                                                                     
