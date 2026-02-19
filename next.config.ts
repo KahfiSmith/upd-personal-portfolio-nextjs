@@ -4,12 +4,14 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === "development";
 const usePolling = process.env.NEXT_DEV_POLL === "1";
+const isImageUnoptimized = process.env.NEXT_IMAGE_UNOPTIMIZED === "1";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    // Serve images as static files (no optimization server needed for static hosting)
-    unoptimized: true,
+    // Keep optimization enabled by default for better Core Web Vitals.
+    // Set NEXT_IMAGE_UNOPTIMIZED=1 only for fully static deployments.
+    unoptimized: isImageUnoptimized,
     // Allow local SVG icons to render in next/image
     dangerouslyAllowSVG: true,
   },

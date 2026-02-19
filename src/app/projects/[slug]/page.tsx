@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import BackButton from "@/components/common/BackButton";
 import { dataProjects } from "@/data/projects";
 import { cn } from "@/lib/utils";
+import { toAbsoluteUrl } from "@/lib/seo";
 
 const techIconMap: Record<string, string> = {
   astro: "/icons/astro.svg",
@@ -60,11 +61,44 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   const { slug } = await params;
   const project = dataProjects.find((item) => item.slug === slug);
   if (!project) return { title: "Project Not Found" };
+
+  const description =
+    project.summary ??
+    (Array.isArray(project.description)
+      ? project.description[0]
+      : project.description);
+  const pageUrl = `/projects/${project.slug}`;
+  const absolutePageUrl = toAbsoluteUrl(pageUrl);
+  const absoluteImageUrl = project.heroImage
+    ? toAbsoluteUrl(project.heroImage)
+    : undefined;
+
   return {
     title: `${project.title} | Case Study`,
-    description: project.summary ?? (Array.isArray(project.description) ? project.description[0] : project.description),
+    description,
+    keywords: [...(project.techStack ?? []), "frontend", "case study"],
     alternates: {
-      canonical: `/projects/${project.slug}`,
+      canonical: pageUrl,
+    },
+    openGraph: {
+      title: `${project.title} | Case Study`,
+      description,
+      url: absolutePageUrl,
+      type: "website",
+      images: absoluteImageUrl
+        ? [
+            {
+              url: absoluteImageUrl,
+              alt: project.title,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} | Case Study`,
+      description,
+      images: absoluteImageUrl ? [absoluteImageUrl] : undefined,
     },
   };
 }

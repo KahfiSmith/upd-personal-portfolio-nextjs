@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
 import { blogPosts } from "@/data/blog-posts";
 import { dataProjects } from "@/data/projects";
+import { getSiteOrigin } from "@/lib/seo";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const siteOrigin = new URL(siteUrl).origin;
+const siteOrigin = getSiteOrigin();
 const now = new Date().toISOString();
 
 const staticRoutes = ["/", "/about", "/projects", "/blog", "/contact"];

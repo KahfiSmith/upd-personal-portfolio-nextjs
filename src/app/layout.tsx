@@ -4,6 +4,7 @@ import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
+import { getSiteOrigin, getSiteUrl } from "@/lib/seo";
 import "./globals.css";
 
 // Local fonts from public/fonts
@@ -28,8 +29,8 @@ const spaceGrotesk = localFont({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const siteOrigin = new URL(siteUrl).origin;
+const siteUrl = getSiteUrl();
+const siteOrigin = getSiteOrigin();
 const title = "Kahfi Smith | Frontend Web Developer";
 const description =
   "Personal portfolio of Kahfi Smith – frontend engineer crafting polished digital experiences with performance and precision.";
@@ -46,7 +47,7 @@ const personSchema = {
   alternateName: "Kahfi Smith",
   url: siteOrigin,
   jobTitle: "Frontend Web Developer",
-  image: `${siteOrigin}/images/kahfi-og.png`,
+  image: `${siteOrigin}/kahfi-og.png`,
   email: "mailto:alkahfii2018@gmail.com",
   sameAs: socialProfiles,
   worksFor: {
@@ -80,7 +81,7 @@ export const metadata: Metadata = {
     siteName: "Kahfi Smith Portfolio",
     images: [
       {
-        url: "/images/kahfi-og.png",
+        url: "/kahfi-og.png",
         width: 1299,
         height: 1243,
         alt: "KS monogram on a cobalt background",
@@ -91,7 +92,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description,
-    images: ["/images/kahfi-og.png"],
+    images: ["/kahfi-og.png"],
   },
   icons: {
     icon: [
