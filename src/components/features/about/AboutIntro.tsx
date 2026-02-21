@@ -5,8 +5,18 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedPillButton from "@/components/common/AnimatedPillButton";
 
+const EXPERIENCE_START_DATE = new Date(2024, 4, 1); // May 1, 2024
+
+function getExperienceYears() {
+  const now = new Date();
+  const diffMs = now.getTime() - EXPERIENCE_START_DATE.getTime();
+  const years = diffMs / (1000 * 60 * 60 * 24 * 365.25);
+  return Math.max(0, Number(years.toFixed(1)));
+}
+
 export default function AboutIntro() {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const experienceYears = getExperienceYears();
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -114,7 +124,7 @@ export default function AboutIntro() {
             >
               <div className="space-y-3">
                 <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal font-display">
-                  1+
+                  {experienceYears}
                 </div>
                 <p className="text-sm md:text-base text-charcoal/60 font-medium">
                   Years Experience
