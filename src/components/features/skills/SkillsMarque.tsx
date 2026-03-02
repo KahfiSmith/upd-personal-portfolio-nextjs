@@ -33,7 +33,7 @@ const MarqueeRow = ({
   }, [baseRate, directionMultiplier]);
 
   useEffect(() => {
-    const distance = 50; 
+    const distance = 50;
     const durationMs = duration * 1000;
     const shiftPerMs = distance / durationMs;
     let frameId: number;
@@ -128,7 +128,7 @@ export default function SkillsMarque() {
       const nextDirection: ScrollDirection =
         currentY > lastScrollY.current ? "down" : "up";
       setScrollDirection((prev) =>
-        prev === nextDirection ? prev : nextDirection
+        prev === nextDirection ? prev : nextDirection,
       );
       lastScrollY.current = currentY;
     };
@@ -140,9 +140,7 @@ export default function SkillsMarque() {
   return (
     <section className="my-12 md:my-20 relative overflow-x-hidden overflow-y-visible pt-16 md:pt-24">
       <div className="relative py-12 md:py-16 overflow-visible">
-        <div
-          className="w-[calc(100%+8rem)] sm:w-[calc(100%+12rem)] md:w-[calc(100%+16rem)] ml-[-4rem] sm:ml-[-6rem] md:ml-[-8rem] max-w-none bg-charcoal text-cream px-5 sm:px-6 md:px-10 py-6 sm:py-7 md:py-10 overflow-x-hidden overflow-y-visible shadow-lg ring-1 ring-white/10 -rotate-2 sm:-rotate-4 md:-rotate-6 origin-center relative z-20 mb-8 translate-y-2 md:translate-y-3"
-        >
+        <div className="w-[calc(100%+8rem)] sm:w-[calc(100%+12rem)] md:w-[calc(100%+16rem)] ml-[-4rem] sm:ml-[-6rem] md:ml-[-8rem] max-w-none bg-charcoal text-cream px-5 sm:px-6 md:px-10 py-6 sm:py-7 md:py-10 overflow-x-hidden overflow-y-visible shadow-lg ring-1 ring-white/10 -rotate-2 sm:-rotate-4 md:-rotate-6 origin-center relative z-20 mb-8 translate-y-2 md:translate-y-3">
           <MarqueeRow
             duration={18}
             wrapperClassName="overflow-visible py-4"

@@ -43,7 +43,7 @@ export default function WorkExperience() {
               start: "top 85%",
               once: true,
             },
-          }
+          },
         );
       });
     }, sectionEl);

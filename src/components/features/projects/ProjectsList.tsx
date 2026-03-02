@@ -8,7 +8,14 @@ import type { ProjectItem } from "@/types";
 import { gsap } from "gsap";
 import Image from "next/image";
 import Link from "next/link";
-import { CSSProperties, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  CSSProperties,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 type ProjectsListProps = {
   limit?: number;
@@ -50,7 +57,7 @@ const buildTokens = (project: ProjectItem): MarqueeToken[] => {
   const textBits = rawTexts
     .filter(
       (entry): entry is string =>
-        typeof entry === "string" && entry.trim().length > 0
+        typeof entry === "string" && entry.trim().length > 0,
     )
     .map((entry) => entry.replace(/\.$/, "").toUpperCase());
 
@@ -61,7 +68,7 @@ const buildTokens = (project: ProjectItem): MarqueeToken[] => {
     ? project.marqueeImages
     : [];
   const filteredImages = customMarqueeImages.filter(
-    (src): src is string => typeof src === "string" && src.trim().length > 0
+    (src): src is string => typeof src === "string" && src.trim().length > 0,
   );
 
   const tokens: MarqueeToken[] = [];
@@ -170,7 +177,7 @@ export default function ProjectsList({
   const entryTweenRef = useRef<gsap.core.Tween | null>(null);
   const suppressExitRef = useRef(false);
   const deactivateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null
+    null,
   );
   const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const previewHideTimelineRef = useRef<gsap.core.Timeline | null>(null);
@@ -266,7 +273,9 @@ export default function ProjectsList({
     const tokens = marqueeTokens.get(project.id) ?? [];
     const duration = Math.max(20, tokens.length * 2.2);
 
-    const trackStyles: CSSProperties & { "--projects-marquee-duration": string } = {
+    const trackStyles: CSSProperties & {
+      "--projects-marquee-duration": string;
+    } = {
       animationPlayState: isActive ? "running" : "paused",
       "--projects-marquee-duration": `${duration}s`,
     };
@@ -305,7 +314,7 @@ export default function ProjectsList({
                       }}
                     />
                   </span>
-                )
+                ),
               )}
             </div>
           ))}
@@ -316,7 +325,7 @@ export default function ProjectsList({
 
   const moveOverlay = (
     row: HTMLElement | null,
-    options?: { immediate?: boolean }
+    options?: { immediate?: boolean },
   ) => {
     if (!overlayRef.current || !listRef.current || !row) return;
     const listRect = listRef.current.getBoundingClientRect();
@@ -352,7 +361,7 @@ export default function ProjectsList({
   const handleActivate = (
     id: number | null,
     row?: HTMLElement | null,
-    options?: { forceExit?: boolean }
+    options?: { forceExit?: boolean },
   ) => {
     const forceExit = options?.forceExit ?? false;
 
@@ -393,7 +402,7 @@ export default function ProjectsList({
     }
 
     setActiveId(id);
-    const project = id ? projects.find((p) => p.id === id) ?? null : null;
+    const project = id ? (projects.find((p) => p.id === id) ?? null) : null;
     if (project) {
       setOverlayState({
         project: { ...project },
@@ -457,7 +466,7 @@ export default function ProjectsList({
         hideTween.to(
           overlayRef.current,
           { opacity: 0, duration: 0.2 },
-          ">-0.1"
+          ">-0.1",
         );
       } else {
         hideTween.to(overlayRef.current, { opacity: 0, duration: 0.3 });
@@ -493,7 +502,7 @@ export default function ProjectsList({
     }
 
     const nodes = Object.values(previewImageRefs.current).filter(
-      (node): node is HTMLImageElement => Boolean(node)
+      (node): node is HTMLImageElement => Boolean(node),
     );
     if (!nodes.length) {
       setPreviewLayers([]);
@@ -536,7 +545,7 @@ export default function ProjectsList({
           transformOrigin: "50% 100%",
           ease: "power3.inOut",
         },
-        0
+        0,
       );
     }
   }, [overlayState]);
@@ -559,7 +568,7 @@ export default function ProjectsList({
               filter: "blur(0px)",
               duration: 0.65,
               ease: "power3.out",
-            }
+            },
           );
         } else {
           gsap.to(node, {
@@ -605,7 +614,7 @@ export default function ProjectsList({
         opacity: firstRevealRef.current ? 0.9 : 1,
         transformOrigin: fromOrigin,
       },
-      { scaleY: 1, opacity: 1, duration, ease: "power2.out" }
+      { scaleY: 1, opacity: 1, duration, ease: "power2.out" },
     );
     firstRevealRef.current = false;
     return () => {
@@ -669,13 +678,13 @@ export default function ProjectsList({
                 onPointerEnter={() =>
                   handleActivate(
                     project.id,
-                    rowRefs.current[project.id] ?? null
+                    rowRefs.current[project.id] ?? null,
                   )
                 }
                 onFocusCapture={() =>
                   handleActivate(
                     project.id,
-                    rowRefs.current[project.id] ?? null
+                    rowRefs.current[project.id] ?? null,
                   )
                 }
                 onBlurCapture={(event) => {
@@ -790,7 +799,9 @@ export default function ProjectsList({
                     sizes="(min-width: 1024px) 460px, 360px"
                     style={{
                       zIndex: index + 1,
-                      boxShadow: isTop ? "0 20px 60px rgba(0,0,0,0.45)" : "none",
+                      boxShadow: isTop
+                        ? "0 20px 60px rgba(0,0,0,0.45)"
+                        : "none",
                     }}
                   />
                 );

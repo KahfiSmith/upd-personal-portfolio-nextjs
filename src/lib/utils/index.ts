@@ -5,11 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/**
- * Returns an additional scroll offset for in-page anchor jumps.
- * First checks for an explicit data-anchor-offset value on the section so designers
- * can fine-tune alignment manually. Falls back to heuristics for the About section.
- */
 export function getAnchorScrollOffset(targetId: string, el?: HTMLElement) {
   if (typeof window === "undefined") return 0;
   const section = el ?? document.getElementById(targetId);
@@ -48,14 +43,23 @@ const hasNonPrimaryButton = (event?: ModifierKeyEvent) =>
 
 export function isModifiedEvent(event?: ModifierKeyEvent) {
   if (!event) return false;
-  return Boolean(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey || hasNonPrimaryButton(event));
+  return Boolean(
+    event.metaKey ||
+    event.altKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    hasNonPrimaryButton(event),
+  );
 }
 
 /**
  * Shared guard to decide whether a click should skip client-side routing.
  * Keeps modifier-key and target checks consistent across components.
  */
-export function shouldSkipClientNavigation(event?: ModifierKeyEvent, target?: string | null) {
+export function shouldSkipClientNavigation(
+  event?: ModifierKeyEvent,
+  target?: string | null,
+) {
   if (isModifiedEvent(event)) return true;
   if (!target) return false;
   return target !== "_self";

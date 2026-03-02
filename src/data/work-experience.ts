@@ -59,7 +59,13 @@ export const dataWorkExperience: WorkExperienceItemProps[] = [
       "Developed reusable listing cards, category filters, and detail page sections to support fast discovery and comparison for potential buyers.",
       "Implemented responsive UI and motion-enhanced interactions to keep the browsing flow smooth across desktop and mobile devices.",
     ],
-    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Shadcn UI"],
+    tags: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Shadcn UI",
+    ],
   },
   {
     id: 5,
@@ -79,6 +85,7 @@ export const dataWorkExperience: WorkExperienceItemProps[] = [
       "Tanstack Query",
       "Axios",
       "Zustand",
+      "MySQL",
       "Firebase",
     ],
   },

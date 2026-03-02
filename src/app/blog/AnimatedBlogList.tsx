@@ -6,7 +6,13 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback } from "react";
 import { usePageTransition } from "@/hooks";
 import { shouldSkipClientNavigation } from "@/lib/utils";
-import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import type { BlogPost } from "@/types";
 
 interface AnimatedBlogListProps {
@@ -49,7 +55,7 @@ function BlogCard({ post }: { post: BlogPost }) {
       pointerX.set(x);
       pointerY.set(y);
     },
-    [pointerX, pointerY]
+    [pointerX, pointerY],
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -64,7 +70,7 @@ function BlogCard({ post }: { post: BlogPost }) {
       event.preventDefault();
       navigate(`/blog/${post.slug}`, { label: "Story Spotlight" });
     },
-    [navigate, post.slug]
+    [navigate, post.slug],
   );
 
   return (
@@ -80,7 +86,11 @@ function BlogCard({ post }: { post: BlogPost }) {
         className="pointer-events-none absolute inset-x-2 md:inset-x-6 inset-y-4 -z-10 blur-3xl opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100"
       />
 
-      <Link href={`/blog/${post.slug}`} className="block relative" onClick={handleNavigate}>
+      <Link
+        href={`/blog/${post.slug}`}
+        className="block relative"
+        onClick={handleNavigate}
+      >
         <div className="relative flex flex-col gap-6 py-10 md:py-12 px-0 rounded-none transition-all duration-500 group-hover:px-6 group-hover:rounded-[32px]">
           <span
             aria-hidden="true"
@@ -93,8 +103,13 @@ function BlogCard({ post }: { post: BlogPost }) {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="space-y-3 max-w-3xl">
               <p className="flex items-center gap-3 text-sm text-charcoal/60">
-                <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
-                <span className="w-1 h-1 rounded-full bg-charcoal/25" aria-hidden="true" />
+                <time dateTime={post.publishedAt}>
+                  {formatDate(post.publishedAt)}
+                </time>
+                <span
+                  className="w-1 h-1 rounded-full bg-charcoal/25"
+                  aria-hidden="true"
+                />
                 <span>{post.minuteRead} min read</span>
               </p>
               <h2 className="text-3xl md:text-4xl font-display text-charcoal leading-tight">

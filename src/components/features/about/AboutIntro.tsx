@@ -52,7 +52,7 @@ export default function AboutIntro() {
               start: "top 85%",
               once: true,
             },
-          }
+          },
         );
       });
     }, sectionEl);

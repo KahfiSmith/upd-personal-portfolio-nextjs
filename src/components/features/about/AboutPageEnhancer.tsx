@@ -37,14 +37,14 @@ export default function AboutPageEnhancer() {
               start: "top 85%",
               once: true,
             },
-          }
+          },
         );
       });
 
       const items = root.querySelectorAll<HTMLElement>(".drives-item");
       items.forEach((item) => {
         const numberGradient = item.querySelector<HTMLElement>(
-          ".drives-number-gradient"
+          ".drives-number-gradient",
         );
         const underline = item.querySelector<HTMLElement>(".drives-underline");
         const divider = item.querySelector<HTMLElement>(".drives-divider");
@@ -71,19 +71,19 @@ export default function AboutPageEnhancer() {
           tl.to(
             numberGradient,
             { opacity: 1, duration: 0.4, ease: "power2.out" },
-            0
+            0,
           );
         if (divider)
           tl.to(
             divider,
             { scaleY: 1.15, duration: 0.35, ease: "power2.out" },
-            0
+            0,
           );
         if (title)
           tl.to(
             title,
             { color: "#0a0a0a", duration: 0.35, ease: "power2.out" },
-            0
+            0,
           );
         if (desc)
           tl.to(
@@ -94,14 +94,14 @@ export default function AboutPageEnhancer() {
               duration: 0.4,
               ease: "power2.out",
             },
-            0
+            0,
           );
 
         let hoverTween: gsap.core.Tween | null = null;
         const playTo = (
           time: number,
           duration: number,
-          ease = "power2.out"
+          ease = "power2.out",
         ) => {
           hoverTween?.kill();
           hoverTween = tl.tweenTo(time, {

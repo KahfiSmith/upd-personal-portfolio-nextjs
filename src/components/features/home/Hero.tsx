@@ -4,7 +4,10 @@ import AnimatedPillButton from "@/components/common/AnimatedPillButton";
 
 export default function Hero() {
   return (
-    <section id="hero" className="relative min-h-screen pt-8 md:pt-12 overflow-hidden">
+    <section
+      id="hero"
+      className="relative min-h-screen pt-8 md:pt-12 overflow-hidden"
+    >
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div
           className="absolute -top-16 left-1/2 -translate-x-1/2 w-[340px] h-[340px] rounded-full opacity-18 blur-[120px]"

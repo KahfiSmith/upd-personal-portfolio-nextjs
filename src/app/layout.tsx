@@ -134,7 +134,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${outfit.variable} ${playfair.variable} ${spaceGrotesk.variable} antialiased`}>
+      <body
+        className={`${outfit.variable} ${playfair.variable} ${spaceGrotesk.variable} antialiased`}
+      >
         <PageTransitionProvider>
           <SmoothScrollProvider>
             {children}

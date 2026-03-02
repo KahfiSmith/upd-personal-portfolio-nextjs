@@ -82,30 +82,30 @@
   * {
     @apply border-border outline-ring/50;
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     @apply bg-background text-foreground font-sans overflow-x-hidden;
   }
-  
+
   body::-webkit-scrollbar {
-    width: 0.05em; 
+    width: 0.05em;
   }
-  
+
   body::-webkit-scrollbar-track {
     background-color: var(--color-charcoal);
     opacity: 0.1;
   }
-  
+
   body::-webkit-scrollbar-thumb {
     background-color: var(--color-charcoal);
     opacity: 0.4;
     border-radius: 20px;
   }
-  
+
   body::-webkit-scrollbar-thumb:hover {
     opacity: 0.7;
   }
@@ -125,7 +125,8 @@
 }
 
 @keyframes subtleFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(-50%, -50%) scale(1);
   }
   50% {
@@ -141,7 +142,8 @@
   display: flex;
   width: max-content;
   flex-wrap: nowrap;
-  animation: projectsMarquee var(--projects-marquee-duration, 28s) linear infinite;
+  animation: projectsMarquee var(--projects-marquee-duration, 28s) linear
+    infinite;
   will-change: transform;
 }
 

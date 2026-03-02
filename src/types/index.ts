@@ -78,21 +78,27 @@ export interface BlogPost {
 }
 
 export interface BlogContentText {
-  type: 'text';
+  type: "text";
   content: string;
 }
 
 export interface BlogContentImage {
-  type: 'image';
+  type: "image";
   src: string;
   alt: string;
   caption?: string;
 }
 
-export type SocialName = 'github' | 'linkedin' | 'facebook' | 'instagram';
+export type SocialName = "github" | "linkedin" | "facebook" | "instagram";
 
-export interface SocialLink { name: SocialName; href: string }
-export interface Button { label: string; href: string }
+export interface SocialLink {
+  name: SocialName;
+  href: string;
+}
+export interface Button {
+  label: string;
+  href: string;
+}
 export interface Props {
   headlinePrefix?: string;
   headlineHighlight?: string;

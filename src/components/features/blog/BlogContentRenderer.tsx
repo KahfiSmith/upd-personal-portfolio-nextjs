@@ -15,7 +15,7 @@ export function BlogContentRenderer({
 }: BlogContentRendererProps) {
   const renderContentGroup = (
     items: (BlogContentText | BlogContentImage)[],
-    startIdx: number
+    startIdx: number,
   ) => {
     if (
       items.length >= 2 &&
@@ -62,7 +62,7 @@ export function BlogContentRenderer({
                 >
                   {item.content}
                 </p>
-              ) : null
+              ) : null,
             )}
           </div>
 
@@ -133,7 +133,7 @@ export function BlogContentRenderer({
   return (
     <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
       {groupedContent.map(({ items, startIdx }) =>
-        renderContentGroup(items, startIdx)
+        renderContentGroup(items, startIdx),
       )}
     </div>
   );

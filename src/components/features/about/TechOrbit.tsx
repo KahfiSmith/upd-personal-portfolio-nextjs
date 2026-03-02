@@ -39,7 +39,7 @@ export default function TechOrbit({
       const rect = el.getBoundingClientRect();
       const r = Math.max(
         32,
-        (Math.min(rect.width, rect.height) / 2) * orbitRatio
+        (Math.min(rect.width, rect.height) / 2) * orbitRatio,
       );
       setRadius(r);
       setReady(true);
@@ -66,7 +66,7 @@ export default function TechOrbit({
         ? () => {
             const rot = (gsap.getProperty(track, "rotation") as number) || 0;
             const items = track.querySelectorAll<HTMLElement>(
-              "[data-orbit-arm] [data-icon-inner]"
+              "[data-orbit-arm] [data-icon-inner]",
             );
             items.forEach((node) => {
               const angAttr = (node as HTMLElement).dataset.angle;

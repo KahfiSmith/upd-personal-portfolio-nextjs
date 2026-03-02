@@ -37,7 +37,7 @@ export default function ContactForm() {
     const message = (data.get("message") as string) ?? "";
 
     const subject = encodeURIComponent(
-      `Portfolio Inquiry${name ? ` - ${name}` : ""}`
+      `Portfolio Inquiry${name ? ` - ${name}` : ""}`,
     );
 
     const bodyLines = [
