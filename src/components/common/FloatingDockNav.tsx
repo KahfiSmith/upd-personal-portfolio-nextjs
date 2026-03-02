@@ -3,7 +3,7 @@
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { usePageTransition } from "@/hooks";
 import { getAnchorScrollOffset, shouldSkipClientNavigation } from "@/lib/utils";
-import { Briefcase, FolderGit2, User2, BookText, Home } from "lucide-react";
+import { Briefcase, FolderGit2, User2, BookText, Home, Code2 } from "lucide-react";
 import { MouseEvent, useCallback, useMemo } from "react";
 
 type LenisLike = {
@@ -16,7 +16,6 @@ export default function FloatingDockNav() {
     if (!hash?.startsWith("#")) return;
     e.preventDefault();
     const id = hash.replace(/^#/, "");
-    // On home: smooth scroll to section
     const el = document.getElementById(id);
     if (!el) return;
     const lenis = (window as typeof window & { __lenis?: LenisLike }).__lenis;
@@ -25,7 +24,6 @@ export default function FloatingDockNav() {
       const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
       lenis.scrollTo(el, { duration: 1.8, easing: easeInOutCubic, offset });
     } else {
-      // Fallback manual tween for smoother-than-default behavior
       const startY = window.scrollY || window.pageYOffset || 0;
       const targetRect = el.getBoundingClientRect();
       const targetY = startY + targetRect.top + offset;
@@ -67,6 +65,12 @@ export default function FloatingDockNav() {
         title: "About",
         icon: <User2 className="h-5 w-5 text-white" />,
         href: "#about",
+        onClick: onAnchorClick,
+      },
+      {
+        title: "Activity",
+        icon: <Code2 className="h-5 w-5 text-white" />,
+        href: "#activity",
         onClick: onAnchorClick,
       },
       {
