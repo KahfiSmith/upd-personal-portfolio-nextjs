@@ -142,59 +142,59 @@ export default function CodingActivity() {
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-stretch">
           <div className="lg:col-span-8 space-y-6">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              <div className="rounded-3xl border border-cyan-300/80 bg-gradient-to-br from-cyan-100 via-sky-50 to-sky-100/90 p-5 md:p-6 shadow-[0_20px_70px_rgba(14,116,144,0.16)] backdrop-blur-sm">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="flex min-h-[220px] flex-col rounded-3xl border-2 border-charcoal bg-white/80 p-5 md:p-6 shadow-[0_20px_70px_rgba(15,23,42,0.08)] backdrop-blur-sm">
                 <p className="text-xs font-mono uppercase tracking-[0.24em] text-charcoal/45">
                   Total Coding Time
                 </p>
-                <p className="mt-4 font-display text-3xl md:text-4xl text-charcoal">
+                <p className="mt-4 font-display text-3xl md:text-3xl text-charcoal">
                   {stats.totalCodingTime}
                 </p>
-                <p className="mt-2 text-sm text-charcoal/55">
+                <p className="mt-auto pt-4 text-sm text-charcoal/55">
                   Lifetime tracked coding time
                 </p>
               </div>
 
-              <div className="rounded-3xl border border-amber-300/80 bg-gradient-to-br from-amber-100 via-orange-50 to-orange-100/90 p-5 md:p-6 shadow-[0_20px_70px_rgba(217,119,6,0.16)] backdrop-blur-sm">
+              <div className="flex min-h-[220px] flex-col rounded-3xl border-2 border-charcoal bg-white/80 p-5 md:p-6 shadow-[0_20px_70px_rgba(15,23,42,0.08)] backdrop-blur-sm">
                 <p className="text-xs font-mono uppercase tracking-[0.24em] text-charcoal/45">
                   Daily Average
                 </p>
-                <p className="mt-4 font-display text-3xl md:text-4xl text-charcoal">
+                <p className="mt-4 font-display text-3xl md:text-3xl text-charcoal">
                   {stats.dailyAverage}
                 </p>
-                <p className="mt-2 text-sm text-charcoal/55">
+                <p className="mt-auto pt-4 text-sm text-charcoal/55">
                   Average daily tracked time
                 </p>
               </div>
 
-              <div className="rounded-3xl border border-rose-300/80 bg-gradient-to-br from-rose-100 via-pink-50 to-pink-100/90 p-5 md:p-6 shadow-[0_20px_70px_rgba(225,29,72,0.16)] backdrop-blur-sm">
+              <div className="flex min-h-[220px] flex-col rounded-3xl border-2 border-charcoal bg-white/80 p-5 md:p-6 shadow-[0_20px_70px_rgba(15,23,42,0.08)] backdrop-blur-sm">
                 <p className="text-xs font-mono uppercase tracking-[0.24em] text-charcoal/45">
                   Best Day
                 </p>
-                <p className="mt-4 font-display text-3xl md:text-4xl text-charcoal">
+                <p className="mt-4 font-display text-3xl md:text-3xl text-charcoal">
                   {stats.bestDay.text}
                 </p>
-                <p className="mt-2 text-sm text-charcoal/55">
+                <p className="mt-auto pt-4 text-sm text-charcoal/55">
                   {stats.bestDay.date
                     ? `Highest tracked day on ${stats.bestDay.date}`
                     : "Highest single tracked day"}
                 </p>
               </div>
 
-              <div className="rounded-3xl border border-emerald-300/80 bg-gradient-to-br from-emerald-100 via-teal-50 to-teal-100/90 p-5 md:p-6 shadow-[0_20px_70px_rgba(5,150,105,0.16)] backdrop-blur-sm">
+              <div className="flex min-h-[220px] flex-col rounded-3xl border-2 border-charcoal bg-white/80 p-5 md:p-6 shadow-[0_20px_70px_rgba(15,23,42,0.08)] backdrop-blur-sm">
                 <p className="text-xs font-mono uppercase tracking-[0.24em] text-charcoal/45">
                   Top Language
                 </p>
-                <p className="mt-4 font-display text-3xl md:text-4xl text-charcoal">
+                <p className="mt-4 font-display text-3xl md:text-3xl text-charcoal">
                   {stats.topLanguage}
                 </p>
-                <p className="mt-2 text-sm text-charcoal/55">
+                <p className="mt-auto pt-4 text-sm text-charcoal/55">
                   Primary language by tracked time
                 </p>
               </div>
             </div>
 
-            <div className="rounded-[1.75rem] border border-slate-300/70 bg-gradient-to-br from-white via-slate-50 to-cyan-50/60 p-6 md:p-8 shadow-[0_24px_90px_rgba(15,23,42,0.10)] backdrop-blur-sm">
+            <div className="rounded-[1.75rem] border-2 border-charcoal bg-white/80 p-6 md:p-8 shadow-[0_24px_90px_rgba(15,23,42,0.10)] backdrop-blur-sm">
               <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-xs font-mono uppercase tracking-[0.24em] text-charcoal/45">
@@ -204,9 +204,6 @@ export default function CodingActivity() {
                     Time spent per top language
                   </h3>
                 </div>
-                <p className="text-sm md:text-base text-charcoal/55">
-                  Built from `data.languages` on the WakaTime response
-                </p>
               </div>
 
               <div className="mt-8">
@@ -246,7 +243,7 @@ export default function CodingActivity() {
           </div>
 
           <div className="lg:col-span-4">
-            <div className="flex h-full flex-col rounded-[1.75rem] border border-sky-200/80 bg-gradient-to-br from-slate-100 via-white to-cyan-100/70 p-6 md:p-8 shadow-[0_24px_90px_rgba(14,116,144,0.10)]">
+            <div className="flex h-full flex-col rounded-[1.75rem] border-2 border-charcoal bg-white/80 p-6 md:p-8 shadow-[0_24px_90px_rgba(15,23,42,0.08)]">
               <p className="text-xs font-mono uppercase tracking-[0.24em] text-charcoal/45">
                 Language Breakdown
               </p>
@@ -277,7 +274,7 @@ export default function CodingActivity() {
                 ))}
               </div>
 
-              <div className="mt-8 rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50 to-cyan-50/50 p-5 shadow-[0_14px_40px_rgba(15,23,42,0.08)]">
+              <div className="mt-8 rounded-2xl border-2 border-charcoal bg-white p-5 shadow-[0_14px_40px_rgba(15,23,42,0.06)]">
                 <p className="text-xs font-mono uppercase tracking-[0.22em] text-charcoal/45">
                   Editor Usage
                 </p>

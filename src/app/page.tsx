@@ -1,6 +1,6 @@
 import SimpleCurtainLoader from "@/components/common/SimpleCurtainLoader";
 import AboutIntro from "@/components/features/about/AboutIntro";
-import CodingActivity from "@/components/features/home/CodingActivity";
+import CodingActivity from "@/components/features/activity/CodingActivity";
 import Hero from "@/components/features/home/Hero";
 import ProjectsList from "@/components/features/projects/ProjectsList";
 import SkillsMarque from "@/components/features/skills/SkillsMarque";
