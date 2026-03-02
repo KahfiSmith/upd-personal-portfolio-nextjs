@@ -1,84 +1,84 @@
 import type { BlogPost } from "@/types";
 
 export const blogPosts: BlogPost[] = [
-  {
-    id: 1,
-    slug: "onizuka-guru-absurd-tapi-paling-ngerti-murid",
-    title: "Onizuka: Guru Absurd yang Justru Paling Ngerti Murid",
-    excerpt:
-      "Kisah bagaimana seorang mantan preman berubah menjadi guru paling nyeleneh, penuh hati, dan berhasil menyentuh hidup murid-murid yang sudah kehilangan kepercayaan pada orang dewasa.",
-    content: [
-      {
-        type: "text",
-        content:
-          "Eikichi Onizuka, mantan anggota geng motor yang dulunya cuma mikirin kesenangan dan rusuh, tiba-tiba punya mimpi aneh: menjadi guru terbaik di Jepang. Kedengarannya absurd, tapi justru itu yang bikin perjalanan hidupnya menarik. GTO bukan cuma soal guru gila ini cerita tentang seseorang yang punya masa lalu kacau tapi tetap berusaha memberi yang terbaik pada muridnya.",
-      },
-      {
-        type: "image",
-        src: "/images/blog/onizuka/onizuka.jpg",
-        alt: "Onizuka dengan gaya santainya mengajar",
-      },
-      {
-        type: "text",
-        content:
-          "Onizuka ditugaskan mengajar kelas paling bandel, paling trauma, dan paling pintar bikin guru resign. Tapi bukannya kabur, dia malah ngeladenin semua tingkah mereka dengan cara yang nggak biasa. Lewat metode gilanya entah itu naik tengki ke sekolah, manjat gedung, sampai ngelindungi murid dari orang dewasa toxic. Onizuka bikin mereka sadar bahwa masih ada guru yang bener-bener peduli.",
-      },
-      {
-        type: "text",
-        content:
-          "Di balik kelakuannya yang absurd, Onizuka paham satu hal: murid bermasalah bukan karena mereka jahat, tapi karena mereka punya luka yang nggak kelihatan. Ada yang dibully, ada yang keluarga berantakan, ada yang tertekan nilai, ada yang kehilangan kepercayaan pada orang dewasa. Onizuka selalu nyari akar masalahnya dulu, bukan cuma ngasih hukuman.",
-      },
-      {
-        type: "image",
-        src: "/images/blog/onizuka/onizuka3.jpg",
-        alt: "Onizuka bersama murid-muridnya",
-      },
-      {
-        type: "text",
-        content:
-          "Makanya gaya mengajar Onizuka beda. Ia nggak fokus ke nilai, tapi ke kehidupan muridnya. Dia ngasih mereka keberanian untuk jujur, buat berubah, dan buat nggak takut gagal. Bahkan kalau harus naruh reputasi atau nyawanya sendiri, dia tetap maju demi muridnya. Ini yang bikin karakter Onizuka terasa hidup dan menyentuh.",
-      },
-      {
-        type: "text",
-        content:
-          "Banyak momen yang kelihatannya konyol tapi sebenarnya nyentuh. GTO ngasih lihat bahwa pendidikan sejati bukan cuma soal pelajaran di buku, tapi soal membentuk manusia yang percaya diri, mau maju, dan tahu bahwa mereka nggak sendirian. Bahkan murid paling keras kepala pun akhirnya luluh sama ketulusan Onizuka.",
-      },
-      {
-        type: "image",
-        src: "/images/blog/onizuka/onizuka4.jpg",
-        alt: "Onizuka membantu murid keluar dari masalah",
-      },
-      {
-        type: "text",
-        content:
-          "Ada banyak pelajaran yang bisa dipetik dari kisah Onizuka: tentang empati, tentang keberanian, tentang jadi orang dewasa yang layak dipercaya. GTO ngajarin bahwa meskipun hidup kita kacau, kita tetap bisa berdampak baik buat orang lain. Dan kadang, cara paling efektif buat menyentuh hati murid bukan lewat aturan, tapi lewat ketulusan dan humor.",
-      },
-      {
-        type: "text",
-        content:
-          "Intinya, GTO adalah pengingat bahwa guru hebat bukan yang paling pintar, tapi yang paling mengerti manusia. Onizuka mungkin absurd, tapi dia punya hati yang besar dan itu sudah cukup buat mengubah hidup satu kelas penuh siswa yang awalnya putus asa.",
-      },
-      {
-        type: "image",
-        src: "/images/blog/onizuka/onizuka2.jpg",
-        alt: "Onizuka bersama murid-muridnya",
-      },
-      {
-        type: "text",
-        content:
-          "Kisah Onizuka relevan banget bahkan sampai sekarang. Banyak sekolah penuh tekanan, banyak murid kehilangan tempat cerita, dan banyak guru fokus pada nilai daripada manusia. GTO ngingetin kita bahwa sekolah harus jadi tempat aman, bukan tempat takut. Dan kadang, butuh seseorang sekacau Onizuka buat ngasih pelajaran hidup yang paling jujur dan paling nyata.",
-      },
-      {
-        type: "text",
-        content:
-          "Akhirnya, GTO ngasih satu pesan penting: masa lalu lu nggak menentukan masa depan. Kalau Onizuka aja bisa berubah dan jadi guru baik, kita pun bisa jadi versi terbaik dari diri kita, walau harus lewat jalan yang aneh dan penuh komedi.",
-      },
-    ],
-    publishedAt: "2025-09-18",
-    minuteRead: 6,
-    tags: ["Great Teacher Onizuka", "Manga", "Life Lessons", "Onizuka"],
-    heroImage: "/images/blog/onizuka/onizuka1.jpg",
-  },
+  // {
+  //   id: 1,
+  //   slug: "onizuka-guru-absurd-tapi-paling-ngerti-murid",
+  //   title: "Onizuka: Guru Absurd yang Justru Paling Ngerti Murid",
+  //   excerpt:
+  //     "Kisah bagaimana seorang mantan preman berubah menjadi guru paling nyeleneh, penuh hati, dan berhasil menyentuh hidup murid-murid yang sudah kehilangan kepercayaan pada orang dewasa.",
+  //   content: [
+  //     {
+  //       type: "text",
+  //       content:
+  //         "Eikichi Onizuka, mantan anggota geng motor yang dulunya cuma mikirin kesenangan dan rusuh, tiba-tiba punya mimpi aneh: menjadi guru terbaik di Jepang. Kedengarannya absurd, tapi justru itu yang bikin perjalanan hidupnya menarik. GTO bukan cuma soal guru gila ini cerita tentang seseorang yang punya masa lalu kacau tapi tetap berusaha memberi yang terbaik pada muridnya.",
+  //     },
+  //     {
+  //       type: "image",
+  //       src: "/images/blog/onizuka/onizuka.jpg",
+  //       alt: "Onizuka dengan gaya santainya mengajar",
+  //     },
+  //     {
+  //       type: "text",
+  //       content:
+  //         "Onizuka ditugaskan mengajar kelas paling bandel, paling trauma, dan paling pintar bikin guru resign. Tapi bukannya kabur, dia malah ngeladenin semua tingkah mereka dengan cara yang nggak biasa. Lewat metode gilanya entah itu naik tengki ke sekolah, manjat gedung, sampai ngelindungi murid dari orang dewasa toxic. Onizuka bikin mereka sadar bahwa masih ada guru yang bener-bener peduli.",
+  //     },
+  //     {
+  //       type: "text",
+  //       content:
+  //         "Di balik kelakuannya yang absurd, Onizuka paham satu hal: murid bermasalah bukan karena mereka jahat, tapi karena mereka punya luka yang nggak kelihatan. Ada yang dibully, ada yang keluarga berantakan, ada yang tertekan nilai, ada yang kehilangan kepercayaan pada orang dewasa. Onizuka selalu nyari akar masalahnya dulu, bukan cuma ngasih hukuman.",
+  //     },
+  //     {
+  //       type: "image",
+  //       src: "/images/blog/onizuka/onizuka3.jpg",
+  //       alt: "Onizuka bersama murid-muridnya",
+  //     },
+  //     {
+  //       type: "text",
+  //       content:
+  //         "Makanya gaya mengajar Onizuka beda. Ia nggak fokus ke nilai, tapi ke kehidupan muridnya. Dia ngasih mereka keberanian untuk jujur, buat berubah, dan buat nggak takut gagal. Bahkan kalau harus naruh reputasi atau nyawanya sendiri, dia tetap maju demi muridnya. Ini yang bikin karakter Onizuka terasa hidup dan menyentuh.",
+  //     },
+  //     {
+  //       type: "text",
+  //       content:
+  //         "Banyak momen yang kelihatannya konyol tapi sebenarnya nyentuh. GTO ngasih lihat bahwa pendidikan sejati bukan cuma soal pelajaran di buku, tapi soal membentuk manusia yang percaya diri, mau maju, dan tahu bahwa mereka nggak sendirian. Bahkan murid paling keras kepala pun akhirnya luluh sama ketulusan Onizuka.",
+  //     },
+  //     {
+  //       type: "image",
+  //       src: "/images/blog/onizuka/onizuka4.jpg",
+  //       alt: "Onizuka membantu murid keluar dari masalah",
+  //     },
+  //     {
+  //       type: "text",
+  //       content:
+  //         "Ada banyak pelajaran yang bisa dipetik dari kisah Onizuka: tentang empati, tentang keberanian, tentang jadi orang dewasa yang layak dipercaya. GTO ngajarin bahwa meskipun hidup kita kacau, kita tetap bisa berdampak baik buat orang lain. Dan kadang, cara paling efektif buat menyentuh hati murid bukan lewat aturan, tapi lewat ketulusan dan humor.",
+  //     },
+  //     {
+  //       type: "text",
+  //       content:
+  //         "Intinya, GTO adalah pengingat bahwa guru hebat bukan yang paling pintar, tapi yang paling mengerti manusia. Onizuka mungkin absurd, tapi dia punya hati yang besar dan itu sudah cukup buat mengubah hidup satu kelas penuh siswa yang awalnya putus asa.",
+  //     },
+  //     {
+  //       type: "image",
+  //       src: "/images/blog/onizuka/onizuka2.jpg",
+  //       alt: "Onizuka bersama murid-muridnya",
+  //     },
+  //     {
+  //       type: "text",
+  //       content:
+  //         "Kisah Onizuka relevan banget bahkan sampai sekarang. Banyak sekolah penuh tekanan, banyak murid kehilangan tempat cerita, dan banyak guru fokus pada nilai daripada manusia. GTO ngingetin kita bahwa sekolah harus jadi tempat aman, bukan tempat takut. Dan kadang, butuh seseorang sekacau Onizuka buat ngasih pelajaran hidup yang paling jujur dan paling nyata.",
+  //     },
+  //     {
+  //       type: "text",
+  //       content:
+  //         "Akhirnya, GTO ngasih satu pesan penting: masa lalu lu nggak menentukan masa depan. Kalau Onizuka aja bisa berubah dan jadi guru baik, kita pun bisa jadi versi terbaik dari diri kita, walau harus lewat jalan yang aneh dan penuh komedi.",
+  //     },
+  //   ],
+  //   publishedAt: "2025-09-18",
+  //   minuteRead: 6,
+  //   tags: ["Great Teacher Onizuka", "Manga", "Life Lessons", "Onizuka"],
+  //   heroImage: "/images/blog/onizuka/onizuka1.jpg",
+  // },
   {
     id: 2,
     slug: "belajar-english-dari-hal-yang-kamu-sukai",
