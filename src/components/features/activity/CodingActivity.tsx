@@ -36,8 +36,8 @@ const fallbackData: CodingActivityResponse = {
   dailyAverageSeconds: 17_280,
   bestDay: {
     date: null,
-    text: "7 hrs 12 mins",
-    totalSeconds: 25_920,
+    text: "Syncing...",
+    totalSeconds: 0,
   },
   topLanguage: "TypeScript",
   languages: [
@@ -104,6 +104,17 @@ export default function CodingActivity() {
     1,
   );
   const topEditors = stats.editors.slice(0, 2);
+  const bestDayText =
+    stats.bestDay.totalSeconds > 0
+      ? stats.bestDay.text
+      : status === "error"
+        ? "Unavailable"
+        : "Syncing...";
+  const bestDayDescription = stats.bestDay.date
+    ? `Highest tracked day on ${stats.bestDay.date}`
+    : status === "error"
+      ? "Connect WakaTime API to show your real longest coding day"
+      : "Fetching your highest tracked day";
 
   return (
     <section
@@ -169,15 +180,13 @@ export default function CodingActivity() {
 
               <div className="flex min-h-[220px] flex-col rounded-3xl border-2 border-charcoal bg-white/80 p-5 md:p-6 shadow-[0_20px_70px_rgba(15,23,42,0.08)] backdrop-blur-sm">
                 <p className="text-xs font-mono uppercase tracking-[0.24em] text-charcoal/45">
-                  Best Day
+                  Longest Coding Day
                 </p>
                 <p className="mt-4 font-display text-3xl md:text-3xl text-charcoal">
-                  {stats.bestDay.text}
+                  {bestDayText}
                 </p>
                 <p className="mt-auto pt-4 text-sm text-charcoal/55">
-                  {stats.bestDay.date
-                    ? `Highest tracked day on ${stats.bestDay.date}`
-                    : "Highest single tracked day"}
+                  {bestDayDescription}
                 </p>
               </div>
 
