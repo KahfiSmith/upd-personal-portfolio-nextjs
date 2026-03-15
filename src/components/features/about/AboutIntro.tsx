@@ -1,5 +1,6 @@
 "use client";
 
+import { dataProjects } from "@/data/projects";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -17,6 +18,7 @@ function getExperienceYears() {
 export default function AboutIntro() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const experienceYears = getExperienceYears();
+  const projectCount = dataProjects.length;
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -90,7 +92,7 @@ export default function AboutIntro() {
                   More than just
                 </span>
                 <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-medium bg-gradient-to-r from-black via-cyan-600 to-black bg-clip-text text-transparent mt-1 lg:mt-2">
-                  Code & Coffee
+                  Code & Ideas
                 </span>
               </h2>
             </div>
@@ -104,7 +106,7 @@ export default function AboutIntro() {
             >
               <p className="text-charcoal/80 text-xl md:text-2xl lg:text-3xl leading-relaxed font-light">
                 Behind every line of code is a story of curiosity, creativity,
-                and countless cups of coffee. Dive deeper into my journey,
+                and a constant drive to improve. Dive deeper into my journey,
                 passions, and the philosophy that drives my work. I believe
                 great software is born from the intersection of technical
                 excellence and human-centered design. My approach combines
@@ -132,7 +134,7 @@ export default function AboutIntro() {
               </div>
               <div className="space-y-3">
                 <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal font-display">
-                  8+
+                  {projectCount}
                 </div>
                 <p className="text-sm md:text-base text-charcoal/60 font-medium">
                   Projects Completed
@@ -143,7 +145,7 @@ export default function AboutIntro() {
                   ∞
                 </div>
                 <p className="text-sm md:text-base text-charcoal/60 font-medium">
-                  Cups of Coffee
+                  Iterations Made
                 </p>
               </div>
             </div>
