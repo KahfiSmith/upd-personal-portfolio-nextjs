@@ -12,6 +12,8 @@ const nextConfig: NextConfig = {
     // Keep optimization enabled by default for better Core Web Vitals.
     // Set NEXT_IMAGE_UNOPTIMIZED=1 only for fully static deployments.
     unoptimized: isImageUnoptimized,
+    // Allow higher-quality output for UI screenshots that look soft at the default q=75.
+    qualities: [75, 85, 90],
     // Allow local SVG icons to render in next/image
     dangerouslyAllowSVG: true,
   },
