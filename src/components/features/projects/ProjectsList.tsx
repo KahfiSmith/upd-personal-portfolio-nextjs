@@ -32,6 +32,15 @@ type MarqueeToken =
   | { type: "image"; value: string };
 
 const MIN_MARQUEE_TOKENS = 8;
+const PREVIEW_IMAGE_SIZES = "(min-width: 1024px) 460px, 360px";
+const MARQUEE_IMAGE_SIZES =
+  "(min-width: 1280px) 336px, (min-width: 768px) 304px, 272px";
+const PREVIEW_IMAGE_QUALITY = 90;
+const MARQUEE_IMAGE_QUALITY = 85;
+type HoverPreloadAsset = {
+  kind: "preview" | "marquee";
+  src: string;
+};
 
 const ensureMarqueeDensity = (tokens: MarqueeToken[]): MarqueeToken[] => {
   if (tokens.length >= MIN_MARQUEE_TOKENS) return tokens;
@@ -131,6 +140,33 @@ const getPreviewImage = (project: ProjectItem): string | null => {
   return null;
 };
 
+const getHoverPreloadAssets = (projects: ProjectItem[]): HoverPreloadAsset[] => {
+  const assets = new Map<string, HoverPreloadAsset>();
+
+  const addAsset = (
+    src: string | null | undefined,
+    kind: HoverPreloadAsset["kind"],
+  ) => {
+    if (!src) return;
+    const existing = assets.get(src);
+    if (existing?.kind === "preview") return;
+    assets.set(src, { kind, src });
+  };
+
+  projects.forEach((project) => {
+    addAsset(getPreviewImage(project), "preview");
+
+    (project.marqueeImages ?? [])
+      .filter(
+        (src): src is string => typeof src === "string" && src.trim().length > 0,
+      )
+      .slice(0, 2)
+      .forEach((src) => addAsset(src, "marquee"));
+  });
+
+  return Array.from(assets.values());
+};
+
 type PreviewLayer = {
   projectId: number;
   src: string;
@@ -153,6 +189,10 @@ export default function ProjectsList({
     }
     return dataProjects;
   }, [limit]);
+  const hoverPreloadAssets = useMemo(
+    () => getHoverPreloadAssets(projects),
+    [projects],
+  );
   const [activeId, setActiveId] = useState<number | null>(null);
   const [overlayState, setOverlayState] = useState<{
     project: ProjectItem;
@@ -167,6 +207,7 @@ export default function ProjectsList({
   const overlayContentRef = useRef<HTMLDivElement | null>(null);
   const activeRowRef = useRef<HTMLElement | null>(null);
   const [previewLayers, setPreviewLayers] = useState<PreviewLayer[]>([]);
+  const [shouldPreloadHoverMedia, setShouldPreloadHoverMedia] = useState(false);
   const previewImageRefs = useRef<Record<string, HTMLImageElement | null>>({});
   const lastRowTopRef = useRef<number | null>(null);
   const wipeDirectionRef = useRef<"down" | "up">("down");
@@ -269,6 +310,46 @@ export default function ProjectsList({
     return () => ctx.revert();
   }, [activeId]);
 
+  useEffect(() => {
+    if (!hoverPreloadAssets.length) return;
+
+    const browserWindow = window as Window & {
+      requestIdleCallback?: (
+        callback: IdleRequestCallback,
+        options?: IdleRequestOptions,
+      ) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+
+    let timeoutId: number | null = null;
+    let idleCallbackId: number | null = null;
+
+    const enableHoverPreload = () => {
+      setShouldPreloadHoverMedia(true);
+    };
+
+    if (typeof browserWindow.requestIdleCallback === "function") {
+      idleCallbackId = browserWindow.requestIdleCallback(
+        () => enableHoverPreload(),
+        { timeout: 1200 },
+      );
+    } else {
+      timeoutId = window.setTimeout(enableHoverPreload, 800);
+    }
+
+    return () => {
+      if (
+        idleCallbackId !== null &&
+        typeof browserWindow.cancelIdleCallback === "function"
+      ) {
+        browserWindow.cancelIdleCallback(idleCallbackId);
+      }
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
+    };
+  }, [hoverPreloadAssets]);
+
   const renderMarquee = (project: ProjectItem, isActive: boolean) => {
     const tokens = marqueeTokens.get(project.id) ?? [];
     const duration = Math.max(20, tokens.length * 2.2);
@@ -307,7 +388,9 @@ export default function ProjectsList({
                       alt={`${project.title} preview asset`}
                       fill
                       className="projects-marquee-media-image object-cover"
-                      sizes="120px"
+                      sizes={MARQUEE_IMAGE_SIZES}
+                      quality={MARQUEE_IMAGE_QUALITY}
+                      loading="eager"
                       onError={(event) => {
                         const target = event.currentTarget;
                         target.style.display = "none";
@@ -777,6 +860,39 @@ export default function ProjectsList({
           </div>
         </div>
 
+        {shouldPreloadHoverMedia && hoverPreloadAssets.length > 0 && (
+          <div
+            className="pointer-events-none fixed inset-0 -z-10 overflow-hidden opacity-0"
+            aria-hidden="true"
+          >
+            {hoverPreloadAssets.map((asset) => {
+              const isPreview = asset.kind === "preview";
+              return (
+                <div
+                  key={`hover-preload-${asset.src}`}
+                  className={
+                    isPreview
+                      ? "absolute bottom-0 right-0 h-[345px] w-[460px]"
+                      : "absolute top-0 left-0 h-[160px] w-[320px]"
+                  }
+                >
+                  <Image
+                    src={asset.src}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes={isPreview ? PREVIEW_IMAGE_SIZES : MARQUEE_IMAGE_SIZES}
+                    quality={
+                      isPreview ? PREVIEW_IMAGE_QUALITY : MARQUEE_IMAGE_QUALITY
+                    }
+                    loading="eager"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         {previewLayers.length > 0 && (
           <div className="pointer-events-none fixed bottom-6 right-6 z-[60] hidden lg:block">
             <div className="relative aspect-[4/3] w-[360px] sm:w-[460px] overflow-hidden rounded-md">
@@ -796,7 +912,9 @@ export default function ProjectsList({
                     alt={`Preview ${layer.projectId}`}
                     fill
                     className="absolute inset-0 h-full w-full rounded-md object-cover"
-                    sizes="(min-width: 1024px) 460px, 360px"
+                    sizes={PREVIEW_IMAGE_SIZES}
+                    quality={PREVIEW_IMAGE_QUALITY}
+                    loading="eager"
                     style={{
                       zIndex: index + 1,
                       boxShadow: isTop
