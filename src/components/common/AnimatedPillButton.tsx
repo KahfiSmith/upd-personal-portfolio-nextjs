@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { motion } from "framer-motion";
-import { usePageTransition } from "@/hooks";
+import { usePageTransition } from "@/components/common/PageTransitionProvider";
 import { shouldSkipClientNavigation } from "@/lib/utils";
 
 type DivVariantProps = React.HTMLAttributes<HTMLDivElement> & { href?: undefined };

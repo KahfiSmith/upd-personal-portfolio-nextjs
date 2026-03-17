@@ -3,8 +3,8 @@
 import { MoveLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, type MouseEvent, type KeyboardEvent } from "react";
+import { usePageTransition } from "@/components/common/PageTransitionProvider";
 import { cn, shouldSkipClientNavigation } from "@/lib/utils";
-import { usePageTransition } from "@/hooks";
 import type { BackButtonProps } from "@/types";
 
 export default function BackButton({

@@ -92,7 +92,7 @@ export default function AboutIntro() {
                   More than just
                 </span>
                 <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-medium bg-gradient-to-r from-black via-cyan-600 to-black bg-clip-text text-transparent mt-1 lg:mt-2">
-                  Code & Ideas
+                  Code & Solutions
                 </span>
               </h2>
             </div>

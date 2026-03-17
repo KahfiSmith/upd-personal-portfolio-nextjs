@@ -1,8 +1,8 @@
 "use client";
 
 import AnimatedPillButton from "@/components/common/AnimatedPillButton";
+import { usePageTransition } from "@/components/common/PageTransitionProvider";
 import { dataProjects } from "@/data/projects";
-import { usePageTransition } from "@/hooks";
 import { shouldSkipClientNavigation } from "@/lib/utils";
 import type { ProjectItem } from "@/types";
 import { gsap } from "gsap";

@@ -1,14 +1,16 @@
-'use client';
+"use client";
 
-import { useLenis } from '@/hooks';
-import { ReactNode } from 'react';
+import { useLenis } from "@/hooks/useLenis";
+import { ReactNode } from "react";
 
 interface SmoothScrollProviderProps {
   children: ReactNode;
 }
 
-export default function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
+export default function SmoothScrollProvider({
+  children,
+}: SmoothScrollProviderProps) {
   useLenis();
-  
+
   return <>{children}</>;
 }

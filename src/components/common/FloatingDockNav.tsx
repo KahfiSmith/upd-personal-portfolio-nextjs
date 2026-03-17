@@ -1,7 +1,7 @@
 "use client";
 
 import { FloatingDock } from "@/components/ui/floating-dock";
-import { usePageTransition } from "@/hooks";
+import { usePageTransition } from "@/components/common/PageTransitionProvider";
 import { getAnchorScrollOffset, shouldSkipClientNavigation } from "@/lib/utils";
 import { Briefcase, FolderGit2, User2, BookText, Home, Code2 } from "lucide-react";
 import { MouseEvent, useCallback, useMemo } from "react";

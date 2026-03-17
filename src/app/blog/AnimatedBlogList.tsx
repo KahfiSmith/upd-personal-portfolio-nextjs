@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback } from "react";
-import { usePageTransition } from "@/hooks";
+import { usePageTransition } from "@/components/common/PageTransitionProvider";
 import { shouldSkipClientNavigation } from "@/lib/utils";
 import {
   motion,

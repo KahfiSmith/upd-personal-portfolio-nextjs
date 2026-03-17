@@ -1,5 +1,3 @@
-"use client";
-
 import AnimatedPillButton from "@/components/common/AnimatedPillButton";
 
 export default function Hero() {
