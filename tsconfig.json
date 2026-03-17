@@ -6,8 +6,6 @@
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": true,
-    "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -17,6 +15,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "skipLibCheck": true,
     "plugins": [
       {
         "name": "next"
