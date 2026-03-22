@@ -9,6 +9,27 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/contact",
   },
+  openGraph: {
+    title: "Contact | Let's Build Together | Mohamad Al-Kahfi",
+    description:
+      "Reach out for collaborations, freelance work, or just to say hello.",
+    url: "/contact",
+    type: "website",
+    siteName: "Mohamad Al-Kahfi Portfolio",
+    images: [
+      {
+        url: "/kahfi-og.png",
+        alt: "Contact Mohamad Al-Kahfi",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact | Let's Build Together | Mohamad Al-Kahfi",
+    description:
+      "Reach out for collaborations, freelance work, or just to say hello.",
+    images: ["/kahfi-og.png"],
+  },
 };
 
 const contactMethods = [
