@@ -11,6 +11,27 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/about",
   },
+  openGraph: {
+    title: "About | Behind the Code | Mohamad Al-Kahfi",
+    description:
+      "Discover my story, what drives me, and the technologies I love.",
+    url: "/about",
+    type: "website",
+    siteName: "Mohamad Al-Kahfi Portfolio",
+    images: [
+      {
+        url: "/kahfi-og.png",
+        alt: "About Mohamad Al-Kahfi",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About | Behind the Code | Mohamad Al-Kahfi",
+    description:
+      "Discover my story, what drives me, and the technologies I love.",
+    images: ["/kahfi-og.png"],
+  },
 };
 
 const driveItemClasses =
@@ -112,11 +133,11 @@ export default function AboutPage() {
                     icons={[
                       { src: "/icons/react.svg", alt: "React" },
                       { src: "/icons/next.svg", alt: "Next.js" },
-                      { src: "/icons/express.svg", alt: "Express" },
-                      { src: "/icons/supabase.svg", alt: "Supabase" },
-                      { src: "/icons/postgresql.svg", alt: "PostgreSQL" },
-                      { src: "/icons/node.svg", alt: "Node.js" },
+                      { src: "/icons/vue.svg", alt: "Vue.js" },
                       { src: "/icons/tailwind.svg", alt: "Tailwind" },
+                      { src: "/icons/express.svg", alt: "Express" },
+                      { src: "/icons/golang.svg", alt: "Golang" },
+                      { src: "/icons/postgresql.svg", alt: "PostgreSQL" },
                       { src: "/icons/docker.svg", alt: "Docker" },
                     ]}
                     duration={26}
