@@ -154,7 +154,7 @@ export default function SimpleCurtainLoader() {
                 fontFamily: 'var(--font-playfair)',
               }}
             >
-              Kahfi Smith
+              Mohamad Al-Kahfi
             </h1>
 
             <p
