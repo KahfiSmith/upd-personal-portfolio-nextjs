@@ -9,6 +9,25 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/blog",
   },
+  openGraph: {
+    title: "Blog | Mohamad Al-Kahfi",
+    description: "Stories, lessons, and reflections from the studio.",
+    url: "/blog",
+    type: "website",
+    siteName: "Mohamad Al-Kahfi Portfolio",
+    images: [
+      {
+        url: "/kahfi-og.png",
+        alt: "Blog by Mohamad Al-Kahfi",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog | Mohamad Al-Kahfi",
+    description: "Stories, lessons, and reflections from the studio.",
+    images: ["/kahfi-og.png"],
+  },
 };
 
 export default function BlogPage() {
