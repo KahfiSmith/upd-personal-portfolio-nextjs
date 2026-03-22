@@ -11,6 +11,27 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/projects",
   },
+  openGraph: {
+    title: "Projects | Mohamad Al-Kahfi",
+    description:
+      "Explore every featured build, experiment, and shipped engagement in one archive.",
+    url: "/projects",
+    type: "website",
+    siteName: "Mohamad Al-Kahfi Portfolio",
+    images: [
+      {
+        url: "/kahfi-og.png",
+        alt: "Projects by Mohamad Al-Kahfi",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Projects | Mohamad Al-Kahfi",
+    description:
+      "Explore every featured build, experiment, and shipped engagement in one archive.",
+    images: ["/kahfi-og.png"],
+  },
 };
 
 const totalProjects = dataProjects.length;
