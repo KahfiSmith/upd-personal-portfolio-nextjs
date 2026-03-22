@@ -31,9 +31,9 @@ const spaceGrotesk = localFont({
 
 const siteUrl = getSiteUrl();
 const siteOrigin = getSiteOrigin();
-const title = "Kahfi Smith | Frontend Web Developer";
+const title = "Mohamad Al-Kahfi | Frontend Web Developer";
 const description =
-  "Personal portfolio of Kahfi Smith – frontend engineer crafting polished digital experiences with performance and precision.";
+  "Personal portfolio of Mohamad Al-Kahfi – frontend engineer crafting polished digital experiences with performance and precision.";
 const socialProfiles = [
   "https://github.com/kahfismith",
   "https://www.linkedin.com/in/mohamad-al-kahfi-b48107271/",
@@ -44,7 +44,6 @@ const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Mohamad Al-Kahfi",
-  alternateName: "Kahfi Smith",
   url: siteOrigin,
   jobTitle: "Frontend Web Developer",
   image: `${siteOrigin}/kahfi-og.png`,
@@ -52,7 +51,7 @@ const personSchema = {
   sameAs: socialProfiles,
   worksFor: {
     "@type": "Organization",
-    name: "Kahfi Smith Studio",
+    name: "Mohamad Al-Kahfi Studio",
     url: siteOrigin,
   },
   knowsAbout: [
@@ -71,14 +70,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: title,
-    template: "%s | Kahfi Smith",
+    template: "%s | Mohamad Al-Kahfi",
   },
   description,
   openGraph: {
     title,
     description,
     url: "/",
-    siteName: "Kahfi Smith Portfolio",
+    siteName: "Mohamad Al-Kahfi Portfolio",
     images: [
       {
         url: "/kahfi-og.png",
