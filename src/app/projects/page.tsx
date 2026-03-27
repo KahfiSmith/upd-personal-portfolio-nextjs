@@ -3,6 +3,7 @@ import BackButton from "@/components/common/BackButton";
 import ProjectsList from "@/components/features/projects/ProjectsList";
 import { dataProjects } from "@/data/projects";
 import type { ProjectItem } from "@/types";
+import { getDefaultOpenGraphImage, getDefaultTwitterImage } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Projects | Personal Portfolio",
@@ -18,19 +19,14 @@ export const metadata: Metadata = {
     url: "/projects",
     type: "website",
     siteName: "Mohamad Al-Kahfi Portfolio",
-    images: [
-      {
-        url: "/kahfi-og.png",
-        alt: "Projects by Mohamad Al-Kahfi",
-      },
-    ],
+    images: [getDefaultOpenGraphImage("Projects by Mohamad Al-Kahfi")],
   },
   twitter: {
     card: "summary_large_image",
     title: "Projects | Mohamad Al-Kahfi",
     description:
       "Explore every featured build, experiment, and shipped engagement in one archive.",
-    images: ["/kahfi-og.png"],
+    images: [getDefaultTwitterImage()],
   },
 };
 

@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 import { blogPosts } from "@/data/blog-posts";
 import { BlogContentRenderer } from "@/components/features/blog/BlogContentRenderer";
 import BackButton from "@/components/common/BackButton";
-import { toAbsoluteUrl } from "@/lib/seo";
+import {
+  getDefaultOpenGraphImage,
+  getDefaultTwitterImage,
+} from "@/lib/seo";
 
 type BlogPageProps = {
   params: Promise<{ slug: string }>;
@@ -20,32 +23,36 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   if (!post) return { title: "Post Not Found" };
 
   const pageUrl = `/blog/${post.slug}`;
-  const absolutePageUrl = toAbsoluteUrl(pageUrl);
-  const absoluteImageUrl = post.heroImage ? toAbsoluteUrl(post.heroImage) : undefined;
+  const imageUrl = post.heroImage ?? null;
 
   return {
     title: `${post.title} | Journal`,
     description: post.excerpt,
     keywords: post.tags,
-    authors: [{ name: "Mohamad Al-Kahfi", url: toAbsoluteUrl("/") }],
+    authors: [{ name: "Mohamad Al-Kahfi", url: "/" }],
     alternates: {
       canonical: pageUrl,
     },
     openGraph: {
       title: post.title,
       description: post.excerpt,
-      url: absolutePageUrl,
+      url: pageUrl,
       type: "article",
+      siteName: "Mohamad Al-Kahfi Portfolio",
       publishedTime: post.publishedAt,
       authors: ["Mohamad Al-Kahfi"],
       tags: post.tags,
-      images: absoluteImageUrl ? [{ url: absoluteImageUrl, alt: post.title }] : undefined,
+      images: imageUrl
+        ? [{ url: imageUrl, alt: post.title }]
+        : [getDefaultOpenGraphImage(post.title)],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      images: absoluteImageUrl ? [absoluteImageUrl] : undefined,
+      images: imageUrl
+        ? [imageUrl]
+        : [getDefaultTwitterImage()],
     },
   };
 }

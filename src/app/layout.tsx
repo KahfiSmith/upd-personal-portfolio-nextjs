@@ -4,7 +4,13 @@ import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
-import { getMetadataBase, getSiteOrigin, toAbsoluteUrl } from "@/lib/seo";
+import {
+  getDefaultOpenGraphImage,
+  getDefaultTwitterImage,
+  getRequestMetadataBase,
+  getSiteOrigin,
+  toAbsoluteUrl,
+} from "@/lib/seo";
 import "./globals.css";
 
 // Local fonts from public/fonts
@@ -29,7 +35,6 @@ const spaceGrotesk = localFont({
   display: "swap",
 });
 
-const metadataBase = getMetadataBase();
 const siteOrigin = getSiteOrigin();
 const title = "Mohamad Al-Kahfi | Frontend Web Developer";
 const description =
@@ -46,7 +51,7 @@ const personSchema = {
   name: "Mohamad Al-Kahfi",
   url: siteOrigin,
   jobTitle: "Frontend Web Developer",
-  image: siteOrigin ? toAbsoluteUrl("/kahfi-og.png") : undefined,
+  image: siteOrigin ? toAbsoluteUrl("/opengraph-image") : undefined,
   email: "mailto:alkahfii2018@gmail.com",
   sameAs: socialProfiles,
   worksFor: {
@@ -66,45 +71,44 @@ const personSchema = {
   ],
 };
 
-export const metadata: Metadata = {
-  metadataBase,
-  title: {
-    default: title,
-    template: "%s | Mohamad Al-Kahfi",
-  },
-  description,
-  openGraph: {
-    title,
+export async function generateMetadata(): Promise<Metadata> {
+  const metadataBase = await getRequestMetadataBase();
+
+  return {
+    metadataBase,
+    title: {
+      default: title,
+      template: "%s | Mohamad Al-Kahfi",
+    },
     description,
-    url: "/",
-    siteName: "Mohamad Al-Kahfi Portfolio",
-    images: [
-      {
-        url: "/kahfi-og.png",
-        width: 1299,
-        height: 1243,
-        alt: "KS monogram on a cobalt background",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-    images: ["/kahfi-og.png"],
-  },
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/kahfi-og.png", type: "image/png" },
-    ],
-    shortcut: "/favicon.ico",
-    apple: [{ url: "/kahfi-og.png", sizes: "180x180", type: "image/png" }],
-  },
-  alternates: {
-    canonical: "/",
-  },
-};
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      locale: "en_US",
+      url: "/",
+      siteName: "Mohamad Al-Kahfi Portfolio",
+      images: [getDefaultOpenGraphImage()],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [getDefaultTwitterImage()],
+    },
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/kahfi-og.png", type: "image/png" },
+      ],
+      shortcut: "/favicon.ico",
+      apple: [{ url: "/kahfi-og.png", sizes: "180x180", type: "image/png" }],
+    },
+    alternates: {
+      canonical: "/",
+    },
+  };
+}
 
 export default function RootLayout({
   children,

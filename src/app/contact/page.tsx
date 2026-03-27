@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import BackButton from "@/components/common/BackButton";
 import ContactForm from "@/components/features/contact/ContactForm";
+import { getDefaultOpenGraphImage, getDefaultTwitterImage } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Contact | Let's build together",
@@ -16,19 +17,14 @@ export const metadata: Metadata = {
     url: "/contact",
     type: "website",
     siteName: "Mohamad Al-Kahfi Portfolio",
-    images: [
-      {
-        url: "/kahfi-og.png",
-        alt: "Contact Mohamad Al-Kahfi",
-      },
-    ],
+    images: [getDefaultOpenGraphImage("Contact Mohamad Al-Kahfi")],
   },
   twitter: {
     card: "summary_large_image",
     title: "Contact | Let's Build Together | Mohamad Al-Kahfi",
     description:
       "Reach out for collaborations, freelance work, or just to say hello.",
-    images: ["/kahfi-og.png"],
+    images: [getDefaultTwitterImage()],
   },
 };
 

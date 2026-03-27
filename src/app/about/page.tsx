@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import TechOrbit from "@/components/features/about/TechOrbit";
 import AboutPageEnhancer from "@/components/features/about/AboutPageEnhancer";
 import BackButton from "@/components/common/BackButton";
+import { getDefaultOpenGraphImage, getDefaultTwitterImage } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "About | Behind the Code",
@@ -18,19 +19,14 @@ export const metadata: Metadata = {
     url: "/about",
     type: "website",
     siteName: "Mohamad Al-Kahfi Portfolio",
-    images: [
-      {
-        url: "/kahfi-og.png",
-        alt: "About Mohamad Al-Kahfi",
-      },
-    ],
+    images: [getDefaultOpenGraphImage("About Mohamad Al-Kahfi")],
   },
   twitter: {
     card: "summary_large_image",
     title: "About | Behind the Code | Mohamad Al-Kahfi",
     description:
       "Discover my story, what drives me, and the technologies I love.",
-    images: ["/kahfi-og.png"],
+    images: [getDefaultTwitterImage()],
   },
 };
 

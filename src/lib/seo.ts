@@ -1,4 +1,12 @@
+import { headers } from "next/headers";
+
 const LOCALHOST_URL = "http://localhost:3000";
+export const DEFAULT_SOCIAL_IMAGE_ALT =
+  "Mohamad Al-Kahfi portfolio preview";
+export const DEFAULT_SOCIAL_IMAGE_WIDTH = 1200;
+export const DEFAULT_SOCIAL_IMAGE_HEIGHT = 630;
+export const DEFAULT_OPEN_GRAPH_IMAGE_PATH = "/opengraph-image";
+export const DEFAULT_TWITTER_IMAGE_PATH = "/twitter-image";
 const PRODUCTION_URL_KEYS = [
   "NEXT_PUBLIC_SITE_URL",
   "SITE_URL",
@@ -56,8 +64,43 @@ export function getMetadataBase() {
   return siteUrl ? new URL(siteUrl) : undefined;
 }
 
+export async function getRequestMetadataBase() {
+  const configured = getMetadataBase();
+  if (configured) return configured;
+
+  const requestHeaders = await headers();
+  const host =
+    requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
+
+  if (!host) {
+    return new URL(LOCALHOST_URL);
+  }
+
+  const protocol =
+    requestHeaders.get("x-forwarded-proto") ??
+    (host.includes("localhost") || host.startsWith("127.0.0.1")
+      ? "http"
+      : "https");
+
+  return new URL(`${protocol}://${host}`);
+}
+
 export function toAbsoluteUrl(path: string) {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
   const origin = getSiteOrigin();
   return origin ? `${origin}${normalizedPath}` : normalizedPath;
+}
+
+export function getDefaultOpenGraphImage(alt = DEFAULT_SOCIAL_IMAGE_ALT) {
+  return {
+    url: DEFAULT_OPEN_GRAPH_IMAGE_PATH,
+    width: DEFAULT_SOCIAL_IMAGE_WIDTH,
+    height: DEFAULT_SOCIAL_IMAGE_HEIGHT,
+    alt,
+    type: "image/png",
+  } as const;
+}
+
+export function getDefaultTwitterImage() {
+  return DEFAULT_TWITTER_IMAGE_PATH;
 }

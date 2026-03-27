@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { blogPosts } from "@/data/blog-posts";
 import AnimatedBlogList from "./AnimatedBlogList";
 import BackButton from "@/components/common/BackButton";
+import { getDefaultOpenGraphImage, getDefaultTwitterImage } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -15,18 +16,13 @@ export const metadata: Metadata = {
     url: "/blog",
     type: "website",
     siteName: "Mohamad Al-Kahfi Portfolio",
-    images: [
-      {
-        url: "/kahfi-og.png",
-        alt: "Blog by Mohamad Al-Kahfi",
-      },
-    ],
+    images: [getDefaultOpenGraphImage("Blog by Mohamad Al-Kahfi")],
   },
   twitter: {
     card: "summary_large_image",
     title: "Blog | Mohamad Al-Kahfi",
     description: "Stories, lessons, and reflections from the studio.",
-    images: ["/kahfi-og.png"],
+    images: [getDefaultTwitterImage()],
   },
 };
 

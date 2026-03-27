@@ -3,8 +3,11 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import BackButton from "@/components/common/BackButton";
 import { dataProjects } from "@/data/projects";
+import {
+  getDefaultOpenGraphImage,
+  getDefaultTwitterImage,
+} from "@/lib/seo";
 import { cn } from "@/lib/utils";
-import { toAbsoluteUrl } from "@/lib/seo";
 
 const techIconMap: Record<string, string> = {
   astro: "/icons/astro.svg",
@@ -68,10 +71,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
       ? project.description[0]
       : project.description);
   const pageUrl = `/projects/${project.slug}`;
-  const absolutePageUrl = toAbsoluteUrl(pageUrl);
-  const absoluteImageUrl = project.heroImage
-    ? toAbsoluteUrl(project.heroImage)
-    : undefined;
+  const imageUrl = project.heroImage ?? null;
 
   return {
     title: `${project.title} | Case Study`,
@@ -83,22 +83,25 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     openGraph: {
       title: `${project.title} | Case Study`,
       description,
-      url: absolutePageUrl,
+      url: pageUrl,
       type: "website",
-      images: absoluteImageUrl
+      siteName: "Mohamad Al-Kahfi Portfolio",
+      images: imageUrl
         ? [
             {
-              url: absoluteImageUrl,
+              url: imageUrl,
               alt: project.title,
             },
           ]
-        : undefined,
+        : [getDefaultOpenGraphImage(project.title)],
     },
     twitter: {
       card: "summary_large_image",
       title: `${project.title} | Case Study`,
       description,
-      images: absoluteImageUrl ? [absoluteImageUrl] : undefined,
+      images: imageUrl
+        ? [imageUrl]
+        : [getDefaultTwitterImage()],
     },
   };
 }
