@@ -1,6 +1,5 @@
-import { headers } from "next/headers";
-
 const LOCALHOST_URL = "http://localhost:3000";
+const FALLBACK_PRODUCTION_URL = "https://www.kahfismith.dev";
 export const DEFAULT_SOCIAL_IMAGE_ALT =
   "Mohamad Al-Kahfi portfolio preview";
 export const DEFAULT_SOCIAL_IMAGE_WIDTH = 1200;
@@ -49,7 +48,9 @@ export function getSiteUrl() {
 
   if (process.env.NODE_ENV === "production") {
     const platformUrl = readFirstEnvUrl(PRODUCTION_URL_KEYS);
-    return platformUrl ? normalizeUrl(platformUrl) : undefined;
+    return platformUrl
+      ? normalizeUrl(platformUrl)
+      : FALLBACK_PRODUCTION_URL;
   }
 
   return LOCALHOST_URL;
@@ -62,27 +63,6 @@ export function getSiteOrigin() {
 export function getMetadataBase() {
   const siteUrl = getSiteUrl();
   return siteUrl ? new URL(siteUrl) : undefined;
-}
-
-export async function getRequestMetadataBase() {
-  const configured = getMetadataBase();
-  if (configured) return configured;
-
-  const requestHeaders = await headers();
-  const host =
-    requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
-
-  if (!host) {
-    return new URL(LOCALHOST_URL);
-  }
-
-  const protocol =
-    requestHeaders.get("x-forwarded-proto") ??
-    (host.includes("localhost") || host.startsWith("127.0.0.1")
-      ? "http"
-      : "https");
-
-  return new URL(`${protocol}://${host}`);
 }
 
 export function toAbsoluteUrl(path: string) {

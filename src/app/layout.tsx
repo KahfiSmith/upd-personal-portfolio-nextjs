@@ -7,7 +7,7 @@ import Script from "next/script";
 import {
   getDefaultOpenGraphImage,
   getDefaultTwitterImage,
-  getRequestMetadataBase,
+  getMetadataBase,
   getSiteOrigin,
   toAbsoluteUrl,
 } from "@/lib/seo";
@@ -35,6 +35,7 @@ const spaceGrotesk = localFont({
   display: "swap",
 });
 
+const metadataBase = getMetadataBase();
 const siteOrigin = getSiteOrigin();
 const title = "Mohamad Al-Kahfi | Frontend Web Developer";
 const description =
@@ -71,44 +72,57 @@ const personSchema = {
   ],
 };
 
-export async function generateMetadata(): Promise<Metadata> {
-  const metadataBase = await getRequestMetadataBase();
-
-  return {
-    metadataBase,
-    title: {
-      default: title,
-      template: "%s | Mohamad Al-Kahfi",
-    },
+export const metadata: Metadata = {
+  metadataBase,
+  title: {
+    default: title,
+    template: "%s | Mohamad Al-Kahfi",
+  },
+  description,
+  openGraph: {
+    title,
     description,
-    openGraph: {
-      title,
-      description,
-      type: "website",
-      locale: "en_US",
-      url: "/",
-      siteName: "Mohamad Al-Kahfi Portfolio",
-      images: [getDefaultOpenGraphImage()],
+    url: siteOrigin ?? "/",
+    siteName: "Mohamad Al-Kahfi Portfolio",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        ...getDefaultOpenGraphImage(),
+        url: siteOrigin
+          ? toAbsoluteUrl(getDefaultOpenGraphImage().url)
+          : getDefaultOpenGraphImage().url,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: [
+      siteOrigin ? toAbsoluteUrl(getDefaultTwitterImage()) : getDefaultTwitterImage(),
+    ],
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/kahfi-og.png", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/kahfi-og.png", sizes: "180x180", type: "image/png" }],
+  },
+  alternates: {
+    canonical: siteOrigin ?? "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
     },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [getDefaultTwitterImage()],
-    },
-    icons: {
-      icon: [
-        { url: "/favicon.ico", sizes: "any" },
-        { url: "/kahfi-og.png", type: "image/png" },
-      ],
-      shortcut: "/favicon.ico",
-      apple: [{ url: "/kahfi-og.png", sizes: "180x180", type: "image/png" }],
-    },
-    alternates: {
-      canonical: "/",
-    },
-  };
-}
+  },
+};
 
 export default function RootLayout({
   children,
