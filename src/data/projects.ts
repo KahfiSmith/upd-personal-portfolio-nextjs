@@ -241,9 +241,9 @@ export const dataProjects: ProjectItem[] = [
       "/images/recipebox-2.png",
     ],
     marqueeImages: [
-      "/images/recipebox/swimcat.jpeg",
-      "/images/recipebox/hellokitty.jpeg",
-      "/images/recipebox/mooncat.jpeg",
+      "/images/recipebox/swimcat.jpg",
+      "/images/recipebox/hellokitty.jpg",
+      "/images/recipebox/mooncat.jpg",
     ],
     previewSrc: "/images/pre-recipebox.png",
     heroImage: "/images/pre-recipebox.png",
