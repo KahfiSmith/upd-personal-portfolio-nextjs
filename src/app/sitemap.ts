@@ -14,20 +14,20 @@ const staticRoutes = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseEntries = staticRoutes.map((route) => ({
-    url: `${siteOrigin}${route.path}`,
+    url: siteOrigin ? `${siteOrigin}${route.path}` : route.path,
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));
 
   const projectEntries = dataProjects.map((project) => ({
-    url: `${siteOrigin}/projects/${project.slug}`,
+    url: siteOrigin ? `${siteOrigin}/projects/${project.slug}` : `/projects/${project.slug}`,
     lastModified: parseDate(project.timeline) ?? undefined,
     changeFrequency: "monthly" as const,
     priority: project.isLatest ? 0.8 : 0.7,
   }));
 
   const blogEntries = blogPosts.map((post) => ({
-    url: `${siteOrigin}/blog/${post.slug}`,
+    url: siteOrigin ? `${siteOrigin}/blog/${post.slug}` : `/blog/${post.slug}`,
     lastModified: parseDate(post.publishedAt),
     changeFrequency: "monthly" as const,
     priority: 0.7,

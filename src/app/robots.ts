@@ -11,7 +11,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: `${siteOrigin}/sitemap.xml`,
+    sitemap: siteOrigin ? `${siteOrigin}/sitemap.xml` : "/sitemap.xml",
     host: siteOrigin,
   };
 }
