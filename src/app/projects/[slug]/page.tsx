@@ -43,6 +43,11 @@ const techIconMap: Record<string, string> = {
   tanstackquery: "/icons/tanstackquery.svg",
   prisma: "/icons/prisma.svg",
   reactrouterv7: "/icons/reactrouterv7.svg",
+  pinia: "/icons/pinia.svg",
+  redis: "/icons/redis.svg",
+  golang: "/icons/golang.svg",
+  swagger: "/icons/swagger.svg",
+  jwt: "/icons/jwt.svg",
 };
 
 const normalize = (name: string) => name.trim().toLowerCase().replace(/[\s.-]/g, "");
