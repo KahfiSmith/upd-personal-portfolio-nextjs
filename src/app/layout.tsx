@@ -93,6 +93,14 @@ export const metadata: Metadata = {
     description,
     images: ["/kahfi-og.png"],
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/kahfi-og.png", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/kahfi-og.png", sizes: "180x180", type: "image/png" }],
+  },
   alternates: {
     canonical: "/",
   },
