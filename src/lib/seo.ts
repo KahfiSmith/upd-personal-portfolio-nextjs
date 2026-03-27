@@ -2,10 +2,10 @@ const LOCALHOST_URL = "http://localhost:3000";
 const FALLBACK_PRODUCTION_URL = "https://www.kahfismith.dev";
 export const DEFAULT_SOCIAL_IMAGE_ALT =
   "Mohamad Al-Kahfi portfolio preview";
-export const DEFAULT_SOCIAL_IMAGE_WIDTH = 1200;
-export const DEFAULT_SOCIAL_IMAGE_HEIGHT = 630;
-export const DEFAULT_OPEN_GRAPH_IMAGE_PATH = "/opengraph-image";
-export const DEFAULT_TWITTER_IMAGE_PATH = "/twitter-image";
+export const DEFAULT_SOCIAL_IMAGE_WIDTH = 1299;
+export const DEFAULT_SOCIAL_IMAGE_HEIGHT = 1243;
+export const DEFAULT_OPEN_GRAPH_IMAGE_PATH = "/kahfi-og.png";
+export const DEFAULT_TWITTER_IMAGE_PATH = "/kahfi-og.png";
 const PRODUCTION_URL_KEYS = [
   "NEXT_PUBLIC_SITE_URL",
   "SITE_URL",

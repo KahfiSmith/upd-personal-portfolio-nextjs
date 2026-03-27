@@ -52,7 +52,7 @@ const personSchema = {
   name: "Mohamad Al-Kahfi",
   url: siteOrigin,
   jobTitle: "Frontend Web Developer",
-  image: siteOrigin ? toAbsoluteUrl("/opengraph-image") : undefined,
+  image: siteOrigin ? toAbsoluteUrl("/kahfi-og.png") : undefined,
   email: "mailto:alkahfii2018@gmail.com",
   sameAs: socialProfiles,
   worksFor: {
