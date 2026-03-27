@@ -4,7 +4,7 @@ import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
-import { getSiteOrigin, getSiteUrl } from "@/lib/seo";
+import { getMetadataBase, getSiteOrigin, toAbsoluteUrl } from "@/lib/seo";
 import "./globals.css";
 
 // Local fonts from public/fonts
@@ -29,7 +29,7 @@ const spaceGrotesk = localFont({
   display: "swap",
 });
 
-const siteUrl = getSiteUrl();
+const metadataBase = getMetadataBase();
 const siteOrigin = getSiteOrigin();
 const title = "Mohamad Al-Kahfi | Frontend Web Developer";
 const description =
@@ -46,7 +46,7 @@ const personSchema = {
   name: "Mohamad Al-Kahfi",
   url: siteOrigin,
   jobTitle: "Frontend Web Developer",
-  image: `${siteOrigin}/kahfi-og.png`,
+  image: siteOrigin ? toAbsoluteUrl("/kahfi-og.png") : undefined,
   email: "mailto:alkahfii2018@gmail.com",
   sameAs: socialProfiles,
   worksFor: {
@@ -67,7 +67,7 @@ const personSchema = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase,
   title: {
     default: title,
     template: "%s | Mohamad Al-Kahfi",
@@ -93,21 +93,6 @@ export const metadata: Metadata = {
     description,
     images: ["/kahfi-og.png"],
   },
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "32x32" },
-      { url: "/kahfi-og.png", sizes: "192x192", type: "image/png" },
-      { url: "/kahfi-og.png", sizes: "512x512", type: "image/png" },
-    ],
-    shortcut: "/favicon.ico",
-    apple: "/kahfi-og.png",
-    other: [
-      {
-        rel: "icon",
-        url: "/favicon.ico",
-      },
-    ],
-  },
   alternates: {
     canonical: "/",
   },
@@ -121,9 +106,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/kahfi-og.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/kahfi-og.png" />
         <Script
           id="person-schema"
           type="application/ld+json"
