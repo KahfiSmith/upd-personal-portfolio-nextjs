@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { gsap } from "gsap";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -94,14 +93,8 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
   const [isOverlayVisible, setOverlayVisible] = useState(false);
   const [showTitle, setShowTitle] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isClient) return;
     if (!wipeRef.current) return;
 
     gsap.set(wipeRef.current, {
@@ -111,7 +104,7 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
     });
 
     gsap.set(overlayRef.current, { pointerEvents: "none" });
-  }, [isClient]);
+  }, []);
 
   const normalizePath = useCallback((value: string) => {
     const pathOnly = value.replace(/[?#].*$/, "");
@@ -306,36 +299,31 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
   return (
     <TransitionContext.Provider value={value}>
       {children}
-      {isClient && (
+      <div
+        ref={overlayRef}
+        className="pointer-events-none fixed inset-0 z-[9999] flex items-center justify-center"
+        aria-hidden="true"
+        style={{ visibility: isOverlayVisible ? "visible" : "hidden" }}
+      >
         <div
-          ref={overlayRef}
-          className="pointer-events-none fixed inset-0 z-[9999] flex items-center justify-center"
-          aria-hidden="true"
-          style={{ visibility: isOverlayVisible ? "visible" : "hidden" }}
+          ref={wipeRef}
+          className="absolute inset-0 bg-charcoal pointer-events-none"
+          style={{
+            willChange: "clip-path, -webkit-clip-path, transform",
+          }}
+        />
+        <div
+          className={[
+            "relative z-10 px-6 text-center font-display text-3xl tracking-[0.4em] text-cream",
+            "transition-all duration-500 ease-out sm:text-4xl md:text-6xl",
+            isOverlayVisible && showTitle
+              ? "translate-y-0 opacity-100"
+              : "-translate-y-2 opacity-0",
+          ].join(" ")}
         >
-          <div
-            ref={wipeRef}
-            className="absolute inset-0 bg-charcoal pointer-events-none"
-            style={{
-              willChange: "clip-path, -webkit-clip-path, transform",
-            }}
-          />
-          <AnimatePresence>
-            {isOverlayVisible && showTitle && (
-              <motion.div
-                key={title}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="relative z-10 px-6 text-center font-display text-3xl sm:text-4xl md:text-6xl tracking-[0.4em] text-cream"
-              >
-                {title}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {title}
         </div>
-      )}
+      </div>
     </TransitionContext.Provider>
   );
 }

@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { motion } from "framer-motion";
 import { usePageTransition } from "@/components/common/PageTransitionProvider";
 import { shouldSkipClientNavigation } from "@/lib/utils";
 
@@ -166,25 +165,28 @@ export default function AnimatedPillButton(props: AnimatedPillButtonProps) {
     };
 
     return (
-      <motion.a
+      <a
         ref={setContainerRef}
-        whileTap={{ scale: 0.98 }}
-        className={sharedClassName}
+        className={`${sharedClassName} transition-transform active:scale-[0.98]`}
         {...anchorRest}
         href={href}
         target={target}
         onClick={handleClick}
       >
         {content}
-      </motion.a>
+      </a>
     );
   }
 
   const divRest = omitMotionConflicts(variantProps);
 
   return (
-    <motion.div ref={setContainerRef} whileTap={{ scale: 0.98 }} className={sharedClassName} {...divRest}>
+    <div
+      ref={setContainerRef}
+      className={`${sharedClassName} transition-transform active:scale-[0.98]`}
+      {...divRest}
+    >
       {content}
-    </motion.div>
+    </div>
   );
 }
