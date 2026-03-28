@@ -134,7 +134,7 @@ export const dataSkills: SkillItemProps[] = [
   },
   {
     imgSrc: "/icons/golang.svg",
-    label: "TanStack",
-    desc: "Toolset",
+    label: "Go",
+    desc: "Programming Language",
   },
 ];
