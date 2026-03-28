@@ -3,19 +3,25 @@
 import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 
-const ANIMATION_DURATION = 2200; // ms the progress bar should take to reach 100%
-const CURTAIN_SLIDE_DURATION = 1100; // ms for the top/bottom panels to move away
-const CURTAIN_REVEAL_DELAY = 250; // ms pause at 100% before the curtain opens
-const HIDE_DELAY = 500; // ms to keep the overlay mounted once the fade out starts
+const ANIMATION_DURATION = 1350; // ms the progress bar should take to reach 100%
+const CURTAIN_SLIDE_DURATION = 920; // ms for the top/bottom panels to move away
+const CURTAIN_REVEAL_DELAY = 180; // ms pause at 100% before the curtain opens
+const HIDE_DELAY = 220; // ms to keep the overlay mounted once the fade out starts
 
 let hasShownCurtainLoader = false;
+
+const shouldShowInitialLoader = () => {
+  if (hasShownCurtainLoader) return false;
+  if (typeof window === "undefined") return true;
+  return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+};
 
 export default function SimpleCurtainLoader() {
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState(0);
   const [isCurtainOpen, setIsCurtainOpen] = useState(false);
-  const [shouldShow] = useState(() => !hasShownCurtainLoader);
-  const [isVisible, setIsVisible] = useState(() => !hasShownCurtainLoader);
+  const [shouldShow] = useState(shouldShowInitialLoader);
+  const [isVisible, setIsVisible] = useState(shouldShowInitialLoader);
   const revealStartedRef = useRef(false);
   const rafIdRef = useRef<number | null>(null);
   const revealTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -26,9 +32,9 @@ export default function SimpleCurtainLoader() {
 
     const timers: Array<ReturnType<typeof setTimeout>> = [];
 
-    timers.push(setTimeout(() => setStage(1), 100));
-    timers.push(setTimeout(() => setStage(2), 650));
-    timers.push(setTimeout(() => setStage(3), 1100));
+    timers.push(setTimeout(() => setStage(1), 130));
+    timers.push(setTimeout(() => setStage(2), 320));
+    timers.push(setTimeout(() => setStage(3), 540));
 
     return () => {
       timers.forEach((timer) => clearTimeout(timer));
