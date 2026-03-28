@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type LanguageStat = {
   name: string;
@@ -66,8 +66,32 @@ export default function CodingActivity() {
   const [status, setStatus] = useState<"loading" | "ready" | "error">(
     "loading",
   );
+  const [shouldFetch, setShouldFetch] = useState(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || shouldFetch) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setShouldFetch(true);
+        observer.disconnect();
+      },
+      { rootMargin: "240px 0px" },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [shouldFetch]);
+
+  useEffect(() => {
+    if (!shouldFetch) return;
+
     let active = true;
 
     async function loadStats() {
@@ -96,7 +120,7 @@ export default function CodingActivity() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [shouldFetch]);
 
   const chartLanguages = stats.languages.slice(0, 6);
   const maxLanguageSeconds = Math.max(
@@ -118,6 +142,7 @@ export default function CodingActivity() {
 
   return (
     <section
+      ref={sectionRef}
       id="activity"
       data-anchor-offset="18"
       className="relative py-20 md:py-28 overflow-hidden"
